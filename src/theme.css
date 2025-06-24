@@ -1,0 +1,3 @@
+:root{
+    --mat-sys-primary: light-dark(var(--color-red-400), var(--color-red-400));
+}

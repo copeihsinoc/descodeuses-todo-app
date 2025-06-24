@@ -1,0 +1,54 @@
+@if(formGroup!=null){
+    <mat-card class="flex h-full bg-gray-100 items-center justify-center" id="full-cover-background">
+        <mat-card-header>
+            <mat-card-title>Edit Todo</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <form class="mt-20" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+                <div id="titre-container">
+                    <mat-form-field>
+                        <mat-label>Title:</mat-label>
+                        <input matInput formControlName="title">
+                    </mat-form-field>
+                </div>
+                <div id="priority-container">
+                    <mat-form-field>
+                        <mat-label>Priority:</mat-label>
+                        <mat-select formControlName="priority">
+                            @for (priority of listPriority; track priority.value){
+                            <mat-option [value]="priority.value">{{priority.text}}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div id="date-container">
+                    <mat-form-field>
+                        <mat-label>Date:</mat-label>
+                        <input matInput formControlName="dueDate"[matDatepicker]="picker" type="date">
+                        <!-- <mat-hint>DD/MM/YYYY</mat-hint> -->
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field class="w-60">
+                        <mat-label>Description</mat-label>
+                        <textarea matInput formControlName="description"></textarea>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-checkbox formControlName="completed"></mat-checkbox>
+                    <mat-label>completed</mat-label>
+                </div>
+                <mat-card-actions>
+                <button mat-raised-button type="submit">
+                    save
+                </button>
+                <button mat-button type="button" (click)="onCancel()">
+                    cancel
+                </button>
+                </mat-card-actions>
+            </form>
+        </mat-card-content>
+    </mat-card>
+}

@@ -1,0 +1,44 @@
+<div class="flex h-full bg-gray-100 items-center justify-center" id="full-cover-background">
+    <div id="centered-block" class="bg-white p-6 rounded-xl shadow-md">
+        <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
+            <h2 class="text-center">Sign up</h2>
+            <div id="nom-container">
+                <mat-form-field>
+                    <mat-label>Last name:</mat-label>
+                    <input matInput formControlName="userLastName" type="text" placeholder="last-name">
+                </mat-form-field>
+            </div>
+            <div id="prenom-container">
+                <mat-form-field>
+                    <mat-label>First name:</mat-label>
+                    <input matInput formControlName="userFirstName" type="text" placeholder="first-name">
+                </mat-form-field>
+            </div>
+            <div id="username-container">
+                <mat-form-field>
+                    <mat-label>Username:</mat-label>
+                    <input matInput formControlName="username" type="text" placeholder="username">
+                </mat-form-field>
+            </div>
+            <div id="select-container">
+                <mat-form-field>
+                    <mat-label>Genre</mat-label>
+                    <mat-select>
+                        @for (genre of listGenre; track genre.value){
+                        <mat-option [value]="genre.value">{{genre.text}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div id="password-container">
+                <mat-form-field>
+                    <mat-label>Password:</mat-label>
+                    <input matInput formControlName="password" type="password" placeholder="password">
+                </mat-form-field>
+            </div>
+            <button mat-flat-button type="submit" class="w-full">
+                save it!
+            </button>
+        </form>
+    </div>
+</div>

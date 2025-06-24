@@ -1,0 +1,16 @@
+<div id="list-blocks" class="grid grid-cols-3 p-4 gap-4" >
+    @for( kpi of kpis; track kpi.id) {
+    <!-- kpi:object of kpis tableaux can name: element etc; track kpi.n'importe quel -->
+    <!-- '!' pour ecraser la couleur du mat-card -->
+    <mat-card class="text-white p-4" [ngClass] = "kpi.bg">  <!--[ngClass] :class--> 
+        <div class="flex item-center gap-x-4">
+            <mat-icon id="b1-col1" class="felx items-center p-4 text-3xl">{{kpi.icon}}</mat-icon>
+            <div id="b1-col2">
+                <div id="title" class="uppercase text-sm opacity-80">{{kpi.title}}</div>
+                <div id="valeur" class="text-2xl font-bold">{{kpi.value}}</div>
+            </div>
+        </div>
+        
+    </mat-card>
+    }
+</div>
