@@ -1,5 +1,5 @@
 <mat-card class="h-full flex flex-col">
-    <form [formGroup]="formGroup" (ngSubmit)="onAddUser ()">
+    <form [formGroup]="formGroup" (ngSubmit)="onAddContact ()">
         <div id="todo-bar-saisie" class="flex gap-2 m-4">
             <mat-form-field appearance="outline" class="flex-1">
                 <input matInput formControlName="title" placeholder="New todo">
@@ -13,7 +13,7 @@
         <mat-list>
             @for(user of users; track user.id){
                 <mat-list-item>
-                    {{user.firstname}}, {{user.lastname}}, {{user.genre}}
+                    {{user.firstName}}, {{user.lastName}}, {{user.genre}}
                 </mat-list-item>
             }
         </mat-list>

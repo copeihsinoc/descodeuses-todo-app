@@ -24,7 +24,7 @@
                 <mat-form-field>
                     <mat-label>Genre</mat-label>
                     <mat-select formControlName="genre">
-                        @for (genre of listGenre; track genre.value){
+                        @for (genre of genre; track genre.value){
                         <mat-option [value]="genre.value">{{genre.text}}</mat-option>
                         }
                     </mat-select>

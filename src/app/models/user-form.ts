@@ -1,8 +1,11 @@
 import { FormControl } from "@angular/forms";
 
-export interface userForm{
-    id: number | null;
-    firstname: FormControl <string | null>;
-    lastname: FormControl <string | null>;
-    genre: FormControl <string | null>;
+
+export interface UserForm{
+    id: number| null;
+    username: FormControl<string>;
+    firstname: FormControl<string>;
+    lastname: FormControl<string>;
+    genre: FormControl<string>;
+    password: FormControl<string>;
 }

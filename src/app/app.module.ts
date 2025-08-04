@@ -17,7 +17,7 @@ import { EnregistrerComponent } from './components/enregistrer/enregistrer.compo
 import {MatSelectModule} from '@angular/material/select';
 import { ToDoListComponent } from './components/to-do-list/to-do-list.component';
 import {MatCardModule} from '@angular/material/card';
-import { HttpClient, provideHttpClient } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptors } from '@angular/common/http';
 import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api'
 import { InMemoryDataService } from './services/in-memory-data.service';
 import { UserListComponent } from './components/user-list/user-list.component';
@@ -31,6 +31,10 @@ import {MatTableModule} from '@angular/material/table';
 import {MatSortModule} from '@angular/material/sort';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import {MatGridListModule} from '@angular/material/grid-list';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatAutocompleteModule } from '@angular/material/autocomplete';
+import { authInterceptor } from './auth/auth.interceptor';
+import { SignupComponent } from './components/signup/signup.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,7 +45,8 @@ import {MatGridListModule} from '@angular/material/grid-list';
     UserListComponent,
     TodoDetailComponent,
     TodoTableComponent,
-    DashboardComponent
+    DashboardComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,
@@ -61,23 +66,31 @@ import {MatGridListModule} from '@angular/material/grid-list';
     MatDatepickerModule,
     MatTableModule,
     MatSortModule,
-    MatGridListModule
+    MatGridListModule,
+    MatChipsModule,
+    MatAutocompleteModule
   ],
   providers: [
     provideNativeDateAdapter(),
 
-    provideHttpClient(),
+    provideHttpClient(
+      withInterceptors([
+        authInterceptor
+      ])
+    ),
     //injecter in-memory-data.service.ts
     //comme il est @Injectable-
-    
+    /*
     importProvidersFrom([
       HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService,{delay:200})
     ]),
+     */
     { provide: LOCALE_ID, useValue: 'fr'}
+    
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 
-//clocalisation pour affichage en format francais (devise, date...)    
+//localisation pour affichage en format francais (devise, date...)    
     })
 
 

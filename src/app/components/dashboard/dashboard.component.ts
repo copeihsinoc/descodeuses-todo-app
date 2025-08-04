@@ -53,7 +53,7 @@ export class DashboardComponent implements OnInit{
       this.todos = data; 
       //creer 3 variables de type nombre
       //...
-      let today = new Date(2025,5,10);
+      let today = new Date();
 
       let countUrgent = 0, countToday = 0, countLate = 0;
       //Urgentes: priority = 1 Et due date = Aujourd'hui

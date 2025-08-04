@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Todo } from '../models/todo.model';
-import { User } from '../models/user.model';
+import { Contact } from '../models/contact.model';
+
 
 
 @Injectable({
@@ -32,11 +33,11 @@ export class InMemoryDataService implements InMemoryDataService {
       {id:4, title:'Send CV', completed: false, priority:null, dueDate:new Date(2025,5,2).toISOString(), description: null},
     ];
 
-    const users : User[] = [
-      {id:1, firstname:'Alice', lastname:'AAA', genre:'Woman'},
-      {id:2, firstname:'Leo', lastname:'BBB', genre:'Man'}
+    const contacts : Contact[] = [
+      {id:1, firstName:'Alice', lastName:'AAA', genre:'Woman'},
+      {id:2, firstName:'Leo', lastName:'BBB', genre:'Man'}   
     ];
 
-    return { todos, users }; // un lien endpoint api/todos 
+    return { todos, contacts }; // un lien endpoint api/todos 
   }
 }

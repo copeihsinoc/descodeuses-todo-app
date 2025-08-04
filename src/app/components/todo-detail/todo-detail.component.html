@@ -1,18 +1,60 @@
 @if(formGroup!=null){
-    <mat-card class="flex h-full bg-gray-100 items-center justify-center" id="full-cover-background">
+<div class="main-container">
+    <!--mat-card cant use flex!!!-->
+    <mat-card id="full-cover-background" class="p-6 rounded shadow-md w-full max-w-md bg-white">
         <mat-card-header>
-            <mat-card-title>Edit Todo</mat-card-title>
+            <mat-card-title class="text-center w-full">Edit Todo</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-            <form class="mt-20" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+            <form class="mt-10" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+                <!----- Title ----->
                 <div id="titre-container">
-                    <mat-form-field>
+                    <mat-form-field class="field">
                         <mat-label>Title:</mat-label>
                         <input matInput formControlName="title">
                     </mat-form-field>
                 </div>
-                <div id="priority-container">
+                <!-----chips----->
+                <div>
+                    <mat-form-field class="field">
+                        <mat-label>Membre</mat-label>
+                        <mat-chip-grid #chipGrid aria-label="User selection">
+                            @for (user of selectedContacts; track user.id) {
+                            <mat-chip-row (removed)="remove(user.id)">
+                                {{user.firstName}}
+                                <button matChipRemove [attr.aria-label]="'remove ' + user.firstName">
+                                    <mat-icon>cancel</mat-icon>
+                                </button>
+                            </mat-chip-row>
+                            }
+                        </mat-chip-grid>
+
+                        <input name="currentUser" #userInput [formControl]="currentContact"
+                            [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
+                            (input)="onCurrentUserChange(userInput.value)" />
+
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                            @for (user of filteredContacts; track user) {
+                            <mat-option [value]="user.id">{{user.firstName}}</mat-option>
+                            }
+                        </mat-autocomplete>
+
+                    </mat-form-field>
+                </div>
+
+
+                <!-----user----->
+                <div id="user-container">
                     <mat-form-field>
+                        <mat-label>User:</mat-label>
+                        <input matInput [value]="userFullName" readonly/>
+                    </mat-form-field>
+                </div>
+
+
+                <!----- Priority ----->
+                <div id="priority-container">
+                    <mat-form-field class="field">
                         <mat-label>Priority:</mat-label>
                         <mat-select formControlName="priority">
                             @for (priority of listPriority; track priority.value){
@@ -21,34 +63,48 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
+                <!-----project----->
+                <div id="projectId-container">
+                    <mat-form-field class="field">
+                        <mat-label>Project ID:</mat-label>
+                        <mat-select formControlName="projectId">
+                            @for(project of projects; track project.id){
+                            <mat-option [value]="project.id">{{project.title}}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <!-----Date----->
                 <div id="date-container">
-                    <mat-form-field>
+                    <mat-form-field class="field">
                         <mat-label>Date:</mat-label>
-                        <input matInput formControlName="dueDate"[matDatepicker]="picker" type="date">
-                        <!-- <mat-hint>DD/MM/YYYY</mat-hint> -->
+                        <input matInput formControlName="dueDate" [matDatepicker]="picker">
                         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
                     </mat-form-field>
                 </div>
-                <div>
-                    <mat-form-field class="w-60">
+                <!-----Description----->
+                <div id="description-container">
+                    <mat-form-field class="field">
                         <mat-label>Description</mat-label>
                         <textarea matInput formControlName="description"></textarea>
                     </mat-form-field>
                 </div>
-                <div>
+                <!-----Completed----->
+                <div class="mb-5">
                     <mat-checkbox formControlName="completed"></mat-checkbox>
                     <mat-label>completed</mat-label>
                 </div>
                 <mat-card-actions>
-                <button mat-raised-button type="submit">
-                    save
-                </button>
-                <button mat-button type="button" (click)="onCancel()">
-                    cancel
-                </button>
+                    <button mat-raised-button type="submit" class="w-30">
+                        save
+                    </button>
+                    <button mat-button type="button" (click)="onCancel()" class="w-30">
+                        cancel
+                    </button>
                 </mat-card-actions>
             </form>
         </mat-card-content>
     </mat-card>
+</div>
 }

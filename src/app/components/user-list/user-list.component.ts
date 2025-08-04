@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { User } from '../../models/user.model';
-import { UserService } from '../../services/user.service';
+import { Contact } from '../../models/contact.model';
+import { ContactService } from '../../services/contact.service';
+
 
 @Component({
   selector: 'app-user-list',
@@ -13,22 +14,22 @@ export class UserListComponent implements OnInit{
   
   formGroup : FormGroup;
 
-  users : User[] = [];
+  users : Contact[] = [];
 
-  constructor(private fb: FormBuilder, private userService : UserService){
+  constructor(private fb: FormBuilder, private contactService : ContactService){
     this.formGroup = this.fb.group({
       title:['', [Validators.required]]
     })
   }
   ngOnInit(): void {
-    this.userService.getUsers().subscribe((data)=>{
+    this.contactService.getContacts().subscribe((data)=>{
       this.users = data;
     })
   }
 
 
 
-  onAddUser(){
+  onAddContact(){
     if(this.formGroup.valid){
       const formValue = this.formGroup.value;
     }

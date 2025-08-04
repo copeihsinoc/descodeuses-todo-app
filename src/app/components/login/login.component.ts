@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+
 //'@':decorator↓
 //qui decore la classe component
 //il vient juste avant la calsse
@@ -27,7 +29,7 @@ export class LoginComponent implements OnInit {
   //'private' avant formBuilder pour pouvoir acceder a la variable 
   //en dehors du constructeur
 
-  constructor(private formBuilder : FormBuilder, private router:Router){
+  constructor(private formBuilder : FormBuilder, private router:Router, private authService : AuthService){
 
   }
   
@@ -35,11 +37,11 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.formBuilder.group({
       //1er parametre : valeur initiale du champ
       //2eme parametre : liste de validators
-      usermail: ['', [Validators.required, Validators.email]],
+      username: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
     });
   }
-
+  /*
   onSubmit(){
     if(this.loginForm.valid){
       console.log(this.loginForm.value);
@@ -51,4 +53,47 @@ export class LoginComponent implements OnInit {
         }
     }
   }
+  
+    onSubmit(): void{
+    if(this.loginForm.valid){
+      const credentials = this.loginForm.value;
+      this.authService.login(credentials).subscribe({
+        next: (res) =>{ //response
+          sessionStorage.setItem('authToken', res.token);
+          this.router.navigateByUrl('');
+        },
+        error: (err) => console.error('Erreur de connexion', err),
+
+      });
+    }
+  }
+*/
+onSubmit(): void {
+  console.log('🔄 Tentative de soumission du formulaire');
+
+  if (this.loginForm.valid) {
+    const credentials = this.loginForm.value;
+    console.log('✅ Formulaire valide, données envoyées :', credentials);
+
+    this.authService.login(credentials).subscribe({
+      next: (res) => {
+        console.log('✅ Réponse du serveur (login réussi) :', res);
+        sessionStorage.setItem('authToken', res.token);
+        this.router.navigateByUrl('/dashboard');
+      },
+      error: (err) => {
+        console.error('❌ Erreur de connexion :', err);
+        if (err.status === 403) {
+          console.warn('⚠️ Erreur 403 - Accès refusé, vérifier les identifiants ou les droits');
+        } else if (err.status === 0) {
+          console.warn('🌐 Erreur réseau ou CORS');
+        }
+      }
+    });
+
+  } else {
+    console.warn('❌ Formulaire invalide :', this.loginForm.errors);
+  }
+}
+
 }
