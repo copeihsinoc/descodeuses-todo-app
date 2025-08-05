@@ -16,8 +16,12 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   // 🔧 加上 Authorization header（JWT token）
-  addUser(user: User): Observable<any>{
+ /* addUser(user: User): Observable<any> {
     return this.http.post<User>('http://localhost:8080/auth/sign-up', user);
+  }
+*/
+  addUser(user: User): Observable<any> {
+    return this.http.post(`${enviroment.apiUrl}/auth/sign-up`, user);
   }
 
   getUsers() {
