@@ -42,8 +42,8 @@
             @for(project of projects; track project.id){
             <mat-list-item>
                 <div class="flex items-center">
-                    <span [routerLink]="['/todo-detail', project.id]" class="flex-1 cursor-pointer">{{project.title}}</span>
-                    <button mat-icon-button (click)="onDeleteTodo(project.id)">
+                    <span [routerLink]="['/project-detail', project.id]" class="flex-1 cursor-pointer">{{project.title}}</span>
+                    <button mat-icon-button (click)="deleteProject(project.id)">
                         <mat-icon>delete</mat-icon>
                     </button>
                 </div>

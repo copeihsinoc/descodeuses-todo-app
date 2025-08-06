@@ -1,0 +1,47 @@
+@if(formGroup!=null){
+<div class="main-container">
+    <!--mat-card cant use flex!!!-->
+    <mat-card id="full-cover-background" class="p-6 rounded shadow-md w-full max-w-md bg-white">
+        <mat-card-header>
+            <mat-card-title class="text-center w-full">Edit Todo</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <form class="mt-10" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+                <!----- Title ----->
+                <div id="titre-container">
+                    <mat-form-field class="field">
+                        <mat-label>Title:</mat-label>
+                        <input matInput formControlName="title">
+                    </mat-form-field>
+                </div>
+
+                <!-----Date----->
+                <div id="date-container">
+                    <mat-form-field class="field">
+                        <mat-label>Date:</mat-label>
+                        <input matInput formControlName="dueDate" [matDatepicker]="picker">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <!-----Description----->
+                <div id="description-container">
+                    <mat-form-field class="field">
+                        <mat-label>Description</mat-label>
+                        <textarea matInput formControlName="description"></textarea>
+                    </mat-form-field>
+                </div>
+
+                <mat-card-actions>
+                    <button mat-raised-button type="submit" class="w-30">
+                        save
+                    </button>
+                    <button mat-button type="button" (click)="onCancel()" class="w-30">
+                        cancel
+                    </button>
+                </mat-card-actions>
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>
+}

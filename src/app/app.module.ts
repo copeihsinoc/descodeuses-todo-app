@@ -35,6 +35,7 @@ import {MatChipsModule} from '@angular/material/chips';
 import {MatAutocompleteModule } from '@angular/material/autocomplete';
 import { authInterceptor } from './auth/auth.interceptor';
 import { SignupComponent } from './components/signup/signup.component';
+import { ProjectDetailComponent } from './components/project-detail/project-detail.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -46,7 +47,8 @@ import { SignupComponent } from './components/signup/signup.component';
     TodoDetailComponent,
     TodoTableComponent,
     DashboardComponent,
-    SignupComponent
+    SignupComponent,
+    ProjectDetailComponent
   ],
   imports: [
     BrowserModule,

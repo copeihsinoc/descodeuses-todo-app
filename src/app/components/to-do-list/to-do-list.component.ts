@@ -111,7 +111,7 @@ export class ToDoListComponent implements OnInit {
 
       const project: Project = {
         id: null, //id est genere sur le serveur pour cela il est envoye null
-        title: formValue.title, //Seulement title est remplis depuis le formulaire
+        title: formValue.project, //Seulement title est remplis depuis le formulaire
         description: null
       };
 
