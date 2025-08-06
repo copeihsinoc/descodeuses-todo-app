@@ -4,6 +4,8 @@ import { TodoService } from '../../services/todo.service';
 import { Todo } from '../../models/todo.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { Project } from '../../models/project.model';
+import { ProjectService } from '../../services/project.service';
 
 @Component({
   selector: 'app-to-do-list',
@@ -17,7 +19,14 @@ export class ToDoListComponent implements OnInit {
 
   todos: Todo[] = [];
 
-  constructor(private fb: FormBuilder, private todoService: TodoService, private snackBar: MatSnackBar) {
+  projects: Project[] = [];
+
+  constructor(
+    private fb: FormBuilder,
+    private todoService: TodoService,
+    private snackBar: MatSnackBar,
+    private projectService: ProjectService
+  ) {
     this.formGroup = this.fb.group({
       title: ['', [Validators.required]]
     });
@@ -25,6 +34,7 @@ export class ToDoListComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchTodo();
+    this.fetchProject();
   }
 
   fetchTodo() {
@@ -33,7 +43,6 @@ export class ToDoListComponent implements OnInit {
       this.todos = data;
     });
   }
-
 
   onAddTodo() {
     if (this.formGroup.valid) {
@@ -45,7 +54,7 @@ export class ToDoListComponent implements OnInit {
         completed: false,
         priority: null,
         dueDate: '',
-        description:null
+        description: null
       };
 
       this.todoService.addTodo(todo).subscribe(data => {
@@ -61,7 +70,7 @@ export class ToDoListComponent implements OnInit {
 
     this.todoService.deleteTodo(id).subscribe(() => {
       this.fetchTodo();
-      this.snackBar.open('Deleted !', '', {duration:1000});
+      this.snackBar.open('Deleted !', '', { duration: 1000 });
     });
   }
 
@@ -74,14 +83,52 @@ export class ToDoListComponent implements OnInit {
       this.fetchTodo();
 
       if (todo.completed) {
-        this.snackBar.open('checked !', '', {duration:1000});
+        this.snackBar.open('checked !', '', { duration: 1000 });
       } else {
-        this.snackBar.open('unchecked !', '', {duration:1000});
+        this.snackBar.open('unchecked !', '', { duration: 1000 });
       }
     });
   }
+
+
+
+  /*-----Project----- */
+
+  fetchProject() {
+    //Communication asynchrone donc il faut ecouter le retour
+    this.projectService.getProjects().subscribe((data) => {
+      this.projects = data;
+    });
+  }
+
+  addProject() {
+    if (this.formGroup.valid) {
+      const formValue = this.formGroup.value;
+
+      const project: Project = {
+        id: null, //id est genere sur le serveur pour cela il est envoye null
+        title: formValue.title, //Seulement title est remplis depuis le formulaire
+        description: null
+      };
+
+      this.projectService.addProject(project).subscribe(data => {
+        //Actualiser la liste apres l'ajout
+        this.fetchProject();
+      });
+    }
+  }
+
+  deleteProject(id: number | null) {
+    if (id === null)
+      return; //pas de retour
+
+    this.projectService.deleteProject(id).subscribe(() => {
+      this.fetchProject();
+      this.snackBar.open('Deleted !', '', { duration: 1000 });
+    });
+  }
 }
-//this.todoService.updateTodo(todo).subscribe(data => { 
+//this.todoService.updateTodo(todo).subscribe(data => {
 // console.log(data);
 // this.snackBar.open('Updated !', '', {duration:1000});
 
