@@ -9,6 +9,7 @@ import { TodoTableComponent } from './components/todo-table/todo-table.component
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { authGuard } from './auth/auth.guard';
 import { SignupComponent } from './components/signup/signup.component';
+import { ProjectDetailComponent } from './components/project-detail/project-detail.component';
 
 /* path: lien saisi dans la barre de navigation
    component: le composant relie a ce path
@@ -21,7 +22,9 @@ const routes: Routes = [
   {path:"user", component:UserListComponent, canActivate: [authGuard]},
   {path:"todo-detail/:id", component:TodoDetailComponent, canActivate: [authGuard]},
   {path:"todo-table", component:TodoTableComponent, canActivate: [authGuard]},
-  {path:"dashboard", component:DashboardComponent, canActivate: [authGuard]}//path vide car page par defaut(index)
+  {path:"dashboard", component:DashboardComponent, canActivate: [authGuard]},//path vide car page par defaut(index)
+  {path:"project-detail/:id", component:ProjectDetailComponent, canActivate: [authGuard]}
+
 ];
 
 @NgModule({

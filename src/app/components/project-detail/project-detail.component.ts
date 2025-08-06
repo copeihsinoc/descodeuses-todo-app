@@ -62,7 +62,7 @@ export class ProjectDetailComponent implements OnInit {
       this.projectService.updateProject(formValue).subscribe(data => {
 
         this.snackbar.open('Updated!', '', { duration: 1000 });
-        this.router.navigate(['/']);
+        this.router.navigate(['/to-do-list']);
       })
     }
   }
