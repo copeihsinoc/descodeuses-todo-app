@@ -15,7 +15,8 @@ import { ProjectService } from '../../services/project.service';
 })
 export class ToDoListComponent implements OnInit {
 
-  formGroup: FormGroup;
+  todoForm: FormGroup;
+  projectForm: FormGroup;
 
   todos: Todo[] = [];
 
@@ -27,8 +28,11 @@ export class ToDoListComponent implements OnInit {
     private snackBar: MatSnackBar,
     private projectService: ProjectService
   ) {
-    this.formGroup = this.fb.group({
+    this.todoForm = this.fb.group({
       title: ['', [Validators.required]]
+    });
+    this.projectForm = this.fb.group({
+      project: ['', Validators.required]
     });
   }
 
@@ -45,8 +49,8 @@ export class ToDoListComponent implements OnInit {
   }
 
   onAddTodo() {
-    if (this.formGroup.valid) {
-      const formValue = this.formGroup.value;
+    if (this.todoForm.valid) {
+      const formValue = this.todoForm.value;
 
       const todo: Todo = {
         id: null, //id est genere sur le serveur pour cela il est envoye null
@@ -102,8 +106,8 @@ export class ToDoListComponent implements OnInit {
   }
 
   addProject() {
-    if (this.formGroup.valid) {
-      const formValue = this.formGroup.value;
+    if (this.projectForm.valid) {
+      const formValue = this.projectForm.value;
 
       const project: Project = {
         id: null, //id est genere sur le serveur pour cela il est envoye null

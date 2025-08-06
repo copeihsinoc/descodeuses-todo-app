@@ -1,5 +1,5 @@
 <mat-card class="h-full flex flex-col">
-    <form [formGroup]="formGroup" (ngSubmit)="onAddTodo ()">
+    <form [formGroup]="todoForm" (ngSubmit)="onAddTodo ()">
         <div id="todo-bar-saisie" class="flex gap-2 m-4">
             <mat-form-field appearance="outline" class="flex-1">
                 <input matInput formControlName="title" placeholder="New todo">
@@ -27,7 +27,7 @@
 </mat-card>
 
 <mat-card class="h-full flex flex-col">
-    <form [formGroup]="formGroup" (ngSubmit)="onAddTodo ()">
+    <form [formGroup]="projectForm" (ngSubmit)="addProject()">
         <div id="todo-bar-saisie" class="flex gap-2 m-4">
             <mat-form-field appearance="outline" class="flex-1">
                 <input matInput formControlName="project" placeholder="New project">
