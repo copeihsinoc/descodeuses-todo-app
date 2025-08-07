@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Todo } from '../models/todo.model';
-import { enviroment } from '../../environments/environment.prod';
+import { enviroment } from '../../environments/environment';
 
 //commande pour creer le fichier:
 //ng g service todo

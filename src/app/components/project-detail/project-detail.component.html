@@ -1,5 +1,5 @@
 @if(formGroup!=null){
-<div class="main-container">
+<div class="main-container h-screen flex items-center justify-center">
     <!--mat-card cant use flex!!!-->
     <mat-card id="full-cover-background" class="p-6 rounded shadow-md w-full max-w-md bg-white">
         <mat-card-header>
@@ -31,7 +31,6 @@
                         <textarea matInput formControlName="description"></textarea>
                     </mat-form-field>
                 </div>
-
                 <mat-card-actions>
                     <button mat-raised-button type="submit" class="w-30">
                         save

@@ -32,7 +32,7 @@ export class ProjectDetailComponent implements OnInit {
       next: data => {
         if (!data) {
           console.error('Project not found');
-          return;
+          return; 
         }
 
         this.project = data;
@@ -40,6 +40,7 @@ export class ProjectDetailComponent implements OnInit {
         this.formGroup = this.fb.group({
           id: [this.project.id],
           title: [this.project.title, Validators.required],
+          dueDate:[this.project.dueDate],
           description: [this.project.description],
         });
       },

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Contact } from '../models/contact.model';
-import { enviroment } from '../../environments/environment.prod';
+import { enviroment } from '../../environments/environment';
 
 
 
