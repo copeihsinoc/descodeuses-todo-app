@@ -79,6 +79,9 @@ onSubmit(): void {
       next: (res) => {
         console.log('✅ Réponse du serveur (login réussi) :', res);
         sessionStorage.setItem('authToken', res.token);
+
+        this.authService.isAdmin = res.role == 'ROLE_ADMIN';
+
         this.router.navigateByUrl('/dashboard');
       },
       error: (err) => {

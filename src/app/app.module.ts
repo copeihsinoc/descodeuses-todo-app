@@ -36,6 +36,7 @@ import {MatAutocompleteModule } from '@angular/material/autocomplete';
 import { authInterceptor } from './auth/auth.interceptor';
 import { SignupComponent } from './components/signup/signup.component';
 import { ProjectDetailComponent } from './components/project-detail/project-detail.component';
+import { LogOutComponent } from './components/log-out/log-out.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -48,7 +49,8 @@ import { ProjectDetailComponent } from './components/project-detail/project-deta
     TodoTableComponent,
     DashboardComponent,
     SignupComponent,
-    ProjectDetailComponent
+    ProjectDetailComponent,
+    LogOutComponent
   ],
   imports: [
     BrowserModule,

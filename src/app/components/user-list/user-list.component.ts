@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Contact } from '../../models/contact.model';
-import { ContactService } from '../../services/contact.service';
+import { User } from '../../models/user.model';
+import { UserService } from '../../services/user.service';
 
 
 @Component({
@@ -10,28 +10,50 @@ import { ContactService } from '../../services/contact.service';
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.css'
 })
-export class UserListComponent implements OnInit{
-  
-  formGroup : FormGroup;
+export class UserListComponent implements OnInit {
 
-  users : Contact[] = [];
+  formGroup: FormGroup;
 
-  constructor(private fb: FormBuilder, private contactService : ContactService){
+  users: User[] = [];
+  selectedUsers: any[] = [];
+
+  constructor(private fb: FormBuilder, private userService: UserService) {
     this.formGroup = this.fb.group({
-      title:['', [Validators.required]]
+      title: ['', [Validators.required]]
     })
   }
   ngOnInit(): void {
-    this.contactService.getContacts().subscribe((data)=>{
+    this.userService.getUsers().subscribe((data) => {
       this.users = data;
-    })
+    });
+  }
+
+  //check user is selected or not
+  checked(user: User): boolean {
+    return this.selectedUsers.some(u => u.id === user.id);
+  }
+
+  //select user
+  select(user: User) {
+    if (this.checked(user)) {
+      this.selectedUsers = this.selectedUsers.filter(u => u.id !== user.id);
+    } else {
+      this.selectedUsers.push(user);
+    }
+  }
+
+  deleteUser() {
+    this.users = this.users.filter(u => !this.selectedUsers.includes(u));
+    this.selectedUsers = [];
   }
 
 
-
-  onAddContact(){
-    if(this.formGroup.valid){
+  AddUser() {
+    if (this.formGroup.valid) {
       const formValue = this.formGroup.value;
     }
   }
+
 }
+
+

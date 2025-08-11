@@ -3,15 +3,11 @@
     variable template commence par '#' pour 
      declencher le menu dans la fonction click-->
     <mat-sidenav #sidenav mode="side">
+        @for(link of navLinks; track link.label){
         <mat-nav-list>
-            <a mat-list-item routerLink="">Home</a>
-            <!--<a mat-list-item routerLink="/profile">Profile</a>-->
-            <a mat-list-item routerLink="/signup">Sign-up</a>
-            <a mat-list-item routerLink="/to-do-list">To-Do List</a>
-            <a mat-list-item routerLink="/user">User-list</a>
-            <a mat-list-item routerLink="/todo-table">todo-table</a>
-            <a mat-list-item routerLink="/dashboard">dashboard</a>
+            <a mat-list-item [routerLink]="link.path">{{link.label}}</a>
         </mat-nav-list>
+        }
     </mat-sidenav>
 
     <mat-sidenav-content>
@@ -19,7 +15,7 @@
             <div id="div-toolbar">
                 <mat-toolbar>
                     <button mat-icon-button (click)="sidenav.toggle()">
-                    <mat-icon>menu</mat-icon>
+                        <mat-icon>menu</mat-icon>
                     </button>
                     <span>
                         {{title}}
@@ -30,6 +26,6 @@
             <div id="div-router" class="flex-1">
                 <router-outlet />
             </div>
-        </div>     
+        </div>
     </mat-sidenav-content>
 </mat-sidenav-container>

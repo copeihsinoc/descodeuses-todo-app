@@ -1,21 +1,31 @@
 <mat-card class="h-full flex flex-col">
-    <form [formGroup]="formGroup" (ngSubmit)="onAddContact ()">
+    <form [formGroup]="formGroup" (ngSubmit)="AddUser()">
         <div id="todo-bar-saisie" class="flex gap-2 m-4">
             <mat-form-field appearance="outline" class="flex-1">
-                <input matInput formControlName="title" placeholder="New todo">
+                <input matInput formControlName="title" placeholder="New user">
             </mat-form-field>
             <button mat-fab type="submit">
                 <mat-icon>add</mat-icon>
             </button>
         </div>
     </form>
+
+    <!-- User List with Checkboxes -->
     <div id="user-list">
         <mat-list>
             @for(user of users; track user.id){
-                <mat-list-item>
-                    {{user.firstName}}, {{user.lastName}}, {{user.genre}}
-                </mat-list-item>
+            <mat-list-item>
+                <mat-checkbox [checked]="checked(user)" (change)="select(user)" class="mr-4"></mat-checkbox>
+                {{user.firstname}}, {{user.lastname}}
+            </mat-list-item>
             }
         </mat-list>
+    </div>
+
+    <!-- Delete Button -->
+    <div class="px-4 pb-2 flex justify-center">
+        <button mat-raised-button color="warn" (click)="deleteUser()" [disabled]="!selectedUsers.length">
+            Delete
+        </button>
     </div>
 </mat-card>
