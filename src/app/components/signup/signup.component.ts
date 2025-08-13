@@ -38,7 +38,7 @@ export class SignupComponent implements OnInit {
       username: ['', Validators.required],
       genre: [''],
       password: ['', Validators.required],
-      role: ['user']
+      role: ['ROLE_USER']
     });
 
     console.log('[ngOnInit] Form initialized:', this.signUpForm.value);
