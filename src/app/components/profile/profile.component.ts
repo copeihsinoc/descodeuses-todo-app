@@ -22,6 +22,10 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     this.profileService.getProfile().subscribe({
       next: (profile) => {
+        const image = profile.image && !profile.image.includes('localhost')
+          ?profile.image
+          :'assets/user.png';
+
         //get profile from back
         this.user = {
           ...profile,
