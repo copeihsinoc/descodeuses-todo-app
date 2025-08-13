@@ -14,11 +14,12 @@ export class AppComponent implements OnInit {
   navLinks = [
     { path: '', label: 'Home' },
     { path: 'profile', label: 'Profile' },
-    { path: 'signup', label: 'Sign-up' },
+    { path: 'signup', label: 'Sign up' },
     { path: 'to-do-list', label: 'To-Do List' },
-    { path: 'user', label: 'User-list' },
-    { path: 'todo-table', label: 'todo-table' },
-    { path: 'dashboard', label: 'dashboard' },
+    { path: 'user', label: 'User List' },
+    { path: 'todo-table', label: 'To-do Table' },
+    { path: 'dashboard', label: 'Dashboard' },
+    { path: 'log-out', label: 'Log out' },
   ];
 
   constructor(public authService: AuthService, private router: Router) { }

@@ -79,6 +79,9 @@ export class SignupComponent implements OnInit {
 
     if (this.signUpForm.valid) {
       const formValue = this.signUpForm.value;
+
+      formValue.role = "ROLE_USER";
+
       console.log('[onSubmit] Form is valid, value:', formValue);
 
       this.userService.addUser(formValue).subscribe({

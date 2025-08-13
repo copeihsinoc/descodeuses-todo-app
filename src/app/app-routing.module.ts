@@ -10,6 +10,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { authGuard } from './auth/auth.guard';
 import { SignupComponent } from './components/signup/signup.component';
 import { ProjectDetailComponent } from './components/project-detail/project-detail.component';
+import { LogOutComponent } from './components/log-out/log-out.component';
 
 /* path: lien saisi dans la barre de navigation
    component: le composant relie a ce path
@@ -19,11 +20,12 @@ const routes: Routes = [
   {path:"profile", component:ProfileComponent, canActivate: [authGuard]},
   {path:"signup", component:SignupComponent},
   {path:"to-do-list", component:ToDoListComponent, canActivate: [authGuard]}, 
-  {path:"user", component:UserListComponent, canActivate: [authGuard]},
+  {path:"user", component:UserListComponent, canActivate: [authGuard], data: { requiresAdmin: true } },
   {path:"todo-detail/:id", component:TodoDetailComponent, canActivate: [authGuard]},
   {path:"todo-table", component:TodoTableComponent, canActivate: [authGuard]},
   {path:"dashboard", component:DashboardComponent, canActivate: [authGuard]},//path vide car page par defaut(index)
-  {path:"project-detail/:id", component:ProjectDetailComponent, canActivate: [authGuard]}
+  {path:"project-detail/:id", component:ProjectDetailComponent, canActivate: [authGuard]},
+  {path:"log-out", component:LogOutComponent, canActivate: [authGuard]}
 
 ];
 

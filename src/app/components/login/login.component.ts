@@ -78,7 +78,10 @@ onSubmit(): void {
     this.authService.login(credentials).subscribe({
       next: (res) => {
         console.log('✅ Réponse du serveur (login réussi) :', res);
+
+        //save token / role
         sessionStorage.setItem('authToken', res.token);
+        sessionStorage.setItem('authRole', res.role);
 
         this.authService.isAdmin = res.role == 'ROLE_ADMIN';
 
