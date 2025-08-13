@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface UserProfile {
   username: string;
@@ -12,10 +13,11 @@ export interface UserProfile {
 })
 export class ProfileService {
 
+  private apiURL = environment.apiUrl + '/api/profile';
 
   constructor(private http: HttpClient) { }
 
   getProfile(): Observable<UserProfile>{
-    return this.http.get<UserProfile>('http://localhost:8080/api/profile');
+    return this.http.get<UserProfile>(this.apiURL);
   }
 }

@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
 import { Observable } from 'rxjs';
-import { enviroment } from '../../environments/environment';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ export class UserService {
 
   //private apiURL = 'http://localhost:8080/api/user'
 
-  private apiURL = enviroment.apiUrl + '/api/user';
+  private apiURL = environment.apiUrl + '/api/user';
 
   constructor(private http: HttpClient) { }
 
@@ -21,7 +21,7 @@ export class UserService {
   }
 */
   addUser(user: User): Observable<any> {
-    return this.http.post(`${enviroment.apiUrl}/auth/sign-up`, user);
+    return this.http.post(`${environment.apiUrl}/auth/sign-up`, user);
   }
 
   getUsers() {

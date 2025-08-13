@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Project } from '../models/project.model';
-import { enviroment } from '../../environments/environment';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,7 @@ export class ProjectService {
 
   //private apiURL = 'http://localhost:8080/api/project';
 
-  private apiURL = enviroment.apiUrl + '/api/project';
+  private apiURL = environment.apiUrl + '/api/project';
 
   constructor(private http: HttpClient) { }
 
