@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from './services/auth.service';
 import { Router } from '@angular/router';
+import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +10,7 @@ import { Router } from '@angular/router';
   styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit {
-  title = 'Todo-list';
+  title = 'My Tasks';
 
   navLinks = [
     { path: '', label: 'Home' },
@@ -22,6 +23,8 @@ export class AppComponent implements OnInit {
     { path: 'log-out', label: 'Log out' },
   ];
 
+  @ViewChild('sidenav') sidenav!: MatSidenav;
+
   constructor(public authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
@@ -32,4 +35,10 @@ export class AppComponent implements OnInit {
 
   }
 
+  //version mobile
+  closeSidenav() {
+    if (window.innerWidth < 768) { 
+      this.sidenav.close();
+    }
+  }
 }
