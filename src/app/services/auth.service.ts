@@ -51,5 +51,9 @@ export class AuthService {
     return sessionStorage.getItem('authRole');
   }
 
-  isAdmin = false;
+  //check user = admin
+  get isAdmin(): boolean {
+    return sessionStorage.getItem('authRole') === 'ROLE_ADMIN';
+  }
+
 }

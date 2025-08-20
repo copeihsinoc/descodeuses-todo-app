@@ -16,10 +16,10 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   // 🔧 加上 Authorization header（JWT token）
- /* addUser(user: User): Observable<any> {
-    return this.http.post<User>('http://localhost:8080/auth/sign-up', user);
-  }
-*/
+  /* addUser(user: User): Observable<any> {
+     return this.http.post<User>('http://localhost:8080/auth/sign-up', user);
+   }
+ */
   addUser(user: User): Observable<any> {
     return this.http.post(`${environment.apiUrl}/auth/sign-up`, user);
   }
@@ -37,6 +37,10 @@ export class UserService {
   }
 
   deleteUser(id: number) {
-    return this.http.delete(this.apiURL + '/' + id);
+    return this.http.delete(`${this.apiURL}/${id}`);
+  }
+
+  deleteUsers(ids: number[]) {
+    return this.http.request('delete', this.apiURL + '/batch', { body: ids });
   }
 }

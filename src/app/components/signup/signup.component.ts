@@ -37,8 +37,7 @@ export class SignupComponent implements OnInit {
       firstname: [''],
       username: ['', Validators.required],
       genre: [''],
-      password: ['', Validators.required],
-      role: ['ROLE_USER']
+      password: ['', Validators.required]
     });
 
     console.log('[ngOnInit] Form initialized:', this.signUpForm.value);
@@ -80,24 +79,20 @@ export class SignupComponent implements OnInit {
     if (this.signUpForm.valid) {
       const formValue = this.signUpForm.value;
 
-      formValue.role = "ROLE_USER";
-
-      console.log('[onSubmit] Form is valid, value:', formValue);
+      console.log('[Signup] Form value:', formValue);
 
       this.userService.addUser(formValue).subscribe({
         next: (data) => {
-          console.log('[onSubmit] User added successfully:', data);
           this.snackbar.open('added！', '', { duration: 1500 });
           this.router.navigate(['/to-do-list']);
         },
         error: (error) => {
           console.error('[onSubmit] Error adding user:', error);
-          this.snackbar.open('failed to add ' + (error.error || 'try later'), '', { duration: 3000 });
+          this.snackbar.open('Failed to add:' + (error.error || 'try later'), '', { duration: 3000 });
         }
       });
     } else {
-      console.warn('[onSubmit] Form is invalid:', this.signUpForm.errors);
-      this.snackbar.open('complete all', '', { duration: 1500 });
+      this.snackbar.open('Complete all fields', '', { duration: 1500 });
     }
   }
 }

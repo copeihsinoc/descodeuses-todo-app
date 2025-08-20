@@ -12,7 +12,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatListModule} from '@angular/material/list';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EnregistrerComponent } from './components/enregistrer/enregistrer.component';
 import {MatSelectModule} from '@angular/material/select';
 import { ToDoListComponent } from './components/to-do-list/to-do-list.component';
@@ -72,7 +72,8 @@ import { LogOutComponent } from './components/log-out/log-out.component';
     MatSortModule,
     MatGridListModule,
     MatChipsModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    FormsModule
   ],
   providers: [
     provideNativeDateAdapter(),

@@ -41,65 +41,25 @@ export class LoginComponent implements OnInit {
       password: ['', [Validators.required]]
     });
   }
-  /*
-  onSubmit(){
-    if(this.loginForm.valid){
-      console.log(this.loginForm.value);
 
-      if(this.loginForm.value.usermail == 'admin@test.com' &&
-        this.loginForm.value.password == 'admin'){
-          sessionStorage.setItem('isLoggedIn', 'true');
-          this.router.navigateByUrl('/dashboard');
-        }
-    }
-  }
-  
-    onSubmit(): void{
-    if(this.loginForm.valid){
+  onSubmit(): void {
+    if (this.loginForm.valid) {
       const credentials = this.loginForm.value;
-      this.authService.login(credentials).subscribe({
-        next: (res) =>{ //response
-          sessionStorage.setItem('authToken', res.token);
-          this.router.navigateByUrl('');
-        },
-        error: (err) => console.error('Erreur de connexion', err),
+      console.log('✅ Sending login data:', credentials);
 
+      this.authService.login(credentials).subscribe({
+        next: (res) => {
+          console.log('✅ Login success:', res);
+          this.router.navigateByUrl('/dashboard');
+        },
+        error: (err) => {
+          console.error('❌ Login error:', err);
+        }
       });
+    } else {
+      console.warn('❌ Invalid form:', this.loginForm.errors);
     }
   }
-*/
-onSubmit(): void {
-  console.log('🔄 Tentative de soumission du formulaire');
-
-  if (this.loginForm.valid) {
-    const credentials = this.loginForm.value;
-    console.log('✅ Formulaire valide, données envoyées :', credentials);
-
-    this.authService.login(credentials).subscribe({
-      next: (res) => {
-        console.log('✅ Réponse du serveur (login réussi) :', res);
-
-        //save token / role
-        sessionStorage.setItem('authToken', res.token);
-        sessionStorage.setItem('authRole', res.role);
-
-        this.authService.isAdmin = res.role == 'ROLE_ADMIN';
-
-        this.router.navigateByUrl('/dashboard');
-      },
-      error: (err) => {
-        console.error('❌ Erreur de connexion :', err);
-        if (err.status === 403) {
-          console.warn('⚠️ Erreur 403 - Accès refusé, vérifier les identifiants ou les droits');
-        } else if (err.status === 0) {
-          console.warn('🌐 Erreur réseau ou CORS');
-        }
-      }
-    });
-
-  } else {
-    console.warn('❌ Formulaire invalide :', this.loginForm.errors);
-  }
 }
 
-}
+

@@ -2,9 +2,9 @@
     <form [formGroup]="formGroup" (ngSubmit)="AddUser()">
         <div id="todo-bar-saisie" class="flex gap-2 m-4">
             <mat-form-field appearance="outline" class="flex-1">
-                <input matInput formControlName="title" placeholder="New user">
+                <input matInput type="text" placeholder="Search user" formControlName="textSearch" (input)="onSearch()">
             </mat-form-field>
-            <button mat-fab type="submit">
+            <button mat-fab [routerLink]="['/signup']">
                 <mat-icon>add</mat-icon>
             </button>
         </div>
