@@ -1,5 +1,19 @@
 <mat-table [dataSource]="todos">
 
+  <ng-container matColumnDef="dashboard">
+    <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+      <span [ngClass]="{
+        'bg-red-500 font-bold': row.status === 'Overdue',
+        'bg-yellow-500 font-bold': row.status === 'Urgent',
+        'bg-blue-500 font-bold': row.status === 'Today',
+        'bg-gray-500': row.status === 'Normal'
+      }">
+        {{ row.status }}
+      </span>
+    </mat-cell>
+  </ng-container>
+
   <ng-container matColumnDef="id">
     <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
     <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
@@ -17,7 +31,7 @@
 
   <ng-container matColumnDef="dueDate">
     <mat-header-cell *matHeaderCellDef> dueDate </mat-header-cell>
-  <!-- 
+    <!-- 
   Localisation:
     J'ai utiliser la fonction 'date' qui est un Pipe pour formatter la valeur affichée 
   -->
@@ -35,6 +49,8 @@
   </ng-container>
 
   <!-- Header and Row Declarations -->
-  <mat-header-row *matHeaderRowDef="['id', 'title', 'priority', 'dueDate', 'description', 'completed']"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: ['id', 'title', 'priority', 'dueDate', 'description', 'completed']"></mat-row>
+  <mat-header-row
+    *matHeaderRowDef="['dashboard', 'id', 'title', 'priority', 'dueDate', 'description', 'completed']"></mat-header-row>
+  <mat-row
+    *matRowDef="let row; columns: ['dashboard', 'id', 'title', 'priority', 'dueDate', 'description', 'completed']"></mat-row>
 </mat-table>

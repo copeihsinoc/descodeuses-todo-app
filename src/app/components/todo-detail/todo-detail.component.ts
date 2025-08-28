@@ -56,99 +56,90 @@ export class TodoDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //je recupere le Id de mon URL et je le converti au nombre
-    //pour faire appel au fetch by ID du service CRUD
+    // I get the ID from the URL and convert it to a number
+    // to call the fetch-by-ID function from the CRUD service
+
+    /*-----Get ID from URL-----*/
     const id = Number(this.route.snapshot.paramMap.get('id'));
 
-    this.todoService.getTodo(id).subscribe({
-      next: data => {
-        if (!data) {
-          console.error('Task not found');
-          return;
-        }
 
+    /*-----get contacts first-----*/
+    //ensure allContacts is ready, so you can safely map IDs to full objects.
+    this.contactService.getContacts().subscribe(contacts => {
+      this.allContacts = contacts;
+      this.filteredContacts = contacts;
+
+
+      // get todo
+      this.todoService.getTodo(id).subscribe(data => {
         this.todo = data;
 
-        // ✅ 取得使用者資料
+        // Show username from userId in input.
         if (this.todo.userId !== undefined) {
           this.userService.getUser(this.todo.userId).subscribe(user => {
-            //this.userFullName = `${user.firstname} ${user.lastname}`;
-            console.log('Current user:', this.userFullName);
-            //console.log('🚀 API 回傳 user：', user);
-            //console.log('👀 firstname:', user.firstname);
-            //console.log('👀 lastname:', user.lastname);
-            //console.log('👀 genre:', user.genre);
-
             this.userFullName = `${user.firstname} ${user.lastname}`;
-            console.log('使用者名稱:', this.userFullName);
           });
         }
 
-        // ✅ 初始化表單
+        // initial selectedContacts
+        if (this.todo.memberIds && this.allContacts.length) {
+          this.selectedContacts = this.todo.memberIds
+            .map((memberId: number) => this.allContacts.find(c => c.id === memberId))
+            .filter((c): c is Contact => c !== undefined); // 避免 undefined
+        }
+
+        // initial form
         this.formGroup = this.fb.group({
           id: [this.todo.id],
           title: [this.todo.title, Validators.required],
           completed: [this.todo.completed],
-          priority: [this.todo.priority],
+          priority: [Number(this.todo.priority)],
           dueDate: [this.todo.dueDate],
           description: [this.todo.description],
-          member: [this.todo.member || []],
+          memberIds: [this.todo.memberIds || []],
           projectId: [this.todo.projectId || null],
-          // 可加 userId 但目前寫死 formValue.userId = this.todo.userId;
         });
-
-        // ✅ 預設選中的 contact
-        this.selectedContacts = this.todo.member || [];
-      },
-      error: err => {
-        console.error('Task error:', err);
-      }
+      });
     });
 
-
-    //Fetch all users
-    this.contactService.getContacts().subscribe(contacts => {
-      this.allContacts = contacts;
-      this.filteredContacts = contacts;
-    });
-
-    //Fetch all projects
+    //get all projects
     this.projectService.getProjects().subscribe(projects => {
       this.projects = projects;
-    })
+    });
   }
+
+
 
   onSubmit() {
-    //if (this.formGroup.value.dueDate)
-    //this.formGroup.value.dueDate = this.toLocalIsoString(this.formGroup.value.dueDate);
-    this.formGroup.patchValue({ member: this.selectedContacts });
+    if (!this.formGroup.valid) return;
 
-    /*const userValue = this.formGroup.get('user')?.value;
-    this.formGroup.patchValue({ userId: userValue });*/
+    //only send id to back
+    this.formGroup.patchValue({
+      memberIds: this.selectedContacts.map(c => c.id)
+    });
 
+    const formValue = { ...this.formGroup.value };
 
-    //tester si formulaire valide
-    if (this.formGroup.valid) {
-      const formValue = { ...this.formGroup.value };
-      //formValue.projectId = formValue.projectId;
-      
-
-      formValue.userId = this.todo.userId;
-
-      console.log("send format:", JSON.stringify(formValue));
-
-
-      //faire appel au update du service CRUD
-      this.todoService.updateTodo(formValue).subscribe(data => {
-        //afficher message popup
-        this.snackbar.open('Updated!', '', { duration: 1000 });
-        this.router.navigate(['/todo-table']);
-      })
+    // date
+    if (formValue.dueDate) {
+      formValue.dueDate = this.toLocalIsoString(formValue.dueDate);
     }
-    //tester si formulaire valide
 
-    //faire appel au update du service CRUD
+    // priority => number
+    formValue.priority = Number(formValue.priority);
+
+    // Ensure userId is not null
+    // Current user id = 1
+    formValue.userId = this.todo.userId ?? 1; 
+
+    console.log('Sending data:', formValue);
+
+    this.todoService.updateTodo(formValue).subscribe(() => {
+      this.snackbar.open('Updated!', '', { duration: 1000 });
+      this.router.navigate(['/todo-table']);
+    });
   }
+
 
   onCancel() {
     //revenir sur la liste initiale apres sauvegarde
@@ -156,29 +147,31 @@ export class TodoDetailComponent implements OnInit {
   }
 
   toLocalIsoString(dateString: string): string {
-    const dateObject = new Date(dateString);
-    return new Date(dateObject.getTime() - dateObject.getTimezoneOffset() * 60000).toISOString();
+    const date = new Date(dateString);
+    return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString();
   }
 
 
   /*-----chips-----*/
-  remove(id: number): void {
-    this.selectedContacts = this.selectedContacts.filter(u => u.id !== id);
+  remove(id: number) {
+    this.selectedContacts = this.selectedContacts.filter(c => c.id !== id);
   }
 
+  //filter contacts
   onCurrentUserChange(value: string) {
     const filterValue = value.toLowerCase();
-    this.filteredContacts = this.allContacts.filter(contact =>
-      contact.firstName.toLowerCase().includes(filterValue)
+    this.filteredContacts = this.allContacts.filter(c =>
+      c.firstName.toLowerCase().includes(filterValue)
     );
   }
 
+  //select contacts
   selected(event: MatAutocompleteSelectedEvent): void {
     const selectedId = Number(event.option.value);
-    const selectedUser = this.allContacts.find((u) => u.id === selectedId);
+    const selectedUser = this.allContacts.find((c) => c.id === selectedId);
 
-    if (selectedUser && !this.selectedContacts.some((u) => u.id === selectedId)) {
-      this.selectedContacts = [...this.selectedContacts, selectedUser];
+    if (selectedUser && !this.selectedContacts.some((c) => c.id === selectedId)) {
+      this.selectedContacts.push(selectedUser);
     }
 
     this.currentContact.setValue('');
@@ -193,3 +186,4 @@ export class TodoDetailComponent implements OnInit {
   }
 
 }
+

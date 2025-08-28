@@ -20,8 +20,8 @@ export interface Todo {
     priority: string | null;
     dueDate: string;
     description: string | null;
-    member?: Contact[]; //? optional if it's empty no table or..
-    projectId?: number;
+    memberIds?: number[]; //? optional if it's empty no table or..
+    projectId?: number | null;
     userId?: number;
 
     firstname?: string;
