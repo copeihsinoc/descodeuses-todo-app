@@ -1,56 +1,77 @@
-<mat-table [dataSource]="todos">
+<div class="hidden sm:block">
+  <mat-table [dataSource]="todos">
 
-  <ng-container matColumnDef="dashboard">
-    <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
-    <mat-cell *matCellDef="let row">
-      <span [ngClass]="{
-        'bg-red-500 font-bold': row.status === 'Overdue',
-        'bg-yellow-500 font-bold': row.status === 'Urgent',
-        'bg-blue-500 font-bold': row.status === 'Today',
-        'bg-gray-500': row.status === 'Normal'
-      }">
-        {{ row.status }}
-      </span>
-    </mat-cell>
-  </ng-container>
+    <!-- Dashboard / Status Column -->
 
-  <ng-container matColumnDef="id">
-    <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
-    <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
-  </ng-container>
+    <ng-container matColumnDef="dashboard">
+      <mat-header-cell *matHeaderCellDef class="!bg-red-300 font-bold px-4 py-2">
+        Status
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row" class="px-4 py-3 text-center">
+        <div class="inline-block px-3 py-1 rounded-full text-white text-center"
+          [style.background-color]="getStatusColor(row.status)">
+          {{ row.status }}
+        </div>
+      </mat-cell>
+    </ng-container>
 
-  <ng-container matColumnDef="title">
-    <mat-header-cell *matHeaderCellDef> title </mat-header-cell>
-    <mat-cell *matCellDef="let row"> {{row.title}} </mat-cell>
-  </ng-container>
+    <!-- ID Column -->`
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef class="!bg-red-300 font-bold px-4 py-2"> No. </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+    </ng-container>
 
-  <ng-container matColumnDef="priority">
-    <mat-header-cell *matHeaderCellDef> priority </mat-header-cell>
-    <mat-cell *matCellDef="let row"> {{row.priority}} </mat-cell>
-  </ng-container>
+    <!-- Title Column -->
+    <ng-container matColumnDef="title">
+      <mat-header-cell *matHeaderCellDef class="!bg-red-300 font-bold px-4 py-2"> title </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.title}} </mat-cell>
+    </ng-container>
 
-  <ng-container matColumnDef="dueDate">
-    <mat-header-cell *matHeaderCellDef> dueDate </mat-header-cell>
-    <!-- 
-  Localisation:
-    J'ai utiliser la fonction 'date' qui est un Pipe pour formatter la valeur affichée 
-  -->
-    <mat-cell *matCellDef="let row"> {{row.dueDate | date:'dd/MM/yyyy'}} </mat-cell>
-  </ng-container>
+    <!-- Priority Column -->
+    <ng-container matColumnDef="priority">
+      <mat-header-cell *matHeaderCellDef class="!bg-red-300 font-bold px-4 py-2"> priority </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.priority}} </mat-cell>
+    </ng-container>
 
-  <ng-container matColumnDef="description">
-    <mat-header-cell *matHeaderCellDef> description </mat-header-cell>
-    <mat-cell *matCellDef="let row"> {{row.description}} </mat-cell>
-  </ng-container>
+    <!-- DueDate Column -->
+    <ng-container matColumnDef="dueDate">
+      <mat-header-cell *matHeaderCellDef class="!bg-red-300 font-bold px-4 py-2"> dueDate </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.dueDate | date:'dd/MM/yyyy'}} </mat-cell>
+    </ng-container>
 
-  <ng-container matColumnDef="completed">
-    <mat-header-cell *matHeaderCellDef> completed </mat-header-cell>
-    <mat-cell *matCellDef="let row"> {{row.completed}} </mat-cell>
-  </ng-container>
+    <!-- Description Column -->
+    <ng-container matColumnDef="description">
+      <mat-header-cell *matHeaderCellDef class="!bg-red-300 font-bold px-4 py-2"> description </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.description}} </mat-cell>
+    </ng-container>
 
-  <!-- Header and Row Declarations -->
-  <mat-header-row
-    *matHeaderRowDef="['dashboard', 'id', 'title', 'priority', 'dueDate', 'description', 'completed']"></mat-header-row>
-  <mat-row
-    *matRowDef="let row; columns: ['dashboard', 'id', 'title', 'priority', 'dueDate', 'description', 'completed']"></mat-row>
-</mat-table>
+    <!-- Completed Column -->
+    <ng-container matColumnDef="completed">
+      <mat-header-cell *matHeaderCellDef class="!bg-red-300 font-bold px-4 py-2"> completed </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.completed}} </mat-cell>
+    </ng-container>
+
+    <!-- Header and Row Declarations -->
+    <mat-header-row *matHeaderRowDef="['dashboard', 'id', 'title', 'priority', 'dueDate', 'description', 'completed']">
+    </mat-header-row>
+    <mat-row
+      *matRowDef="let row; columns: ['dashboard', 'id', 'title', 'priority', 'dueDate', 'description', 'completed']">
+    </mat-row>
+
+  </mat-table>
+</div>
+
+
+<!-- Cartes pour mobile -->
+<div class="block sm:hidden w-full space-y-4">
+  <div *ngFor="let todo of todos" class="bg-cyan-700 p-4 rounded-xl shadow-md">
+    <p class="text-sm text-white tracking-wide" [ngStyle]="{'background-color': getStatusColor(getStatus(todo))}">
+      Etat: {{ getStatus(todo) }}
+    </p>
+    <p class="text-sm text-white tracking-wide">Titre: {{todo.title}}</p>
+    <p class="text-sm  text-white tracking-wide">Priorité: {{todo.priority}}</p>
+    <p class="text-sm  text-white tracking-wide">Echéance: {{todo.dueDate | date:'dd/MM/yyyy'}}</p>
+    <p class="text-sm  text-white tracking-wide">Complétion: {{todo.completed ? 'Oui' : 'Non'}}</p>
+    <p class="text-sm  text-white tracking-wide">Description:{{todo.description}}</p>
+  </div>
+</div>

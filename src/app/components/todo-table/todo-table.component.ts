@@ -12,6 +12,7 @@ export class TodoTableComponent implements OnInit {
   todos: Todo[] = [];
   //displayColums: string[] = ['id', 'titre', 'priority', 'date', 'description', 'completed'];
 
+
   constructor(private todoService: TodoService) {
 
   }
@@ -20,28 +21,39 @@ export class TodoTableComponent implements OnInit {
     this.fetchTodo();
   }
 
-  fetchTodo() {
-    this.todoService.getTodos().subscribe((data) => {
-      const today = new Date();
+  // 計算狀態，不改變 Todo 型別
+  getStatus(todo: Todo): string {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-      this.todos = data.map(todo => {
-        const dueDate = new Date(todo.dueDate);
-        
-        let status = '';
+    const dueDate = new Date(todo.dueDate);
+    dueDate.setHours(0, 0, 0, 0);
 
-        if (todo.priority == '1' && dueDate.toDateString() == today.toDateString()) {
-          status = 'Urgent';
-        } else if (dueDate.toDateString() == today.toDateString()) {
-          status = 'Today';
-        } else if (dueDate < today) {
-          status = 'Overdue';
-        } else {
-          status = 'Normal';
-        }
-
-        return { ...todo, status }; // 新增 status 欄位
-      });
-    });
+    if (Number(todo.priority) === 1 && dueDate.getTime() === today.getTime()) {
+      return 'Urgent';
+    } else if (dueDate.getTime() === today.getTime()) {
+      return 'Today';
+    } else if (dueDate < today) {
+      return 'Overdue';
+    } else {
+      return 'Normal';
+    }
   }
 
+  // Tailwind / 顏色對應
+  getStatusColor(status: string): string {
+    switch (status) {
+      case 'Overdue': return '#f87171';  // bg-red-400
+      case 'Urgent': return '#facc15';   // bg-yellow-500
+      case 'Today': return '#3b82f6';    // bg-blue-500
+      case 'Normal': return '#6b7280';   // bg-gray-500
+      default: return '#ffffff';
+    }
+  }
+
+  fetchTodo() {
+    this.todoService.getTodos().subscribe((data) => {
+      this.todos = data; // 直接存原始 Todo
+    });
+  }
 }
