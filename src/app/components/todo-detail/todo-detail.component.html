@@ -1,12 +1,13 @@
-@if(formGroup!=null){
+@if(todoForm!=null){
 <div class="main-container">
     <!--mat-card cant use flex!!!-->
     <mat-card id="full-cover-background" class="p-6 rounded shadow-md w-full max-w-md bg-white">
         <mat-card-header>
-            <mat-card-title class="text-center w-full">Edit Todo</mat-card-title>
+            <mat-card-title class="text-center w-full">{{currentUser?.firstname}}'s task</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-            <form class="mt-10" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+            <form class="mt-10" [formGroup]="todoForm" (ngSubmit)="onSubmit()">
+
                 <!----- Title ----->
                 <div id="titre-container">
                     <mat-form-field class="field">
@@ -14,6 +15,7 @@
                         <input matInput formControlName="title">
                     </mat-form-field>
                 </div>
+
                 <!-----chips----->
                 <div>
                     <mat-form-field class="field">
@@ -29,9 +31,8 @@
                             }
                         </mat-chip-grid>
 
-                        <input name="currentUser" #userInput [formControl]="currentContact"
-                            [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
-                            (input)="onCurrentUserChange(userInput.value)" />
+                        <input name="currentUser" #userInput [formControl]="currentContact" [matChipInputFor]="chipGrid"
+                            [matAutocomplete]="auto" (input)="onCurrentUserChange(userInput.value)" />
 
                         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
                             @for (user of filteredContacts; track user) {
@@ -47,10 +48,13 @@
                 <div id="user-container">
                     <mat-form-field class="field">
                         <mat-label>User:</mat-label>
-                        <input matInput [value]="userFullName" readonly/>
+                        <mat-select formControlName="userIds" multiple>
+                            @for (user of users; track user.id){
+                            <mat-option [value]="user.id">{{ user.firstname }} {{ user.lastname }}</mat-option>
+                            }
+                        </mat-select>
                     </mat-form-field>
                 </div>
-
 
                 <!----- Priority ----->
                 <div id="priority-container">
@@ -63,6 +67,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
+
                 <!-----project----->
                 <div id="projectId-container">
                     <mat-form-field class="field">
@@ -74,6 +79,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
+
                 <!-----Date----->
                 <div id="date-container">
                     <mat-form-field class="field">
@@ -83,6 +89,7 @@
                         <mat-datepicker #picker></mat-datepicker>
                     </mat-form-field>
                 </div>
+
                 <!-----Description----->
                 <div id="description-container">
                     <mat-form-field class="field">
@@ -90,11 +97,13 @@
                         <textarea matInput formControlName="description"></textarea>
                     </mat-form-field>
                 </div>
+
                 <!-----Completed----->
                 <div class="mb-5">
                     <mat-checkbox formControlName="completed"></mat-checkbox>
                     <mat-label>completed</mat-label>
                 </div>
+
                 <mat-card-actions>
                     <button mat-raised-button type="submit" class="w-30">
                         save

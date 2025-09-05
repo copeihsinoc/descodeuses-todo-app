@@ -20,9 +20,10 @@ export interface Todo {
     priority: string | null;
     dueDate: string;
     description: string | null;
+    
     memberIds?: number[]; //? optional if it's empty no table or..
     projectId?: number | null;
-    userId?: number;
+    userIds?: number;
 
     firstname?: string;
     lastname?: string;

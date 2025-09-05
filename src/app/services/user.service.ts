@@ -27,9 +27,13 @@ export class UserService {
   getUsers() {
     return this.http.get<User[]>(this.apiURL);
   }
+  
+  getCurrentUser(): Observable<User> {
+    return this.http.get<User>(`${this.apiURL}/current`);
+  }
 
-  getUser(id: number): Observable<User> {
-    return this.http.get<User>(this.apiURL + '/current');
+  getUserById(id: number): Observable<User> {
+    return this.http.get<User>(`${this.apiURL}/${id}`);
   }
 
   updateUser(user: User) {

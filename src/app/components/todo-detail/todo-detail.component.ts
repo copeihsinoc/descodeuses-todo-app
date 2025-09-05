@@ -10,6 +10,7 @@ import { Project } from '../../models/project.model';
 import { ProjectService } from '../../services/project.service';
 import { ContactService } from '../../services/contact.service';
 import { UserService } from '../../services/user.service';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-todo-detail',
@@ -19,7 +20,10 @@ import { UserService } from '../../services/user.service';
 })
 export class TodoDetailComponent implements OnInit {
 
-  /*-----1-----*/
+  todo!: Todo;
+  todoForm!: FormGroup;
+
+  /*-----Contacts(chip)-----*/
   //create a new form
   currentContact = new FormControl('');
   //selected one
@@ -29,19 +33,19 @@ export class TodoDetailComponent implements OnInit {
   //searching item
   filteredContacts: Contact[] = [];
 
-  todo!: Todo;
-  formGroup!: FormGroup;
+  //Projects
+  projects: Project[] = [];
+  //Users
+  users: any[] = [];
+
+  //currentUser
+  currentUser: any;
 
   listPriority = [
     { text: '1', value: 1 },
     { text: '2', value: 2 },
     { text: '3', value: 3 }
   ];
-
-  /*project table */
-  projects: Project[] = [];
-
-  userFullName: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -52,8 +56,7 @@ export class TodoDetailComponent implements OnInit {
     private contactService: ContactService,
     private projectService: ProjectService,
     private userService: UserService
-  ) {
-  }
+  ) { }
 
   ngOnInit(): void {
     // I get the ID from the URL and convert it to a number
@@ -62,77 +65,76 @@ export class TodoDetailComponent implements OnInit {
     /*-----Get ID from URL-----*/
     const id = Number(this.route.snapshot.paramMap.get('id'));
 
+    /*-----load all infos-----*/
 
-    /*-----get contacts first-----*/
-    //ensure allContacts is ready, so you can safely map IDs to full objects.
+    // 1. get all users
+    this.userService.getUsers().subscribe(users => {
+      this.users = users;
+    });
+
+    // 2. get current user
+    this.userService.getCurrentUser().subscribe(user => {
+      this.currentUser = user;
+    });
+
+    // 3.get all Contacts
     this.contactService.getContacts().subscribe(contacts => {
       this.allContacts = contacts;
       this.filteredContacts = contacts;
 
 
       // get todo
-      this.todoService.getTodo(id).subscribe(data => {
-        this.todo = data;
+      this.todoService.getTodo(id).subscribe(todo => {
+        this.todo = todo;
 
-        // Show username from userId in input.
-        if (this.todo.userId !== undefined) {
-          this.userService.getUser(this.todo.userId).subscribe(user => {
-            this.userFullName = `${user.firstname} ${user.lastname}`;
-          });
-        }
 
-        // initial selectedContacts
+        // initial selectedContacts(chips)
         if (this.todo.memberIds && this.allContacts.length) {
           this.selectedContacts = this.todo.memberIds
-            .map((memberId: number) => this.allContacts.find(c => c.id === memberId))
-            .filter((c): c is Contact => c !== undefined); // 避免 undefined
+            .map(id => this.allContacts.find(c => c.id === id))
+            .filter((c): c is Contact => c !== undefined);
         }
 
         // initial form
-        this.formGroup = this.fb.group({
+        this.todoForm = this.fb.group({
           id: [this.todo.id],
           title: [this.todo.title, Validators.required],
           completed: [this.todo.completed],
-          priority: [Number(this.todo.priority)],
-          dueDate: [this.todo.dueDate],
-          description: [this.todo.description],
+          priority: [this.todo.priority || 1],
+          dueDate: [this.todo.dueDate || ''],
+          description: [this.todo.description || ''],
           memberIds: [this.todo.memberIds || []],
           projectId: [this.todo.projectId || null],
+          userIds: [this.todo.userIds || []]
         });
       });
     });
 
-    //get all projects
+    // 4.get all projects
     this.projectService.getProjects().subscribe(projects => {
       this.projects = projects;
     });
+
+
   }
 
 
-
   onSubmit() {
-    if (!this.formGroup.valid) return;
+    if (!this.todoForm.valid) return;
 
-    //only send id to back
-    this.formGroup.patchValue({
-      memberIds: this.selectedContacts.map(c => c.id)
-    });
+    const formValue = { ...this.todoForm.value };
 
-    const formValue = { ...this.formGroup.value };
-
-    // date
+    // duedate -> ISO string
     if (formValue.dueDate) {
-      formValue.dueDate = this.toLocalIsoString(formValue.dueDate);
+      const date = new Date(formValue.dueDate);
+      formValue.dueDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString();
     }
+
+    // 將 chips 選擇的 memberIds 寫回
+    formValue.memberIds = this.selectedContacts.map(c => c.id);
 
     // priority => number
     formValue.priority = Number(formValue.priority);
-
-    // Ensure userId is not null
-    // Current user id = 1
-    formValue.userId = this.todo.userId ?? 1; 
-
-    console.log('Sending data:', formValue);
 
     this.todoService.updateTodo(formValue).subscribe(() => {
       this.snackbar.open('Updated!', '', { duration: 1000 });
@@ -140,17 +142,10 @@ export class TodoDetailComponent implements OnInit {
     });
   }
 
-
   onCancel() {
     //revenir sur la liste initiale apres sauvegarde
     this.router.navigate(['/']);
   }
-
-  toLocalIsoString(dateString: string): string {
-    const date = new Date(dateString);
-    return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString();
-  }
-
 
   /*-----chips-----*/
   remove(id: number) {
