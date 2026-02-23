@@ -19,8 +19,8 @@ import { AuthService } from '../../services/auth.service';
 //'implements' pour implementer une interface
 //une classe peut implementer plusieurs interfaces
 export class LoginComponent implements OnInit {
-//'!' pour pouvoir initialiser la variable ultérieurement
-  loginForm! : FormGroup;
+  //'!' pour pouvoir initialiser la variable ultérieurement
+  loginForm!: FormGroup;
 
   //j'utilise l'injection automatique de angular pour recuperer
   //un objet form builder qui va construire le formulaire
@@ -29,10 +29,10 @@ export class LoginComponent implements OnInit {
   //'private' avant formBuilder pour pouvoir acceder a la variable 
   //en dehors du constructeur
 
-  constructor(private formBuilder : FormBuilder, private router:Router, private authService : AuthService){
+  constructor(private formBuilder: FormBuilder, private router: Router, private authService: AuthService) {
 
   }
-  
+
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
       //1er parametre : valeur initiale du champ
@@ -45,11 +45,20 @@ export class LoginComponent implements OnInit {
   onSubmit(): void {
     if (this.loginForm.valid) {
       const credentials = this.loginForm.value;
+
+      //can see username/password
       console.log('✅ Sending login data:', credentials);
 
       this.authService.login(credentials).subscribe({
         next: (res) => {
+
+          //can see role
           console.log('✅ Login success:', res);
+
+          // ✅ 這裡存 token 與角色
+          sessionStorage.setItem('authToken', res.token);
+          sessionStorage.setItem('authRole', res.role); // 直接存字串
+
           this.router.navigateByUrl('/dashboard');
         },
         error: (err) => {

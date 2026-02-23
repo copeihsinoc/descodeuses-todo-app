@@ -56,4 +56,10 @@ export class AuthService {
     return sessionStorage.getItem('authRole') === 'ROLE_ADMIN';
   }
 
+
+  // <!>方便 Guard 或 Sidebar 判斷使用者是否登入
+  get isLoggedIn(): boolean {
+    return !!this.getToken();
+  }
+
 }

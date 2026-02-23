@@ -13,9 +13,9 @@ export interface Todo {
     // | null cad champ optionel
 
     //identifiant
-    id: number | null;
+    id: number;
     
-    title: string | null;
+    title: string;
     completed: boolean | null;
     priority: string | null;
     dueDate: string;

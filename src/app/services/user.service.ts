@@ -27,24 +27,34 @@ export class UserService {
   getUsers() {
     return this.http.get<User[]>(this.apiURL);
   }
-  
+
   getCurrentUser(): Observable<User> {
     return this.http.get<User>(`${this.apiURL}/current`);
   }
 
-  getUserById(id: number): Observable<User> {
+  getUser(id: number): Observable<User> {
     return this.http.get<User>(`${this.apiURL}/${id}`);
   }
 
   updateUser(user: User) {
     return this.http.put<User>(this.apiURL + '/' + user.id, user);
   }
-
+  /*
+  updateUser(user: User) {
+    const payload = { ...user, role: user.role}; // 確保有 role
+    return this.http.put<User>(this.apiURL + '/' + user.id, payload);
+  }
+  */
   deleteUser(id: number) {
     return this.http.delete(`${this.apiURL}/${id}`);
   }
 
   deleteUsers(ids: number[]) {
     return this.http.request('delete', this.apiURL + '/batch', { body: ids });
+  }
+
+  // 新增每日獎勵 API
+  claimDailyReward(): Observable<User> {
+    return this.http.post<User>(`${this.apiURL}/daily-reward`, {});
   }
 }

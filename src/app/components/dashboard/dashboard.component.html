@@ -1,16 +1,136 @@
-<div id="list-blocks" class="grid grid-cols-3 p-4 gap-4" >
-    @for( kpi of kpis; track kpi.id) {
-    <!-- kpi:object of kpis tableaux can name: element etc; track kpi.n'importe quel -->
-    <!-- '!' pour ecraser la couleur du mat-card -->
-    <mat-card class="text-white p-4" [ngClass] = "kpi.bg">  <!--[ngClass] :class--> 
-        <div class="flex item-center gap-x-4">
-            <mat-icon id="b1-col1" class="felx items-center p-4 text-3xl">{{kpi.icon}}</mat-icon>
-            <div id="b1-col2">
-                <div id="title" class="uppercase text-sm opacity-80">{{kpi.title}}</div>
-                <div id="valeur" class="text-2xl font-bold">{{kpi.value}}</div>
+<!-- ================= Layout Container ================= -->
+<div class="container mx-auto px-4 md:px-6 lg:px-8">
+
+    <!-- ================= Top Card ================= -->
+    <div
+        class="top-card w-full flex flex-col md:flex-row md:gap-15 md:p-8">
+
+        <!-- 左邊: 貓咪照片 -->
+        <div class="flex justify-center items-center">
+            <img [src]="user?.catPhoto" alt="user cat"
+                class="rounded-2xl w-36 md:w-40 lg:w-48 h-full object-cover border-3 border-amber-800" />
+        </div>
+
+        <!-- 右邊內容 -->
+        <div class="flex-1 flex flex-col gap-4 w-full">
+            <span class="text-lg font-semibold text-center md:text-left">Your Cat</span>
+
+            <!-- 能量條 + 等級 -->
+            <div class="w-full">
+                <div class="flex justify-between mb-2">
+                    <span>Lv. {{ level }}</span>
+                    <span>{{ energy }}%</span>
+                </div>
+                <div class="bg-green-200 h-5 rounded-full">
+                    <div class="bg-green-500 h-5 rounded-full transition-all duration-300" [style.width.%]="energy">
+                    </div>
+                </div>
+            </div>
+
+            <span class="font-semibold">Rewards</span>
+
+            <!-- 道具 + Feed -->
+            <div class="flex justify-between items-center mt-4 w-full">
+                <div class="flex gap-8 flex-wrap items-center">
+                    <!-- Fish -->
+                    <div class="relative flex flex-col items-center cursor-pointer"
+                        [class.selected]="selectedItem === 'fish'" (click)="selectItem('fish')">
+                        <img src="assets/fish.png" class="w-10 md:w-12 h-10 md:h-12 rounded-full scale-x-[-1]">
+                        <span
+                            class="absolute -top-2 -right-2 bg-orange-400 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">{{
+                            fishCount }}</span>
+                    </div>
+
+                    <!-- Toy -->
+                    <div class="relative flex flex-col items-center cursor-pointer"
+                        [class.selected]="selectedItem === 'toy'" (click)="selectItem('toy')">
+                        <img src="assets/toy.png" class="w-10 md:w-12 h-10 md:h-12 rounded-full">
+                        <span
+                            class="absolute -top-2 -right-2 bg-orange-400 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">{{
+                            toyCount }}</span>
+                    </div>
+
+                    <!-- Heart -->
+                    <div class="relative flex flex-col items-center cursor-pointer"
+                        [class.selected]="selectedItem === 'heart'" (click)="selectItem('heart')">
+                        <img src="assets/heart.png" class="w-10 md:w-12 h-10 md:h-12 rounded-full">
+                        <span
+                            class="absolute -top-2 -right-2 bg-orange-400 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">{{
+                            heartCount }}</span>
+                    </div>
+                </div>
+
+                <!-- Feed 按鈕 -->
+                <button type="button" class="btn-feed min-w-[130px] px-4" (click)="feed(selectedItem)"
+                    [disabled]="isFeedDisabled()">
+                    Feed
+                </button>
             </div>
         </div>
-        
-    </mat-card>
-    }
+    </div>
+
+    <!-- ================= Bottom Section (2:1 Ratio) ================= -->
+    <div class="bottom-section w-full max-w-full mt-6 grid grid-cols-3 gap-6">
+
+        <!-- 左邊卡片 (占 2/3) -->
+        <div class="left-card col-span-2 w-full shadow-lg p-8">
+            <span class="text-2xl font-semibold block mb-4">Task Overview</span>
+
+            <!-- KPI 區 -->
+            <div id="list-blocks" class="grid grid-cols-3 gap-4">
+                @for (kpi of kpis; track kpi.id) {
+                <mat-card class="text-white p-4 w-full" [ngClass]="kpi.bg">
+                    <div class="flex items-center gap-x-4">
+                        <mat-icon class="flex items-center p-4 text-3xl">{{ kpi.icon }}</mat-icon>
+                        <div>
+                            <div class="uppercase text-sm opacity-80">{{ kpi.title }}</div>
+                            <div class="text-2xl font-bold">{{ kpi.value }}</div>
+                        </div>
+                    </div>
+                </mat-card>
+                }
+            </div>
+
+            <!-- Activity 標題 -->
+            <span class="text-2xl font-semibold block mt-8 mb-2">Activity</span>
+
+            <!-- Activity 內容 -->
+            <div class="flex flex-col gap-3">
+                <div>
+                    <img src="assets/check circle.png" class="w-8 h-8 inline-block" />
+                    <span class="text-lg font-semibold">Completed {{ completedCount }} Tasks</span>
+                </div>
+
+                <div>
+                    <img src="assets/star.png" class="w-8 h-8 inline-block" />
+                    <span class="text-lg font-semibold">Daily Challenge</span>
+                </div>
+
+                <mat-card class="card-challenge p-4 w-full">
+                    <div class="flex items-center gap-6">
+                        <p class="text-2xl font-semibold whitespace-nowrap">{{ completedCount }}/3</p>
+
+                        <div class="bg-blue-200 h-4 rounded-full w-full">
+                            <div class="bg-blue-500 h-4 rounded-full transition-all duration-300"
+                                [style.width.%]="(completedCount / 3) * 100 || 5"></div>
+                        </div>
+
+                        <span class="text-lg"> + </span>
+                        <img src="assets/fish-re.png" alt="Claim Reward" class="w-16 h-14 cursor-pointer"
+                            [class.flash]="completedCount >= 3" (click)="claimDailyReward()" />
+                    </div>
+                    <div>
+                        <span class="text-lg">Progress</span>
+                    </div>
+                </mat-card>
+            </div>
+        </div>
+
+        <!-- 右邊兩塊卡片 (占 1/3) -->
+        <div class="right-section col-span-1 w-full max-w-full flex flex-col gap-6">
+            <div class="card-r1 w-full rounded-2xl shadow-lg p-4">Achievements</div>
+            <div class="card-r2 w-full rounded-2xl shadow-lg p-4">Chat</div>
+        </div>
+
+    </div>
 </div>

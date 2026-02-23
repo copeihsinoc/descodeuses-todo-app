@@ -1,38 +1,159 @@
-<div class="flex h-full bg-gray-100 items-center justify-center">
-    <div id="profile-container"
-        class="m-4 p-6 bg-red-200 rounded-xl shadow-md flex flex-col items-center gap-10">
+<div class="flex h-full p-4 gap-4">
+    <mat-card class="card1 flex flex-col p-5 w-full max-w-md">
+        <form [formGroup]="profileForm" (ngSubmit)="onSave()" class="form-grid custom-form">
 
-        <!-- user photo -->
-        <img [src]="user?.image" alt="user image"
-            class="rounded-full w-30 h-30 object-cover border-4 border-white shadow-md flex-shrink-0" />
+            <!-- user photo -->
+            <div class="flex flex-col items-center mt-2">
+                <img [src]="profileForm.get('catPhoto')?.value" alt="user cat"
+                    class="rounded-2xl w-40 h-40 object-cover border-4 border-amber-900" />
 
-        <!-- unmodified mode -->
-        @if (!editMode) {
-        <div class="flex flex-col items-center w-48 space-y-10">
-            <h2 class="text-2xl font-semibold text-red-800 text-center">{{ user?.username }}</h2>
-            <button (click)="enableEdit()"
-                class="px-6 py-2 bg-red-400 text-white border-0 rounded shadow hover:bg-red-500 transition duration-300">
-                Edit
-            </button>
-        </div>
-        } @else {
-        <!-- modified mode -->
-        <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="flex flex-col items-center w-48 space-y-10">
+                <div class="form-row m-5">
+                    <span>Your Cat</span>
+                </div>
+            </div>
 
-            <input type="text" formControlName="username"
-                class="w-full py-2 border border-red-400 rounded focus:outline-none focus:ring-2 focus:ring-red-500" />
+            <!-- Username -->
+            <div class="form-row">
+                <label>Username:</label>
+                <input formControlName="username" type="text" class="custom-input">
+            </div>
 
-            <div class="flex gap-4">
-                <button type="submit" [disabled]="profileForm.invalid"
-                    class="px-6 py-2 bg-red-400 text-white border-0 rounded shadow disabled:opacity-50 hover:bg-red-500 transition duration-300">
-                    Save
+            <!-- Password -->
+            <div class="form-row relative">
+                <label>Password:</label>
+                <input [type]="showPassword ? 'text' : 'password'" formControlName="password" class="custom-input"
+                    placeholder="●●●●●●●" />
+                <button type="button" class="absolute right-2 top-1/2 -translate-y-1/2" (click)="togglePassword()"
+                    style="background: none; border: none; cursor: pointer;">
+                    <!-- icon -->
+                    <span class="material-icons" style="font-size: 20px;">edit</span>
                 </button>
-                <button type="button" (click)="cancel()"
-                    class="px-6 py-2 bg-gray-300 text-gray-700 border-0 rounded hover:bg-gray-400 transition duration-300">
-                    Cancel
+            </div>
+
+            <div class="form-row">
+                <label>You have</label>
+            </div>
+
+            <div class="flex items-center justify-between mt-2">
+
+                <!-- 左邊圖片群組 -->
+                <div class="flex gap-6 items-center">
+
+                    <!-- Fish -->
+                    <div class="relative flex flex-col items-center cursor-pointer"
+                        [class.selected]="selectedItem === 'fish'" (click)="selectItem('fish')">
+                        <img src="assets/fish.png" class="w-18 h-16 rounded-full scale-x-[-1]">
+                        <span
+                            class="absolute -top-2 -right-2 bg-orange-400 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                            {{ fishCount }}
+                        </span>
+                    </div>
+
+                    <!-- Toy -->
+                    <div class="relative flex flex-col items-center cursor-pointer"
+                        [class.selected]="selectedItem === 'toy'" (click)="selectItem('toy')">
+                        <img src="assets/toy.png" class="w-16 h-16 rounded-full">
+                        <span
+                            class="absolute -top-2 -right-2 bg-orange-400 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                            {{ toyCount }}
+                        </span>
+                    </div>
+
+                    <!-- Heart -->
+                    <div class="relative flex flex-col items-center cursor-pointer"
+                        [class.selected]="selectedItem === 'heart'" (click)="selectItem('heart')">
+                        <img src="assets/heart.png" class="w-16 h-16 rounded-full">
+                        <span
+                            class="absolute -top-2 -right-2 bg-orange-400 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                            {{ heartCount }}
+                        </span>
+                    </div>
+
+                </div>
+
+                <!-- 右邊 Feed 按鈕 -->
+                <div>
+                    <button type="button" class="btn-feed" (click)="feedSelectedItem()" [disabled]="totalItems() === 0">
+                        Feed
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- 能量條 + 等級 -->
+            <div class="mt-6 w-full max-w-md">
+                <div class="flex justify-between mb-4">
+                    <span>Lv. {{ level }}</span>
+                    <span>{{ energy }}%</span>
+                </div>
+                <div class="bg-green-200 h-6 rounded-full mb-5">
+                    <div class="bg-green-500 h-6 rounded-full" [style.width.%]="energy"></div>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="form-actions">
+                <button type="button" (click)="onCancel()" class="btn-cancel">
+                    <mat-icon>cancel</mat-icon> cancel
+                </button>
+                <button type="submit" class="btn-save">
+                    <img src="assets/heart.png" alt="Logo" class="w-8 h-8 rounded-full" /> save
                 </button>
             </div>
         </form>
-        }
+    </mat-card>
+</div>
+
+<!-- Level Up Modal -->
+<div *ngIf="showLevelUpModal" class="modal-overlay">
+    <div class="modal-content">
+
+        <!-- light -->
+        <div class="light">
+            <img src="assets/light.png" alt="light">
+        </div>
+
+        <!-- Banner star -->
+        <div class="level-banner">
+            <img src="assets/banner.png" alt="banner">
+        </div>
+
+        <div class="modal-layer-inner">
+
+            <!-- SVG 虛線 -->
+            <svg class="border-svg" width="100%" height="100%">
+                <rect x="3" y="3" width="calc(100% - 6px)" height="calc(100% - 6px)" rx="80" ry="80" fill="none"
+                    stroke="#ff9f43" stroke-width="6" stroke-dasharray="25 25" />
+            </svg>
+
+            <!-- 內層內容 -->
+            <div class="modal-inner-content">
+                <h2>Level Up!</h2>
+                <span>Lv. {{ newLevel }}</span>
+
+                <div class="rewards">
+                    <!-- Fish -->
+                    <div class="reward-item">
+                        <img src="assets/fish.png" class="reward-icon">
+                        <span class="reward-badge">{{ rewards.fish }}</span>
+                    </div>
+
+                    <!-- Toy -->
+                    <div class="reward-item">
+                        <img src="assets/toy.png" class="reward-icon">
+                        <span class="reward-badge">{{ rewards.toy }}</span>
+                    </div>
+
+                    <!-- Heart -->
+                    <div class="reward-item">
+                        <img src="assets/heart.png" class="reward-icon">
+                        <span class="reward-badge">{{ rewards.heart }}</span>
+                    </div>
+                </div>
+                <p class="reward-title">Rewards</p>
+            </div>
+        </div>
+        <button class="btn-ok" (click)="closeLevelUpModal()">Collect</button>
     </div>
+
 </div>

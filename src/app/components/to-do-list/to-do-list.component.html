@@ -1,58 +1,57 @@
-<div class="flex flex-col gap-4 mx-4">
-    <mat-card class="flex flex-col h-96 overflow-y-auto">
-        <form [formGroup]="todoForm" (ngSubmit)="onAddTodo ()">
-            <div id="todo-bar-saisie" class="flex gap-2 m-4">
-                <mat-form-field appearance="outline" class="flex-1">
-                    <input matInput formControlName="title" placeholder="New todo">
-                </mat-form-field>
-                <button mat-fab type="submit">
-                    <mat-icon>add</mat-icon>
-                </button>
-            </div>
-        </form>
-        <div id="todo-list">
-            <mat-list>
-                @for(todo of todos; track todo.id){
-                <mat-list-item>
-                    <div class="flex items-center">
-                        <mat-checkbox [checked]="todo.completed" (change)="onCheckChange($event, todo)"></mat-checkbox>
-                        <span [routerLink]="['/todo-detail', todo.id]"
-                            class="flex-1 cursor-pointer">{{todo.title}}</span>
-                        <button mat-icon-button (click)="onDeleteTodo(todo.id)">
-                            <mat-icon>delete</mat-icon>
-                        </button>
-                    </div>
-                </mat-list-item>
-                }
-            </mat-list>
+<div class="flex h-full p-4 gap-4">
+    <!-- 左邊：任務清單 -->
+    <mat-card class="card1" [class.expanded]="selectedTodoId !== null">
+        <div class="flex flex-col gap-2 mb-4 w-full">
+            <!-- search -->
+            <mat-form-field appearance="outline" class="w-full input1">
+                <mat-icon matPrefix>search</mat-icon>
+                <input matInput [(ngModel)]="searchTask" (input)="onSearch()" placeholder="Search tasks..." />
+            </mat-form-field>
+
+            <!-- add -->
+            <button class="btn-add w-full" (click)="addTodo()">
+                <img src="assets/fish.png" alt="Add" class="w-14 h-10" />
+                Add Task
+            </button>
+        </div>
+
+        <!-- list -->
+        <mat-list class="space-y-5">
+            <mat-list-item *ngFor="let todo of filteredTodos" class="list-item"
+                [class.selected]="selectedTodoId === todo.id" (click)="openTodoDetail(todo.id)">
+                <div class="flex items-center gap-3 w-full">
+
+                    <!-- ✅ completed icon -->
+                    <img *ngIf="todo.completed" src="assets/check.png" alt="completed" class="status-icon" />
+                    <span *ngIf="!todo.completed" class="status-placeholder"></span>
+
+                    <!-- title -->
+                    <span class="flex-1" [class.completed]="todo.completed">
+                        {{ todo.title }}
+                    </span>
+
+                    <!-- ✅ multi delete checkbox（在最後） -->
+                    <mat-checkbox class="delete-checkbox" (click)="$event.stopPropagation()"
+                        (change)="toggleDelete(todo)" [checked]="isSelectedForDelete(todo)">
+                    </mat-checkbox>
+
+                </div>
+            </mat-list-item>
+        </mat-list>
+
+        <!-- multi delete action -->
+        <div class="form-actions">
+            <button type="button" class="btn-delete w-30" (click)="deleteSelectedTodos()"
+                [disabled]="selectedForDelete.length === 0">
+                <mat-icon>delete</mat-icon>
+                delete ({{ selectedForDelete.length }})
+            </button>
         </div>
     </mat-card>
 
-    <mat-card class="flex flex-col h-96 overflow-y-auto mb-4">
-        <form [formGroup]="projectForm" (ngSubmit)="addProject()">
-            <div id="todo-bar-saisie" class="flex gap-2 m-4">
-                <mat-form-field appearance="outline" class="flex-1">
-                    <input matInput formControlName="project" placeholder="New project">
-                </mat-form-field>
-                <button mat-fab type="submit">
-                    <mat-icon>add</mat-icon>
-                </button>
-            </div>
-        </form>
-        <div id="project-list">
-            <mat-list>
-                @for(project of projects; track project.id){
-                <mat-list-item>
-                    <div class="flex items-center">
-                        <span [routerLink]="['/project-detail', project.id]"
-                            class="flex-1 cursor-pointer">{{project.title}}</span>
-                        <button mat-icon-button (click)="deleteProject(project.id)">
-                            <mat-icon>delete</mat-icon>
-                        </button>
-                    </div>
-                </mat-list-item>
-                }
-            </mat-list>
-        </div>
-    </mat-card>
+    <!-- 右邊：詳細 -->
+    <div class="flex-1 drawer" [class.open]="selectedTodoId !== null">
+        <app-todo-detail [todoId]="selectedTodoId" (close)="onCloseDetail()">
+        </app-todo-detail>
+    </div>
 </div>

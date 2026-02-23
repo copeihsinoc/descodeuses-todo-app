@@ -37,6 +37,7 @@ import { authInterceptor } from './auth/auth.interceptor';
 import { SignupComponent } from './components/signup/signup.component';
 import { ProjectDetailComponent } from './components/project-detail/project-detail.component';
 import { LogOutComponent } from './components/log-out/log-out.component';
+import { MatExpansionModule } from '@angular/material/expansion';
 @NgModule({
   declarations: [
     AppComponent,
@@ -73,7 +74,8 @@ import { LogOutComponent } from './components/log-out/log-out.component';
     MatGridListModule,
     MatChipsModule,
     MatAutocompleteModule,
-    FormsModule
+    FormsModule,
+    MatExpansionModule,
   ],
   providers: [
     provideNativeDateAdapter(),

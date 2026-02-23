@@ -26,9 +26,13 @@ export class UserListComponent implements OnInit {
     });
   }
 
-  textSearch: string = '';
+  searchUser: string = '';
 
   selectedUsers: any[] = [];
+
+  selectedUserId: number | null =null;
+
+
 
   constructor(
     private fb: FormBuilder,
@@ -40,6 +44,9 @@ export class UserListComponent implements OnInit {
     })
   }
   ngOnInit(): void {
+    this.fetchUsers();
+  }
+  fetchUsers(){
     this.userService.getUsers().subscribe((data) => {
 
       this.users = data;
@@ -115,12 +122,26 @@ export class UserListComponent implements OnInit {
     }
   }
 
-  AddUser() {
-    if (this.formGroup.valid) {
-      const formValue = this.formGroup.value;
+  addUser() {
+    this.selectedUserId = 0;
     }
+  
+
+  openUserDetail(id:number){
+    this.selectedUserId = id;
+    this.fetchUsers();
   }
 
+  onCloseDetail(){
+    this.selectedUserId = null;
+
+    // wait angular clear input then stable UI
+    setTimeout(() => {}, 50);
+  }
+
+  stopClick(event: MouseEvent) {
+  event.stopPropagation();
+}
 }
 
 

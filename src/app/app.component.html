@@ -1,31 +1,134 @@
-<mat-sidenav-container>
-    <!-- 
-    variable template commence par '#' pour 
-     declencher le menu dans la fonction click-->
-    <mat-sidenav #sidenav mode="side" style="width: 200px;">
-        @for(link of navLinks; track link.label){
-        <mat-nav-list>
-            <a mat-list-item [routerLink]="link.path" (click)="closeSidenav()">{{link.label}}</a>
-        </mat-nav-list>
-        }
+<mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #sidenav mode="side" style="width: 260px;">
+
+        <!-- 主選單 -->
+        <ng-container *ngIf="!activeMainLink && !activeTasks">
+            <mat-nav-list>
+                <mat-nav-list class="!ml-6 !mt-10">
+                    <a mat-list-item *ngFor="let link of navLinks" (click)="openSubMenu(link)"
+                        class="hover:bg-[#f8af61] transition rounded-lg p-0 my-2">
+                        <div class="flex items-center gap-4 w-full py-4">
+                            <mat-icon class="custom-icon">{{ link.icon }}</mat-icon>
+                            <span class="text-xl font-medium">{{ link.label }}</span>
+                        </div>
+                    </a>
+                </mat-nav-list>
+            </mat-nav-list>
+        </ng-container>
+
+        <!-- 子選單 -->
+        <ng-container *ngIf="activeMainLink">
+            <!-- Header -->
+            <div class="flex justify-between items-center p-2 mb-2">
+                <!-- 左側: logo + Menu -->
+                <div class="flex items-center gap-2">
+                    <img src="assets/07.png" alt="Logo" class="w-8 h-8 rounded-full" />
+                    <span>Menu</span>
+                </div>
+                <div>
+                    <button mat-icon-button (click)="backToMainMenu()">
+                        <mat-icon>arrow_back</mat-icon>
+                    </button>
+                </div>
+            </div>
+            <mat-nav-list>
+                <ng-container *ngFor="let child of activeMainLink?.children">
+                    <ng-container *ngIf="!child.requiresAdmin || authService.isAdmin">
+                        <a mat-list-item [routerLink]="child.path" (click)="closeSidenav()">
+                            <mat-icon>{{ child.icon }}</mat-icon>
+                            <span>{{ child.label }}</span>
+                        </a>
+                    </ng-container>
+                </ng-container>
+            </mat-nav-list>
+        </ng-container>
+
+        <!-- Tasks widget -->
+        <ng-container *ngIf="activeTasks">
+            <!-- Header -->
+            <div class="flex justify-between items-center p-2 mb-2">
+                <!-- 左側: logo + Menu -->
+                <div class="flex items-center gap-2">
+                    <img src="assets/07.png" alt="Logo" class="w-8 h-8 rounded-full" />
+                    <span>Menu</span>
+                </div>
+                <div>
+                    <button mat-icon-button (click)="backToMainMenu()">
+                        <mat-icon>arrow_back</mat-icon>
+                    </button>
+                </div>
+            </div>
+            <div class="p-2">
+                <span class="block mb-4">Tasks</span>
+
+                <!-- KPI Summary -->
+                <div class="grid grid-cols-1 gap-2 mb-4">
+                    <div *ngFor="let task of tasksSummary" class="flex items-center justify-between p-2 rounded">
+                        <div class="flex items-center gap-2">
+                            <mat-icon>{{ task.icon }}</mat-icon>
+                            <span>{{ task.label }}</span>
+                        </div>
+                        <span class="badge">{{ task.count }}</span>
+                    </div>
+                </div>
+
+                <!-- Projects -->
+                <div>
+                    <span>Projects</span>
+                    <mat-list>
+                        <mat-list-item *ngFor="let project of projects">
+                            <span>{{ project.title }}</span>
+                            <button mat-icon-button color="warn" (click)="deleteProject(project.id)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </mat-list-item>
+                        <mat-list-item>
+                            <form [formGroup]="projectForm" (ngSubmit)="addProject()">
+                                <button mat-icon-button type="submit">
+                                    <mat-icon>add</mat-icon>
+                                </button>
+                                <input placeholder="Add new project" formControlName="project">
+                            </form>
+                        </mat-list-item>
+                    </mat-list>
+                </div>
+
+                <!-- Contacts -->
+                <div>
+                    <span>Contacts</span>
+                    <mat-list>
+                        <mat-list-item *ngFor="let contact of contacts">
+                            <span>{{ contact.firstName }} {{ contact.lastName }}</span>
+                            <button mat-icon-button color="warn" (click)="deleteContact(contact.id)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </mat-list-item>
+                        <mat-list-item>
+                            <form [formGroup]="contactForm" (ngSubmit)="addContact()">
+                                <button mat-icon-button type="submit">
+                                    <mat-icon>add</mat-icon>
+                                </button>
+                                <input placeholder="Add new contact" formControlName="contact">
+                            </form>
+                        </mat-list-item>
+                    </mat-list>
+                </div>
+
+            </div>
+        </ng-container>
+
     </mat-sidenav>
 
     <mat-sidenav-content>
-        <div class="flex flex-col h-screen">
-            <div id="div-toolbar">
-                <mat-toolbar>
-                    <button mat-icon-button (click)="sidenav.toggle()">
-                        <mat-icon>menu</mat-icon>
-                    </button>
-                    <span>
-                        {{title}}
-                    </span>
-                </mat-toolbar>
-            </div>
-            <!-- flex-1 pour div-router occupe la place qui reste -->
-            <div id="div-router" class="flex-1">
-                <router-outlet />
-            </div>
+        <mat-toolbar>
+            <button mat-icon-button (click)="sidenav.toggle()">
+                <mat-icon>menu</mat-icon>
+            </button>
+            <span>{{ title }}</span>
+        </mat-toolbar>
+
+        <div class="flex-1 p-4">
+            <router-outlet></router-outlet>
         </div>
     </mat-sidenav-content>
 </mat-sidenav-container>

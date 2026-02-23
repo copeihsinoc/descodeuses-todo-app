@@ -1,2 +1,52 @@
 
+.sidenav-container {
+  height: 100vh;
+}
 
+mat-sidenav {
+  background-color: #6D5D50;
+}
+
+.custom-icon {
+  font-size: 40px !important;   
+  line-height: normal !important; /* 避免被裁掉 */
+  display: inline-flex;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+}
+
+/* icons & text fix */
+:host ::ng-deep mat-sidenav mat-icon,
+:host ::ng-deep mat-sidenav .mat-list-item,
+:host ::ng-deep mat-sidenav a,
+:host ::ng-deep mat-sidenav span {
+  color: white !important;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #95806e;
+  font-size: 0.9rem;
+}
+
+input {
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+input::placeholder {
+  color: white;
+  opacity: 0.8;
+}
+
+:host ::ng-deep mat-toolbar {
+  background-color: transparent !important;
+}

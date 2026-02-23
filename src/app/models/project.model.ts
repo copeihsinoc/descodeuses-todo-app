@@ -4,4 +4,5 @@ export interface Project {
     title: string | null;
     description: string | null;
     dueDate?: string; //optional not necessaire
+    taskCount?: number;
 } 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Todo } from '../../models/todo.model';
@@ -16,10 +16,28 @@ import { User } from '../../models/user.model';
   selector: 'app-todo-detail',
   standalone: false,
   templateUrl: './todo-detail.component.html',
-  styleUrl: './todo-detail.component.css'
+  styleUrl: './todo-detail.component.css',
 })
 export class TodoDetailComponent implements OnInit {
 
+  // 0 = 新增, >0 = 編輯
+  @Output() close = new EventEmitter<void>();
+
+  private _todoId: number | null = null;
+  @Input() set todoId(id: number | null | undefined) {
+    this._todoId = id ?? null;
+    if (this._todoId === null || this._todoId <= 0) {
+      this.isNewTodo = true;
+      this.initForm(); // 新增模式
+      this.loadDropdowns();
+    } else {
+      this.isNewTodo = false;
+      this.loadDropdowns(() => this.loadTodo(this._todoId!)); // 先載入下拉資料，再載入 todo
+
+    }
+  }
+
+  isNewTodo = true;
   todo!: Todo;
   todoForm!: FormGroup;
 
@@ -35,6 +53,7 @@ export class TodoDetailComponent implements OnInit {
 
   //Projects
   projects: Project[] = [];
+
   //Users
   users: any[] = [];
 
@@ -46,6 +65,10 @@ export class TodoDetailComponent implements OnInit {
     { text: '2', value: 2 },
     { text: '3', value: 3 }
   ];
+
+  get todoTitle(): string {
+    return this.todoForm?.get('title')?.value || '';
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -59,13 +82,73 @@ export class TodoDetailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // I get the ID from the URL and convert it to a number
-    // to call the fetch-by-ID function from the CRUD service
+    this.initForm(); // 預設初始化 form
+  }
 
-    /*-----Get ID from URL-----*/
-    const id = Number(this.route.snapshot.paramMap.get('id'));
+  /** 初始化空表單 */
+  private initForm() {
+    this.todoForm = this.fb.group({
+      id: [null],
+      title: ['', Validators.required],
+      completed: [false],
+      priority: [1],
+      dueDate: [''],
+      description: [''],
+      memberIds: [[]],
+      projectId: [null],
+      userIds: [[]]
+    });
+    this.selectedContacts = [];
+  }
 
-    /*-----load all infos-----*/
+  /** 載入下拉資料: projects, users, contacts */
+  private loadDropdowns(callback?: () => void) {
+    this.userService.getUsers().subscribe(users => {
+      this.users = users;
+      if (callback) callback();
+    });
+
+    this.contactService.getContacts().subscribe(contacts => {
+      this.allContacts = contacts;
+      this.filteredContacts = contacts;
+    });
+
+    this.projectService.getProjects().subscribe(projects => {
+      this.projects = projects;
+    });
+
+    this.userService.getCurrentUser().subscribe(user => {
+      this.currentUser = user;
+    });
+  }
+
+  /** 載入單一 Todo 的資料 (編輯模式) */
+  private loadTodo(id: number) {
+    this.todoService.getTodo(id).subscribe(todo => {
+      this.todo = todo;
+
+      this.todoForm.patchValue({
+        id: todo.id,
+        title: todo.title,
+        completed: todo.completed,
+        priority: todo.priority || 1,
+        dueDate: todo.dueDate || '',
+        description: todo.description || '',
+        memberIds: todo.memberIds || [],
+        projectId: todo.projectId || null,
+        userIds: todo.userIds || []
+      });
+
+      // 初始化 chip 選擇
+      if (todo.memberIds && this.allContacts.length) {
+        this.selectedContacts = todo.memberIds
+          .map(id => this.allContacts.find(c => c.id === id))
+          .filter((c): c is Contact => c !== undefined);
+      }
+    });
+  }
+  /*-----load all infos-----
+  private loadData(id: number) {
 
     // 1. get all users
     this.userService.getUsers().subscribe(users => {
@@ -84,30 +167,32 @@ export class TodoDetailComponent implements OnInit {
 
 
       // get todo
-      this.todoService.getTodo(id).subscribe(todo => {
-        this.todo = todo;
+      if (!this.isNewTodo && id > 0) {
+        this.todoService.getTodo(id).subscribe(todo => {
+          this.todo = todo;
+
+          // 用 patchValue 更新 form
+          this.todoForm.patchValue({
+            id: todo.id,
+            title: todo.title,
+            completed: todo.completed,
+            priority: todo.priority || 1,
+            dueDate: todo.dueDate || '',
+            description: todo.description || '',
+            memberIds: todo.memberIds || [],
+            projectId: todo.projectId || null,
+            userIds: todo.userIds || []
+          });
 
 
-        // initial selectedContacts(chips)
-        if (this.todo.memberIds && this.allContacts.length) {
-          this.selectedContacts = this.todo.memberIds
-            .map(id => this.allContacts.find(c => c.id === id))
-            .filter((c): c is Contact => c !== undefined);
-        }
-
-        // initial form
-        this.todoForm = this.fb.group({
-          id: [this.todo.id],
-          title: [this.todo.title, Validators.required],
-          completed: [this.todo.completed],
-          priority: [this.todo.priority || 1],
-          dueDate: [this.todo.dueDate || ''],
-          description: [this.todo.description || ''],
-          memberIds: [this.todo.memberIds || []],
-          projectId: [this.todo.projectId || null],
-          userIds: [this.todo.userIds || []]
+          // initial selectedContacts(chips)
+          if (this.todo.memberIds && this.allContacts.length) {
+            this.selectedContacts = this.todo.memberIds
+              .map(id => this.allContacts.find(c => c.id === id))
+              .filter((c): c is Contact => c !== undefined);
+          }
         });
-      });
+      }
     });
 
     // 4.get all projects
@@ -115,12 +200,14 @@ export class TodoDetailComponent implements OnInit {
       this.projects = projects;
     });
 
-
   }
+*/
 
+  onSave() {
 
-  onSubmit() {
-    if (!this.todoForm.valid) return;
+    if (!this.todoForm || !this.todoForm.valid) {
+      return;
+    }
 
     const formValue = { ...this.todoForm.value };
 
@@ -136,15 +223,24 @@ export class TodoDetailComponent implements OnInit {
     // priority => number
     formValue.priority = Number(formValue.priority);
 
-    this.todoService.updateTodo(formValue).subscribe(() => {
-      this.snackbar.open('Updated!', '', { duration: 1000 });
-      this.router.navigate(['/todo-table']);
-    });
+    if (this.isNewTodo) {
+      // 新增不帶 id
+      delete formValue.id;
+      this.todoService.addTodo(formValue).subscribe(() => {
+        this.snackbar.open('Created!', '', { duration: 1000 });
+        this.close.emit();
+
+      });
+    } else {
+      this.todoService.updateTodo(formValue).subscribe(() => {
+        this.snackbar.open('Updated!', '', { duration: 1000 });
+        this.close.emit();
+      });
+    }
   }
 
   onCancel() {
-    //revenir sur la liste initiale apres sauvegarde
-    this.router.navigate(['/']);
+    this.close.emit();
   }
 
   /*-----chips-----*/
@@ -170,14 +266,6 @@ export class TodoDetailComponent implements OnInit {
     }
 
     this.currentContact.setValue('');
-
-
-    /*fruits:*/
-    //this.selectedFruits = [...this.selectedFruits, event.option.viewValue];
-    //this.currentFruit.setValue('');
-    //event.option.deselect();
-
-    //console.log(this.currentFruit.value)
   }
 
 }

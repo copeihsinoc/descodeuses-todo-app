@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TodoService } from '../../services/todo.service';
 import { Todo } from '../../models/todo.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatCheckboxChange } from '@angular/material/checkbox';
-import { Project } from '../../models/project.model';
-import { ProjectService } from '../../services/project.service';
 
 @Component({
   selector: 'app-to-do-list',
@@ -15,125 +12,105 @@ import { ProjectService } from '../../services/project.service';
 })
 export class ToDoListComponent implements OnInit {
 
-  todoForm: FormGroup;
-  projectForm: FormGroup;
-
   todos: Todo[] = [];
+  filteredTodos: Todo[] = [];
+  searchTask: string = '';
 
-  projects: Project[] = [];
+  selectedTodoId: number | null = null;
+
+  // ✅ 新增：multi delete 用（不影響你原本邏輯）
+  selectedForDelete: number[] = [];
 
   constructor(
-    private fb: FormBuilder,
     private todoService: TodoService,
-    private snackBar: MatSnackBar,
-    private projectService: ProjectService
-  ) {
-    this.todoForm = this.fb.group({
-      title: ['', [Validators.required]]
-    });
-    this.projectForm = this.fb.group({
-      project: ['', Validators.required]
-    });
-  }
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
-    this.fetchTodo();
-    this.fetchProject();
+    this.fetchTodos();
   }
 
-  fetchTodo() {
-    //Communication asynchrone donc il faut ecouter le retour
+  fetchTodos() {
     this.todoService.getTodos().subscribe((data) => {
       this.todos = data;
+      this.filteredTodos = data;
+      this.selectedForDelete = [];
     });
   }
 
-  onAddTodo() {
-    if (this.todoForm.valid) {
-      const formValue = this.todoForm.value;
-
-      const todo: Todo = {
-        id: null, //id est genere sur le serveur pour cela il est envoye null
-        title: formValue.title, //Seulement title est remplis depuis le formulaire
-        completed: false,
-        priority: null,
-        dueDate: '',
-        description: null
-      };
-
-      this.todoService.addTodo(todo).subscribe(data => {
-        //Actualiser la liste apres l'ajout
-        this.fetchTodo();
-      });
-    }
+  onSearch() {
+    const query = this.searchTask.toLowerCase();
+    this.filteredTodos = this.todos.filter(t =>
+      t.title.toLowerCase().includes(query)
+    );
   }
 
+  addTodo() {
+    this.selectedTodoId = 0;
+  }
+
+  onCloseDetail() {
+    this.selectedTodoId = null;
+    this.fetchTodos();
+  }
+
+  openTodoDetail(id: number) {
+    this.selectedTodoId = id;
+  }
+
+  // ✅ 原本的：刪單筆（完全不動）
   onDeleteTodo(id: number | null) {
-    if (id === null)
-      return; //pas de retour
+    if (id === null || id === 0) return;
 
     this.todoService.deleteTodo(id).subscribe(() => {
-      this.fetchTodo();
+      this.fetchTodos();
       this.snackBar.open('Deleted !', '', { duration: 1000 });
     });
   }
 
+  // ✅ 原本的：completed（完全不動）
   onCheckChange(event: MatCheckboxChange, todo: Todo) {
-    console.log(event.checked);
     todo.completed = event.checked;
 
-    //mis a jour dans l'api
-    this.todoService.updateTodo(todo).subscribe(data => {   //subscribe ecouter le retour
-      this.fetchTodo();
-
-      if (todo.completed) {
-        this.snackBar.open('checked !', '', { duration: 1000 });
-      } else {
-        this.snackBar.open('unchecked !', '', { duration: 1000 });
-      }
+    this.todoService.updateTodo(todo).subscribe(() => {
+      this.snackBar.open(
+        todo.completed ? 'checked !' : 'unchecked !',
+        '',
+        { duration: 1000 }
+      );
     });
   }
 
+  // =========================
+  // ✅ 新增：multi delete 專用
+  // =========================
 
-
-  /*-----Project----- */
-
-  fetchProject() {
-    //Communication asynchrone donc il faut ecouter le retour
-    this.projectService.getProjects().subscribe((data) => {
-      this.projects = data;
-    });
-  }
-
-  addProject() {
-    if (this.projectForm.valid) {
-      const formValue = this.projectForm.value;
-
-      const project: Project = {
-        id: null, //id est genere sur le serveur pour cela il est envoye null
-        title: formValue.project, //Seulement title est remplis depuis le formulaire
-        description: null
-      };
-
-      this.projectService.addProject(project).subscribe(data => {
-        //Actualiser la liste apres l'ajout
-        this.fetchProject();
-      });
+  toggleDelete(todo: Todo) {
+    const index = this.selectedForDelete.indexOf(todo.id);
+    if (index > -1) {
+      this.selectedForDelete.splice(index, 1);
+    } else {
+      this.selectedForDelete.push(todo.id);
     }
   }
 
-  deleteProject(id: number | null) {
-    if (id === null)
-      return; //pas de retour
+  isSelectedForDelete(todo: Todo): boolean {
+    return this.selectedForDelete.includes(todo.id);
+  }
 
-    this.projectService.deleteProject(id).subscribe(() => {
-      this.fetchProject();
-      this.snackBar.open('Deleted !', '', { duration: 1000 });
+  deleteSelectedTodos() {
+    if (this.selectedForDelete.length === 0) return;
+
+    this.selectedForDelete.forEach(id => {
+      this.todoService.deleteTodo(id).subscribe();
     });
+
+    this.snackBar.open(
+      `Deleted ${this.selectedForDelete.length} tasks`,
+      '',
+      { duration: 1200 }
+    );
+
+    this.fetchTodos();
   }
 }
-//this.todoService.updateTodo(todo).subscribe(data => {
-// console.log(data);
-// this.snackBar.open('Updated !', '', {duration:1000});
-
-

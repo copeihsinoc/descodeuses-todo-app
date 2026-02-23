@@ -1,9 +1,548 @@
 /* importer tailwind dans le fichier global style.css
 qui va etre injecte dans tous les pages
 */
-
 @import "tailwindcss/theme.css";
 @import "tailwindcss/utilities.css";
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background-color: #FFF2E3 !important;
+}
+
+app-root {
+  display: block;
+  min-height: 100vh;
+  background-color: #FFF2E3 !important;
+}
+
+.mat-drawer-container,
+.mat-sidenav-container,
+.mat-app-background {
+  background-color: transparent !important;
+}
+
+/* ----------------------------------Dashboard----------------------------------- */
+/* ================= 全局 box-sizing ================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Top Card */
+.top-card {
+  background-color: #FFFAF0 !important;
+  border: 2px solid #ECD7C3;
+  border-radius: 12px;
+}
+
+/* Bottom Section */
+.bottom-section {
+  gap: 20px;
+}
+
+/* Left Card */
+.left-card {
+  background-color: #FFFAF0;
+  border-radius: 15px;
+}
+
+.card-challenge {
+  background-color: #FEE4C0 !important;
+}
+
+/* Right Section */
+.right-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.card-r1 {
+  background-color: #FFFAF0;
+  border-radius: 15px;
+}
+
+.card-r2 {
+  background-color: #F9A158;
+  border-radius: 15px;
+}
+
+/* 閃爍動畫 */
+@keyframes flashAnimation {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+}
+
+.flash {
+  animation: flashAnimation 1s infinite;
+}
+
+/* ----------------------------------------------------------------------------- */
+.card1 {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 100%;
+  /* 初始全寬 */
+  background-color: #FFF2E3 !important;
+  border: 2px solid #ECD7C3;
+  border-radius: 12px;
+  padding: 24px 24px 40px;
+  /* 底部留空間 */
+  transition: flex-basis 0.3s ease;
+}
+
+.card1.expanded {
+  flex-basis: 50%;
+}
+
+.card2 {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background-color: #FFFAF1 !important;
+  border: 2px solid #ECD7C3;
+  border-radius: 12px;
+  padding: 24px 24px 40px;
+  transition: flex-basis 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* 選中任務的 active 狀態 */
+.card2.active {
+  border: 5px solid #F9A158 !important;
+  box-shadow: 0 0 12px rgba(249, 161, 88, 0.4);
+}
+
+/* ----- drawer (右側滑入) ----- */
+.drawer {
+  flex: 0 0 0;
+  /* 初始隱藏 */
+  overflow: hidden;
+  transition: flex-basis 0.3s ease;
+}
+
+.drawer.open {
+  flex-basis: 50%;
+  /* 點擊後滑入 */
+}
+
+/* -----按鈕樣式----- */
+.btn-add {
+  background-color: #FFFAEF;
+  border-radius: 12px;
+  border: 2px solid #ECD7C3;
+  height: 70px;
+
+  /*img+text*/
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #5A4634;
+}
+
+.btn-cancel,
+.btn-save,
+.btn-delete {
+  width: 150px;
+  height: 60px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  font-size: 1.25rem;
+  font-weight: 600;
+  border-radius: 12px;
+  border: 2px solid #ECD7C3;
+  color: #5A4634;
+}
+
+.btn-cancel {
+  background-color: #FFFAEF;
+}
+
+.btn-save {
+  background-color: #F9A158;
+}
+
+.btn-delete {
+  background-color: #FFFAEF;
+}
+
+.btn-feed {
+  background-color: #F9A158;
+  border-radius: 12px;
+  border: 2px solid #ECD7C3;
+
+  width: 90px;
+  height: 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #FFFAEF;
+}
+
+/*------------------------------todo-list------------------------------*/
+
+.delete-checkbox {
+  /* 未選中 */
+  --mdc-checkbox-unselected-icon-color: #ECD7C3;
+  --mdc-checkbox-unselected-hover-icon-color: #ECD7C3;
+  --mdc-checkbox-unselected-focus-icon-color: #ECD7C3;
+
+  /* ✅ 選中後 */
+  --mdc-checkbox-selected-icon-color: #F9A158;
+  --mdc-checkbox-selected-hover-icon-color: #F9A158;
+  --mdc-checkbox-selected-focus-icon-color: #F9A158;
+
+  /* 關掉 48px touch target，避免位移 */
+  --mdc-checkbox-touch-target-display: none;
+}
+
+/*------------------------------todo-detail------------------------------*/
+
+/* list item */
+.list-item {
+  background-color: #FFFAEF !important;
+  border-radius: 12px !important;
+  border: 2px solid #ECD7C3;
+  height: 70px !important;
+  transition: background-color 0.2s;
+}
+
+.list-item:hover {
+  background-color: #FEC3A3 !important;
+  border: 5px solid #F9A158;
+}
+
+.list-item.selected {
+  background-color: #FEC3A3 !important;
+  border: 5px solid #F9A158 !important;
+  border-radius: 12px !important;
+}
+
+.list-item span {
+  font-size: 1.1rem;
+  font-weight: 550;
+  color: #5A4634;
+}
+
+/* -----Contacts (Chip)----- */
+.chip-wrapper {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  min-height: 40px;
+}
+
+/* 讓 chip grid 與 input 在同一行 */
+.chip-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  flex: 1;
+  align-items: center;
+}
+
+/* placeholder */
+.chip-placeholder {
+  position: absolute;
+  top: 9px;
+  left: 12px;
+  color: #b9b9b9;
+  pointer-events: none;
+}
+
+/* chip 輸入框 */
+.chip-input {
+  border: none;
+  background: transparent;
+  outline: none;
+  flex: 1;
+  font-size: 16px;
+  padding: 4px 0;
+  min-width: 60px;
+  color: #333;
+}
+
+.chip-input::placeholder {
+  color: #bca48d;
+  opacity: 0.9;
+}
+
+/* -----status checkbox----- */
+.list-item mat-checkbox {
+  transform: scale(2);
+  margin-right: 8px;
+  /* 避免和文字貼太近 */
+}
+
+/*------------------------------Profile-detail------------------------------*/
+/* -----form row 統一對齊----- */
+.form-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+/*-----input Username/Password & 長度-----*/
+.custom-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 2px solid #ECD7C3;
+  border-radius: 6px;
+  background-color: #FFFAEF;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.custom-input:focus {
+  border-color: #ff9d5c;
+  outline: none;
+}
+
+.form-row label {
+  width: 100px;
+  margin-right: 12px;
+}
+
+.form-row>*:not(label) {
+  flex: 1;
+}
+
+/*-----fish-toy-heart selected effect-----*/
+.selected {
+  background: rgba(251, 191, 36, 0.2);
+  padding: 8px;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.6);
+}
+
+.form-actions {
+  /* 自動把按鈕推到底部 */
+  margin-top: auto;
+
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+
+  /* 與內容拉開距離 */
+  padding-top: 20px;
+}
+
+
+/*------------------------------Profile:level up------------------------------*/
+
+/* 背景模糊遮罩 */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.35);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+}
+
+/* 外層：淡橘色框 */
+.modal-content {
+  width: 380px;
+  height: 380px;
+  background: #ffefd5;
+  padding: 16px;
+  border-radius: 80px;
+
+  box-shadow:
+    0 20px 0 #FFD384,
+    /* 底部重陰影 */
+    0 25px 0 rgba(0, 0, 0, 0.05),
+    /* 底部淡暈染，增加自然感 */
+    0 32px 15px rgba(0, 0, 0, 0.5);
+
+  /* banner 絕對定位參考 */
+  position: relative;
+}
+
+/* 內層：米色內容 + 橘色虛線框 */
+.modal-layer-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 80px;
+  background: #FFF1D9;
+  padding: 22px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+/* 內層內容 */
+.modal-inner-content {
+  margin-top: 50px;
+  font-size: 24px;
+}
+
+/* SVG 虛線框 */
+.border-svg {
+  position: absolute;
+  inset: 0;
+  /* top/left/right/bottom 簡化 */
+  pointer-events: none;
+  z-index: 0;
+  /* 保證在背景層 */
+}
+
+.border-svg rect {
+  fill: none;
+  stroke: #ff9f43;
+  stroke-width: 6;
+  stroke-dasharray: 25 25;
+}
+
+/*-----Banner-----*/
+.level-banner {
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+
+  /* 高於 SVG */
+  z-index: 2;
+}
+
+.level-banner img {
+  width: 100%;
+  height: auto;
+}
+
+/* -----title:Level Up!----- */
+.modal-inner-content h2 {
+  font-size: 40px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  margin-top: 70px;
+}
+
+/* -----Level----- */
+.modal-inner-content span {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* Rewards */
+.rewards {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 15px;
+}
+
+.reward-item {
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.reward-icon {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
+/* Fish 翻轉 */
+.reward-icon.fish {
+  transform: scaleX(-1);
+}
+
+/* 數量 badge */
+.reward-badge {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  background: orange;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Reward 標題 */
+.reward-title {
+  font-weight: bold;
+  margin-top: 10px;
+  color: #444;
+}
+
+/* Collect 按鈕 */
+.btn-ok {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 16px 36px;
+  font-size: 24px;
+  font-weight: bold;
+  border: none;
+  border-radius: 999px;
+  background: #ffa94d;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 5px 0 #e8892c;
+  z-index: 3;
+  /* 高於 modal-layer-inner 和 SVG */
+  transition: transform 0.2s;
+  margin-top: -49px;
+}
+
+.btn-ok:hover {
+  transform: translateX(-50%) scale(1.05);
+}
+
+/* light 背景光 */
+.light {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  /* 最底層 */
+  z-index: 0;
+
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.light img {
+  width: 1200px;
+  height: auto;
+}

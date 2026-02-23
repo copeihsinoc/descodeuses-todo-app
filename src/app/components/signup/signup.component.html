@@ -1,44 +1,52 @@
-<div class="flex h-full bg-gray-100 items-center justify-center" id="full-cover-background">
-    <div id="centered-block" class="bg-white p-6 rounded-xl shadow-md">
-        <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
-            <h2 class="text-center">Sign up</h2>
-            <div id="nom-container">
-                <mat-form-field>
-                    <mat-label>Last name:</mat-label>
-                    <input matInput formControlName="lastname" type="text" placeholder="last-name">
-                </mat-form-field>
+<div class="main-container" *ngIf="signUpForm != null">
+    <mat-card class="card2">
+
+        <form [formGroup]="signUpForm" (ngSubmit)="onSave()" class="form-grid custom-form">
+
+            <!-- user photo -->
+            <div class="flex flex-col items-center mt-2">
+                <img [src]="isNewUser ? 'assets/07.png' : user?.catPhoto" alt="user image"
+                    class="rounded-2xl w-40 h-40 object-cover border-4 border-amber-900" />
+
+                <div class="form-row m-5">
+                    <span>Your Cat</span>
+                </div>
             </div>
-            <div id="prenom-container">
-                <mat-form-field>
-                    <mat-label>First name:</mat-label>
-                    <input matInput formControlName="firstname" type="text" placeholder="first-name">
-                </mat-form-field>
+
+            <div class="form-row">
+                <label>Last name:</label>
+                <input formControlName="lastname" type="text" class="custom-input">
             </div>
-            <div id="username-container">
-                <mat-form-field>
-                    <mat-label>Username:</mat-label>
-                    <input matInput formControlName="username" type="text" placeholder="username">
-                </mat-form-field>
+            <div class="form-row">
+                <label>First name:</label>
+                <input formControlName="firstname" type="text" class="custom-input">
             </div>
-            <div id="select-container">
-                <mat-form-field>
-                    <mat-label>Genre</mat-label>
-                    <mat-select formControlName="genre">
-                        @for (genre of genre; track genre.value){
-                        <mat-option [value]="genre.value">{{genre.text}}</mat-option>
-                        }
-                    </mat-select>
-                </mat-form-field>
+            <div class="form-row">
+                <label>Username:</label>
+                <input formControlName="username" type="text" class="custom-input">
             </div>
-            <div id="password-container">
-                <mat-form-field>
-                    <mat-label>Password:</mat-label>
-                    <input matInput formControlName="password" type="password" placeholder="password">
-                </mat-form-field>
+
+            <div class="form-row">
+                <label>Genre:</label>
+                <select formControlName="genre" class="custom-input">
+                    @for (g of genre; track g.value){
+                    <option [value]="g.value">{{ g.text }}</option>
+                    }
+                </select>
             </div>
-            <button mat-flat-button type="submit" class="w-full">
-                save it!
-            </button>
+            <div class="form-row">
+                <label>Password:</label>
+                <input formControlName="password" type="password" placeholder="●●●●●●●" class="custom-input">
+            </div>
+            <!-- Buttons -->
+            <div class="form-actions">
+                <button type="button" (click)="onCancel()" class="btn-cancel">
+                    <mat-icon>cancel</mat-icon> cancel
+                </button>
+                <button type="submit" class="btn-save">
+                    <img src="assets/heart.png" alt="Logo" class="w-8 h-8 rounded-full" /> save
+                </button>
+            </div>
         </form>
-    </div>
+    </mat-card>
 </div>
