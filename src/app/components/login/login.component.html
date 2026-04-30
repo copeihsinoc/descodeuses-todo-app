@@ -1,28 +1,28 @@
-<div class="flex h-full bg-gray-100 items-center justify-center" id="full-cover-background">
-    <div id="centered-block" class="bg-white p-6 rounded-xl shadow-md">
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-            <h2 class="text-center">Login</h2>
-            <div id="email-container">
-                <mat-form-field>
-                    <mat-label>Email</mat-label>
-                    <!--forControlName = 1er parametre de loginForm-->
-                    <input matInput formControlName="username" type="email" placeholder="type:admin@test.com">
-                </mat-form-field>
+<div class="flex flex-col h-full items-center entry-page">
+
+    <img src="assets/logo.png" alt="Logo" class="login-logo" />
+
+    <div class="bg-white p-10 shadow-2xl form-card">
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+
+            <div class="login-field">
+                <mat-icon class="input-icon">email</mat-icon>
+                <input formControlName="username" type="email" class="login-input" placeholder="Email">
             </div>
-            <div id="password-container">
-                <mat-form-field>
-                    <mat-label>Password</mat-label>
-                    <input matInput formControlName="password" type="password" placeholder="type:admin">
-                </mat-form-field>
+
+            <div class="login-field">
+                <mat-icon class="input-icon">lock</mat-icon>
+                <input formControlName="password" type="password" class="login-input" placeholder="Password">
             </div>
-            <button mat-flat-button type="submit" class="w-full">
-                Log in
+
+            <button mat-flat-button type="submit" class="w-full login-btn mt-4">
+                Log In
             </button>
 
-            <!-- Signup text link -->
-            <p class="text-center text-sm text-blue-600 hover:underline">
-                 No account? <a routerLink="/signup">Sign Up</a>
-            </p>
+            <div class="flex flex-col items-center mt-2 gap-4">
+                <span class="text-gray-400 text-xl">Don't have an account?</span>
+                <a class="text-orange-400 font-bold signup-link" routerLink="/signup">Sign Up</a>
+            </div>
         </form>
     </div>
 </div>

@@ -1,52 +1,56 @@
-<div class="main-container" *ngIf="signUpForm != null">
-    <mat-card class="card2">
+<div [class.entry-page]="!isAdminMode">
+  
+  <div [class.signup-content-scaler]="!isAdminMode"
+       [style.width]="isAdminMode ? '100%' : 'auto'">
 
-        <form [formGroup]="signUpForm" (ngSubmit)="onSave()" class="form-grid custom-form">
+    <div class="relative flex flex-col items-center">
+      
+      <img *ngIf="!isAdminMode" 
+           [src]="isNewUser ? 'assets/signupCat.png' : user?.catPhoto" 
+           class="signup-photo" />
 
-            <!-- user photo -->
-            <div class="flex flex-col items-center mt-2">
-                <img [src]="isNewUser ? 'assets/07.png' : user?.catPhoto" alt="user image"
-                    class="rounded-2xl w-40 h-40 object-cover border-4 border-amber-900" />
+      <mat-card class="card2" *ngIf="signUpForm != null" 
+                [class.card2-signup]="!isAdminMode"
+                [class.admin-border]="isAdminMode"
+                [style.width]="isAdminMode ? '100%' : '450px'">
+        
+        <form [formGroup]="signUpForm" (ngSubmit)="onSave()" class="form-grid w-full">
 
-                <div class="form-row m-5">
-                    <span>Your Cat</span>
-                </div>
+          <div *ngIf="isAdminMode" class="flex flex-col items-center mt-2">
+            <img [src]="isNewUser ? 'assets/signupCat.png' : user?.catPhoto" 
+                 class="w-55 h-50" />
+            <div class="form-row1 m-5">
+              <span class="font-bold text-amber-900">Your Cat</span>
             </div>
+          </div>
 
-            <div class="form-row">
-                <label>Last name:</label>
-                <input formControlName="lastname" type="text" class="custom-input">
+          <div class="w-full">
+            <div class="form-row1"> <label>Last name:</label> <input formControlName="lastname" class="custom-input1"> </div>
+            <div class="form-row1"> <label>First name:</label> <input formControlName="firstname" class="custom-input1"> </div>
+            <div class="form-row1"> <label>Username:</label> <input formControlName="username" class="custom-input1"> </div>
+            <div class="form-row1"> 
+              <label>Genre:</label> 
+              <select formControlName="genre" class="custom-input1">
+                @for (g of genre; track g.value){ <option [value]="g.value">{{ g.text }}</option> }
+              </select> 
             </div>
-            <div class="form-row">
-                <label>First name:</label>
-                <input formControlName="firstname" type="text" class="custom-input">
-            </div>
-            <div class="form-row">
-                <label>Username:</label>
-                <input formControlName="username" type="text" class="custom-input">
-            </div>
+            <div class="form-row1"> <label>Password:</label> <input formControlName="password" type="password" class="custom-input1"> </div>
+          </div>
 
-            <div class="form-row">
-                <label>Genre:</label>
-                <select formControlName="genre" class="custom-input">
-                    @for (g of genre; track g.value){
-                    <option [value]="g.value">{{ g.text }}</option>
-                    }
-                </select>
+          <div class="mt-8 w-full">
+            <button *ngIf="!isAdminMode" type="submit" class="signup-btn w-full">Sign Up</button>
+            
+            <div *ngIf="isAdminMode" class="form-actions">
+              <button type="button" (click)="onCancel()" class="btn-cancel">
+                <mat-icon>cancel</mat-icon> cancel
+              </button>
+              <button type="submit" class="btn-save">
+                <img src="assets/heart.png" class="w-8 h-8 rounded-full" /> save
+              </button>
             </div>
-            <div class="form-row">
-                <label>Password:</label>
-                <input formControlName="password" type="password" placeholder="●●●●●●●" class="custom-input">
-            </div>
-            <!-- Buttons -->
-            <div class="form-actions">
-                <button type="button" (click)="onCancel()" class="btn-cancel">
-                    <mat-icon>cancel</mat-icon> cancel
-                </button>
-                <button type="submit" class="btn-save">
-                    <img src="assets/heart.png" alt="Logo" class="w-8 h-8 rounded-full" /> save
-                </button>
-            </div>
+          </div>
         </form>
-    </mat-card>
+      </mat-card>
+    </div>
+  </div>
 </div>

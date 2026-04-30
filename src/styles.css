@@ -1,6 +1,4 @@
-/* importer tailwind dans le fichier global style.css
-qui va etre injecte dans tous les pages
-*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import "tailwindcss/theme.css";
 @import "tailwindcss/utilities.css";
 
@@ -23,19 +21,23 @@ app-root {
   background-color: transparent !important;
 }
 
+mat-toolbar {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
 /* ----------------------------------Dashboard----------------------------------- */
 /* ================= 全局 box-sizing ================= */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
 }
 
 /* Top Card */
 .top-card {
   background-color: #FFFAF0 !important;
-  border: 2px solid #ECD7C3;
-  border-radius: 12px;
 }
 
 /* Bottom Section */
@@ -70,8 +72,47 @@ app-root {
   border-radius: 15px;
 }
 
-/* 閃爍動畫 */
-@keyframes flashAnimation {
+/* ----- KPI 卡片基礎樣式 ----- */
+#kpis mat-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: default;
+  box-shadow: none !important;
+}
+
+/* 滑鼠移上去稍微浮起感 */
+#kpis mat-card:hover {
+  transform: translateY(-4px);
+}
+
+#kpis img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+
+  /* shadow*/
+  filter: drop-shadow(0 4px 3px rgba(0, 0, 0, 0.07));
+  transition: transform 0.3s ease;
+}
+
+#kpis mat-card:hover img {
+  transform: scale(1.1);
+}
+
+#kpis .flex.items-center > div:first-child {
+  width: 60px;  
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0; /* 防止圖片被擠壓 */
+}
+
+/* ----- Rewards animation ----- */
+.flash {
+  animation: flash-animation 2s infinite;
+}
+
+@keyframes flash-animation {
 
   0%,
   100% {
@@ -80,44 +121,122 @@ app-root {
   }
 
   50% {
-    opacity: 0.5;
-    transform: scale(1.2);
+    opacity: 0.8;
+    transform: scale(1.1);
+    filter: brightness(1.2);
   }
 }
 
-.flash {
-  animation: flashAnimation 1s infinite;
+/* --- Modal 動畫 --- */
+.scale-in {
+  animation: scale-in-animation 0.3s ease-out;
+}
+
+@keyframes scale-in-animation {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* --- 物品選中樣式 --- */
+.selected-item {
+  outline: 3px solid #fb923c;
+  outline-offset: 2px;
+  border-radius: 9999px;
+  opacity: 1 !important;
+}
+
+.chat-bubble {
+  position: relative;
+  flex-shrink: 0;
+
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 16px;
+
+  margin-left: 25px;
+  animation: float 3s ease-in-out infinite;
+}
+
+.chat-bubble::before {
+  content: '';
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-width: 8px 10px 8px 0;
+  border-style: solid;
+  border-color: transparent #fff7ed transparent transparent;
+  /* 跟背景一致 */
+}
+
+.chat-bubble::after {
+  content: '';
+  position: absolute;
+  left: -11px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-width: 8px 11px 8px 0;
+  border-style: solid;
+  border-color: transparent #fed7aa transparent transparent;
+  /* 跟邊框一致 */
+  z-index: -1;
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
 }
 
 /* ----------------------------------------------------------------------------- */
 .card1 {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 100%;
-  /* 初始全寬 */
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+
+  flex: 1;
+  min-width: 0;
+
   background-color: #FFF2E3 !important;
   border: 2px solid #ECD7C3;
   border-radius: 12px;
-  padding: 24px 24px 40px;
-  /* 底部留空間 */
+
+  padding: 24px 24px 55px;
   transition: flex-basis 0.3s ease;
 }
 
 .card1.expanded {
-  flex-basis: 50%;
+  flex: 0 0 50%;
 }
 
 .card2 {
-  position: relative;
-  display: flex;
-  flex-direction: column;
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+
   flex: 1;
-  background-color: #FFFAF1 !important;
-  border: 2px solid #ECD7C3;
+  min-width: 0;
+
+  padding: 30px 40px !important;
+
+  background-color: #FFF2E3 !important;
+  border: 1px solid #ECD7C3 !important;
   border-radius: 12px;
-  padding: 24px 24px 40px;
-  transition: flex-basis 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
+
 }
 
 /* 選中任務的 active 狀態 */
@@ -156,6 +275,22 @@ app-root {
   font-size: 1.25rem;
   font-weight: 600;
   color: #5A4634;
+
+  transition: all 0.2s ease-in-out !important;
+}
+
+.btn-add:hover {
+  background-color: #FEC3A3 !important;
+  border: 5px solid #F9A158 !important;
+  transform: scale(1.02);
+  cursor: pointer;
+  z-index: 10;
+}
+
+.btn-add.selected {
+  background-color: #FEC3A3 !important;
+  border: 5px solid #F9A158 !important;
+  transform: scale(1.02);
 }
 
 .btn-cancel,
@@ -174,6 +309,13 @@ app-root {
   border-radius: 12px;
   border: 2px solid #ECD7C3;
   color: #5A4634;
+  transition: transform 0.2s ease;
+}
+
+.btn-cancel:hover,
+.btn-save:hover,
+.btn-delete:hover {
+  transform: scale(1.05);
 }
 
 .btn-cancel {
@@ -191,11 +333,10 @@ app-root {
 .btn-feed {
   background-color: #F9A158;
   border-radius: 12px;
-  border: 2px solid #ECD7C3;
-
+  border: none !important;
   width: 90px;
   height: 50px;
-
+  box-shadow: 0 4px 12px rgba(249, 162, 88, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -203,9 +344,76 @@ app-root {
   font-size: 1.25rem;
   font-weight: 600;
   color: #FFFAEF;
+  transition: background-color 0.2s ease;
+}
+
+.btn-feed:hover {
+  background-color: #f08f3f;
 }
 
 /*------------------------------todo-list------------------------------*/
+/* list item */
+.list-item {
+  background-color: #FFFAEF !important;
+  border-radius: 12px !important;
+  border: 2px solid #ECD7C3;
+  height: 70px !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+.list-item:hover {
+  background-color: #FEC3A3 !important;
+  border: 5px solid #F9A158;
+
+  transform: scale(1.02);
+  z-index: 10;
+  /* 確保放大時圖片是在最上層，不會被下一行蓋住 */
+}
+
+.list-item.selected {
+  background-color: #FEC3A3 !important;
+  border: 5px solid #F9A158 !important;
+  border-radius: 12px !important;
+
+  transform: scale(1.02);
+}
+
+.list-item span {
+  font-size: 1.1rem;
+  font-weight: 550;
+  color: #5A4634;
+}
+
+.list-container {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+/* 💡 修正 Delete 按鈕容器：讓它永遠釘在 card1 的底部 */
+.card1 .form-actions {
+  margin-top: auto !important;
+  padding: 10px 0 0 0 !important;
+  display: flex;
+  justify-content: center;
+}
+
+/* --- 讓滾動條變可愛 (貓咪色系) --- */
+.list-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.list-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.list-container::-webkit-scrollbar-thumb {
+  background-color: #ECD7C3;
+  border-radius: 20px;
+  border: 2px solid #FFF2E3;
+}
 
 .delete-checkbox {
   /* 未選中 */
@@ -223,31 +431,44 @@ app-root {
 }
 
 /*------------------------------todo-detail------------------------------*/
+.main-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
 
-/* list item */
-.list-item {
-  background-color: #FFFAEF !important;
-  border-radius: 12px !important;
+/* -----form row 統一對齊----- */
+.todo-form-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+/*-----input 長度-----*/
+.todo-input {
+  width: 100%;
+  padding: 8px 12px;
   border: 2px solid #ECD7C3;
-  height: 70px !important;
-  transition: background-color 0.2s;
+  border-radius: 6px;
+  background-color: #FFFAEF;
+  font-size: 16px;
+  box-sizing: border-box;
 }
 
-.list-item:hover {
-  background-color: #FEC3A3 !important;
-  border: 5px solid #F9A158;
+.todo-input:focus {
+  border-color: #ff9d5c;
+  outline: none;
 }
 
-.list-item.selected {
-  background-color: #FEC3A3 !important;
-  border: 5px solid #F9A158 !important;
-  border-radius: 12px !important;
+.todo-form-row label {
+  width: 100px;
+  margin-right: 12px;
+  font-weight: 700;
+  color: #45392E;
 }
 
-.list-item span {
-  font-size: 1.1rem;
-  font-weight: 550;
-  color: #5A4634;
+.todo-form-row>*:not(label) {
+  flex: 1;
 }
 
 /* -----Contacts (Chip)----- */
@@ -271,8 +492,8 @@ app-root {
 /* placeholder */
 .chip-placeholder {
   position: absolute;
-  top: 9px;
-  left: 12px;
+  top: 15px;
+  left: 13px;
   color: #b9b9b9;
   pointer-events: none;
 }
@@ -301,16 +522,60 @@ app-root {
   /* 避免和文字貼太近 */
 }
 
+#title {
+  font-size: 24px !important;
+  font-weight: 600 !important;
+  border: 2px solid #ECD7C3 !important;
+  border-radius: 12px !important;
+  background-color: #FFFAF0 !important;
+  padding: 15px 20px !important;
+  margin-bottom: 15px !important;
+}
+
+#description {
+  background-color: #FFFAF0 !important;
+  border: 2px solid #ECD7C3 !important;
+  border-radius: 12px !important;
+  min-height: 120px !important;
+  margin-bottom: 15px !important;
+}
+
+
+.card2 .custom-input:not(textarea):not(#title) {
+  flex: 1 !important;
+  max-width: 400px !important;
+  height: 48px !important;
+  border-radius: 8px !important;
+  border: 2px solid #ECD7C3 !important;
+  background-color: #FFFAF0 !important;
+}
+
 /*------------------------------Profile-detail------------------------------*/
+.profile-page {
+  background: url('/assets/profile-bg.png') center/cover no-repeat;
+  min-height: 100vh;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center !important;
+
+  padding: 60px 20px;
+  gap: 1.5rem;
+  font-family: 'Inter', sans-serif;
+  background-size: 1920px auto;
+}
+
 /* -----form row 統一對齊----- */
-.form-row {
+.profile-form-row {
   display: flex;
   align-items: center;
   margin-bottom: 16px;
 }
 
 /*-----input Username/Password & 長度-----*/
-.custom-input {
+.profile-input {
   width: 100%;
   padding: 8px 12px;
   border: 2px solid #ECD7C3;
@@ -320,17 +585,17 @@ app-root {
   box-sizing: border-box;
 }
 
-.custom-input:focus {
+.profile-input:focus {
   border-color: #ff9d5c;
   outline: none;
 }
 
-.form-row label {
+.profile-form-row label {
   width: 100px;
   margin-right: 12px;
 }
 
-.form-row>*:not(label) {
+.profile-form-row>*:not(label) {
   flex: 1;
 }
 
@@ -359,14 +624,19 @@ app-root {
 
 /* 背景模糊遮罩 */
 .modal-overlay {
-  position: fixed;
+  position: absolute;
+  /* 💡 從 fixed 改成 absolute */
   inset: 0;
+  /* 💡 這會讓它自動撐滿 card1 的寬高 */
   backdrop-filter: blur(10px);
   background: rgba(255, 255, 255, 0.35);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 99999;
+  z-index: 99;
+  /* 確保在表單上方 */
+  border-radius: 12px;
+  /* 💡 記得加上跟卡片一樣的圓角，才不會穿幫 */
 }
 
 /* 外層：淡橘色框 */
@@ -426,7 +696,7 @@ app-root {
 /*-----Banner-----*/
 .level-banner {
   position: absolute;
-  top: -100px;
+  top: -120px;
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
@@ -445,7 +715,7 @@ app-root {
   font-size: 40px;
   font-weight: bold;
   margin-bottom: 10px;
-  margin-top: 70px;
+  margin-top: 60px;
 }
 
 /* -----Level----- */
@@ -459,7 +729,7 @@ app-root {
   display: flex;
   justify-content: center;
   gap: 18px;
-  margin-top: 15px;
+  margin-top: 10px;
 }
 
 .reward-item {
@@ -486,10 +756,10 @@ app-root {
   right: -12px;
   background: orange;
   color: white;
-  font-size: 12px;
+  font-size: 18px !important;
   font-weight: bold;
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -500,7 +770,7 @@ app-root {
 /* Reward 標題 */
 .reward-title {
   font-weight: bold;
-  margin-top: 10px;
+  margin-top: 0;
   color: #444;
 }
 
@@ -546,3 +816,254 @@ app-root {
   width: 1200px;
   height: auto;
 }
+
+/*------------------------------Login & Sign-Up------------------------------*/
+.entry-page {
+  background: url('/assets/bg.png') center/cover no-repeat fixed;
+  min-height: 100vh;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center !important;
+
+  padding: 60px 20px;
+  gap: 1.5rem;
+  font-family: 'Inter', sans-serif;
+  background-size: 1920px auto;
+}
+
+.login-logo {
+  width: 500px;
+  max-width: 90%;
+  height: auto;
+  display: block;
+  z-index: 1;
+  margin-bottom: 0 !important;
+}
+
+.form-card {
+  width: 400px;
+  max-width: 90%;
+  min-width: 320px;
+
+  position: relative;
+  z-index: 10;
+  border-radius: 40px;
+  background-color: #FFFAEF;
+}
+
+/*-----Login input-----*/
+.login-input {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 16px;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+.login-field:focus-within {
+  border: 2px solid #ff9d5c;
+  outline: none;
+}
+
+.login-field {
+  display: flex;
+  align-items: center;
+
+  border: 2px solid #ECD7C3;
+  border-radius: 12px;
+  padding: 0 15px;
+  height: 60px;
+}
+
+.login-input::placeholder {
+  color: #CDBBA7;
+  font-size: 16px;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 1px;
+}
+
+.input-icon {
+  color: #ff9d5c;
+}
+
+.login-btn,
+.signup-btn {
+  height: 64px !important;
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  font-family: 'Inter', sans-serif !important;
+  background-color: #F9A258 !important;
+  color: #FFFAEF;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 12px rgba(249, 162, 88, 0.4);
+  transition: all 0.2s ease;
+  display: block;
+  border: none !important;
+}
+
+.login-btn:hover,
+.signup-btn:hover {
+  background-color: #e88d40;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(249, 162, 88, 0.5);
+}
+
+.signup-link {
+  font-size: 20px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.signup-link:hover {
+  text-decoration: underline;
+  transform: scale(1.05);
+}
+
+/*------------------------------Sign-Up------------------------------*/
+.card2-signup {
+  width: 520px !important;
+  padding: 60px 50px 60px !important;
+  border-radius: 40px !important;
+  font-family: 'Inter', sans-serif !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  background-color: #FFFAEF !important;
+  border: none !important;
+  flex: none !important;
+  height: auto !important;
+  z-index: 10;
+}
+
+.admin-border {
+  border: 5px solid #F9A158 !important;
+  box-shadow: 0 0 15px rgba(249, 161, 88, 0.2);
+}
+
+.signup-photo {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  z-index: 50;
+  margin-bottom: 0px;
+  position: relative;
+}
+
+.form-row1 {
+  display: flex;
+  align-items: center;
+  margin-bottom: 28px;
+  width: 100%;
+}
+
+.form-row1 label {
+  flex: 0 0 120px;
+  width: 120px;
+  margin-right: 15px;
+
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 600;
+  font-size: 18px;
+  color: #45392E;
+  white-space: nowrap;
+}
+
+/* 💡 讓所有 Input 填滿剩餘空間 */
+.form-row1>*:not(label) {
+  flex: 1;
+  min-width: 0;
+}
+
+.custom-input1 {
+  height: 55px;
+  border-radius: 18px !important;
+  border: 2px solid #ECD7C3 !important;
+  background-color: #FFFAEF !important;
+  color: #45392E;
+
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 500;
+  font-size: 18px;
+  padding: 0 20px;
+  transition: all 0.2s ease-in-out;
+}
+
+.custom-input1:focus {
+  border-color: #F9A158 !important;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(249, 161, 88, 0.1);
+}
+
+/* 💡 Genre 下拉選單*/
+select.custom-input1 {
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23F9A158' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 20px center;
+  background-size: 20px;
+  padding-right: 50px;
+}
+
+select.custom-input1 option {
+  background-color: #FFFAEF;
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+}
+
+.signup-btn {
+  height: 64px !important;
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  border-radius: 20px !important;
+  margin-top: 15px;
+  width: 100%;
+  background-color: #F9A158 !important;
+  color: #FFFFFF !important;
+  border: none !important;
+}
+
+/*Sign-Up in Users List*/
+.admin-border .flex-col.items-center {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  /* 確保貓咪圖片置中 */
+  justify-content: center !important;
+  width: 100% !important;
+}
+
+/* 2. 針對 Your Cat 那一列進行強制置中 */
+.admin-border .flex-col.items-center .form-row1.m-5 {
+  display: flex !important;
+  justify-content: center !important;
+  /* 強制文字置中 */
+  width: 100% !important;
+  margin: 20px 0 !important;
+  padding: 0 !important;
+}
+
+.admin-border .form-row1.m-5 span {
+  width: auto !important;
+  flex: none !important;
+  text-align: center !important;
+
+  font-size: 24px !important;
+  font-weight: 800 !important;
+  color: #45392E !important;
+  letter-spacing: 1px;
+}
+
+.admin-border {
+  padding: 40px 40px 50px 40px !important;
+}
+
+/*------------------------------User-List------------------------------*/

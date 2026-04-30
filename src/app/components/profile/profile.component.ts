@@ -11,32 +11,18 @@ import { UserService } from '../../services/user.service';
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent implements OnInit {
-
-  user!: User;
-
+  user:any;
   profileForm!: FormGroup;
 
-  // 遊戲欄位
-  level = 0;
-  energy = 0;
-  fishCount = 0;
-  toyCount = 0;
-  heartCount = 0;
-
-  // Feed Btn
+  // 介面控制變數
   selectedItem: 'fish' | 'toy' | 'heart' = 'fish';
-
-  // level up Modal
   showLevelUpModal = false;
+  showPassword = false;
+
+  // 升級獎勵暫存
   newLevel = 0;
-
-  //rewards
   rewards = { fish: 0, toy: 0, heart: 0 };
-
-  // 密碼欄位控制
-  showPassword: boolean = false; 
   
-
 
   constructor(
     private fb: FormBuilder,
@@ -49,10 +35,8 @@ export class ProfileComponent implements OnInit {
       password: [''],
       catPhoto: ['']
     });
-
     this.loadUserData();
   }
-
 
   loadUserData() {
     this.userService.getCurrentUser().subscribe({
@@ -63,152 +47,106 @@ export class ProfileComponent implements OnInit {
           password: '',
           catPhoto: res.catPhoto
         });
-
-        // 遊戲欄位初始化
-        this.level = res.level ?? 0;
-        this.energy = res.energy ?? 0;
-        this.fishCount = res.fishCount ?? 0;
-        this.toyCount = res.toyCount ?? 0;
-        this.heartCount = res.heartCount ?? 0;
-
       },
       error: err => console.error(err)
     });
   }
 
-  // 切換明文/隱藏
   togglePassword() {
     this.showPassword = !this.showPassword;
   }
 
-  // 選擇要 Feed 的物品
   selectItem(item: 'fish' | 'toy' | 'heart') {
     this.selectedItem = item;
-    console.log('Selected item:', this.selectedItem);
   }
 
-  // Feed 按鈕 disable 控制
+  // 修正：統一使用 this.user 判斷
   isFeedDisabled(): boolean {
-    switch (this.selectedItem) {
-      case 'fish': return this.fishCount <= 0;
-      case 'toy': return this.toyCount <= 0;
-      case 'heart': return this.heartCount <= 0;
-    }
-    return true;
+    if (!this.user) return true;
+    const count = this.user[`${this.selectedItem}Count` as keyof User] as number;
+    return (count || 0) <= 0;
   }
 
-  // Feed 按鈕
   feedSelectedItem() {
-    console.log('Feeding:', this.selectedItem);
     this.feed(this.selectedItem);
   }
 
-  // 計算總物品數量，用於按鈕 disable
+  // 修正：統一使用 this.user 判斷
   totalItems(): number {
-    return this.fishCount + this.toyCount + this.heartCount;
+    if (!this.user) return 0;
+    return (this.user.fishCount || 0) + (this.user.toyCount || 0) + (this.user.heartCount || 0);
   }
 
-  // Feed 物品
-  feed(item: string) {
-    let increment = 0;
-    switch (item) {
-      case 'fish': if (this.fishCount <= 0) return; increment = 30; this.fishCount--; break;
-      case 'toy': if (this.toyCount <= 0) return; increment = 20; this.toyCount--; break;
-      case 'heart': if (this.heartCount <= 0) return; increment = 25; this.heartCount--; break;
+  feed(item: 'fish' | 'toy' | 'heart') {
+    if (!this.user || this.isFeedDisabled()) return;
+
+    const bonus = { fish: 30, toy: 20, heart: 25 };
+    
+    // 1. 增加能量
+    this.user.energy = (this.user.energy || 0) + bonus[item];
+
+    // 2. 扣除物品
+    if (item === 'fish') this.user.fishCount!--;
+    else if (item === 'toy') this.user.toyCount!--;
+    else if (item === 'heart') this.user.heartCount!--;
+
+    // 3. 檢查升級
+    if (this.user.energy >= 100) {
+      this.levelUp();
     }
 
-    this.energy += increment;
-    if (this.energy >= 100) this.levelUp();
-    if (this.energy > 100) this.energy = 100;
-
-    // 同步前端 user 物件
-    this.user.level = this.level;
-    this.user.energy = this.energy;
-    this.user.fishCount = this.fishCount;
-    this.user.toyCount = this.toyCount;
-    this.user.heartCount = this.heartCount;
-
-    this.saveStats(); // 同步到後端
+    this.saveStats(); 
   }
 
-  // 升級
   levelUp() {
-    this.level++;
-    this.energy = 0;
-    this.newLevel = this.level;
+    this.user.level++;
+    this.user.energy = this.user.energy >= 100 ? this.user.energy - 100 : 0;
+    this.newLevel = this.user.level;
 
-    // 隨機生成獎勵 (0~3)
+    // 隨機獎勵 (0~3)
     this.rewards.fish = Math.floor(Math.random() * 4);
     this.rewards.toy = Math.floor(Math.random() * 4);
     this.rewards.heart = Math.floor(Math.random() * 4);
 
-    // 更新前端數值
-    this.fishCount += this.rewards.fish;
-    this.toyCount += this.rewards.toy;
-    this.heartCount += this.rewards.heart;
-
-    // 更新 user 前端資料
-    this.user.level = this.level;
-    this.user.energy = this.energy;
-
-    this.user.fishCount = this.fishCount;
-    this.user.toyCount = this.toyCount;
-    this.user.heartCount = this.heartCount;
+    // 加入背包
+    this.user.fishCount = (this.user.fishCount || 0) + this.rewards.fish;
+    this.user.toyCount = (this.user.toyCount || 0) + this.rewards.toy;
+    this.user.heartCount = (this.user.heartCount || 0) + this.rewards.heart;
 
     this.showLevelUpModal = true;
-
-    this.saveStats();
   }
 
   closeLevelUpModal() {
     this.showLevelUpModal = false;
   }
 
-  // 儲存遊戲欄位到後端
   saveStats() {
-    const updatedUser: User = {
-      ...this.user,
-      level: this.level,
-      energy: this.energy,
-      fishCount: this.fishCount,
-      toyCount: this.toyCount,
-      heartCount: this.heartCount
-    };
-
-    this.userService.updateUser(updatedUser).subscribe({
-      next: () => console.log('User stats updated'),
+    if (!this.user) return;
+    this.userService.updateUser(this.user).subscribe({
+      next: () => console.log('Stats synced'),
       error: err => console.error(err)
     });
   }
 
-  // 儲存 Profile（username / password）
   onSave() {
+    if (!this.user) return;
     const formValue = this.profileForm.value;
+    const updatedUser = { ...this.user, username: formValue.username };
 
-    const updatedUser: User = {
-      ...this.user,
-      username: formValue.username
-    };
-
-    // 只有使用者輸入新密碼才更新
-    if (formValue.password && formValue.password.trim() !== '') {
+    if (formValue.password?.trim()) {
       updatedUser.password = formValue.password;
     }
 
     this.userService.updateUser(updatedUser).subscribe({
-      next: () => {
-        console.log('Profile saved');
-        // 儲存後重置密碼欄位
+      next: (res) => {
+        this.user = res;
         this.profileForm.get('password')?.reset();
-      },
-      error: err => console.error(err)
+        console.log('Profile saved');
+      }
     });
   }
 
-
-  // 取消 → 回復後端資料
   onCancel() {
     this.loadUserData();
   }
-
 }

@@ -1,28 +1,28 @@
 <div class="main-container" *ngIf="todoForm != null">
-    <mat-card class="card2" [class.open]="todoId !== null" [class.active]="todoTitle">
-        <form [formGroup]="todoForm" (ngSubmit)="onSave()" class="form-grid custom-form">
+    <mat-card class="card2" [class.open]="todoId !== null" [class.active]="todoId !== null">
+        <form [formGroup]="todoForm" (ngSubmit)="onSave()">
 
             <!-- Title -->
-            <div class="form-row full-width">
-                <input id="title" type="text" formControlName="title" class="custom-input" />
+            <div class="todo-form-row full-width">
+                <input id="title" type="text" formControlName="title" class="todo-input" placeholder="Title"/>
             </div>
 
             <!-- Description -->
-            <div class="form-row full-width">
-                <textarea id="description" formControlName="description" placeholder="description"
-                    class="custom-input"></textarea>
+            <div class="todo-form-row full-width">
+                <textarea id="description" formControlName="description" placeholder="Description"
+                    class="todo-input"></textarea>
             </div>
 
             <!-- Date -->
-            <div class="form-row">
+            <div class="todo-form-row">
                 <label for="dueDate">Date</label>
-                <input id="dueDate" type="date" formControlName="dueDate" class="custom-input" />
+                <input id="dueDate" type="date" formControlName="dueDate" class="todo-input" />
             </div>
 
             <!-- Project -->
-            <div class="form-row">
+            <div class="todo-form-row">
                 <label for="projectId">Project</label>
-                <select id="projectId" formControlName="projectId" class="custom-input">
+                <select id="projectId" formControlName="projectId" class="todo-input">
                     @for(project of projects; track project.id){
                     <option [value]="project.id">{{project.title}}</option>
                     }
@@ -30,9 +30,9 @@
             </div>
 
             <!-- Priority -->
-            <div class="form-row">
+            <div class="todo-form-row">
                 <label for="priority">Priority</label>
-                <select id="priority" formControlName="priority" class="custom-input">
+                <select id="priority" formControlName="priority" class="todo-input">
                     @for(priority of listPriority; track priority.value){
                     <option [value]="priority.value">{{priority.text}}</option>
                     }
@@ -40,9 +40,9 @@
             </div>
 
             <!-- User -->
-            <div class="form-row">
+            <div class="todo-form-row">
                 <label for="userIds">User</label>
-                <select id="userIds" formControlName="userIds" multiple class="custom-input">
+                <select id="userIds" formControlName="userIds" multiple class="todo-input">
                     @for(user of users; track user.id){
                     <option [value]="user.id">{{ user.firstname }} {{ user.lastname }}</option>
                     }
@@ -50,7 +50,7 @@
             </div>
 
             <!-- Contacts (Chip) -->
-            <div class="form-row">
+            <div class="todo-form-row">
                 <label>Contacts</label>
                 <div class="custom-input chip-wrapper">
                     <mat-chip-grid #chipGrid aria-label="User selection" class="chip-grid">
@@ -81,7 +81,7 @@
             </div>
             
             <!-- Completed -->
-            <div class="form-row">
+            <div class="todo-form-row">
                 <label>Status</label>
                 <mat-checkbox formControlName="completed"></mat-checkbox>
             </div>

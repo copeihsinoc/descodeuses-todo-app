@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
 import { HttpClient } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -30,13 +31,14 @@ export class UserListComponent implements OnInit {
 
   selectedUsers: any[] = [];
 
-  selectedUserId: number | null =null;
+  selectedUserId: number | null = null;
 
 
 
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
+    private snackBar: MatSnackBar,
     private http: HttpClient) {
     this.formGroup = this.fb.group({
       title: ['', [Validators.required]],
@@ -46,7 +48,7 @@ export class UserListComponent implements OnInit {
   ngOnInit(): void {
     this.fetchUsers();
   }
-  fetchUsers(){
+  fetchUsers() {
     this.userService.getUsers().subscribe((data) => {
 
       this.users = data;
@@ -99,49 +101,48 @@ export class UserListComponent implements OnInit {
   }
 
   deleteUser() {
-    if (this.selectedUsers.length === 1) {
-      // 👉 單筆刪除
-      const user = this.selectedUsers[0];
-      this.userService.deleteUser(user.id).subscribe({
-        next: () => {
-          this.users = this.users.filter(u => u.id !== user.id);
-          this.selectedUsers = [];
-        },
-        error: err => console.error('Delete failed', err)
-      });
-    } else if (this.selectedUsers.length > 1) {
-      // 👉 批次刪除
-      const ids = this.selectedUsers.map(u => u.id);
-      this.userService.deleteUsers(ids).subscribe({
-        next: () => {
-          this.users = this.users.filter(u => !ids.includes(u.id));
-          this.selectedUsers = [];
-        },
-        error: err => console.error('Batch delete failed', err)
-      });
-    }
-  }
+    if (this.selectedUsers.length === 0) return;
 
+    const idsToDelete = this.selectedUsers.map(u => u.id);
+
+    // 1. 
+    this.users = this.users.filter(u => !idsToDelete.includes(u.id));
+    this.userFilter = this.userFilter.filter(u => !idsToDelete.includes(u.id));
+
+    // 2. 
+    this.userService.deleteUsers(idsToDelete).subscribe({
+      next: () => {
+        this.snackBar.open('Successfully deleted!', '', { duration: 1200 });
+      },
+      error: (err) => {
+        console.error('Delete failed!', err);
+        this.fetchUsers();
+      }
+    });
+
+    this.selectedUsers = [];
+  }
   addUser() {
     this.selectedUserId = 0;
-    }
-  
-
-  openUserDetail(id:number){
-    this.selectedUserId = id;
-    this.fetchUsers();
   }
 
-  onCloseDetail(){
+
+  openUserDetail(id: number) {
+    this.selectedUserId = id;
+    //this.fetchUsers();
+  }
+
+  onCloseDetail() {
     this.selectedUserId = null;
 
     // wait angular clear input then stable UI
-    setTimeout(() => {}, 50);
+    setTimeout(() => { }, 50);
+    this.fetchUsers();
   }
 
   stopClick(event: MouseEvent) {
-  event.stopPropagation();
-}
+    event.stopPropagation();
+  }
 }
 
 

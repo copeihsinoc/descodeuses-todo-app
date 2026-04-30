@@ -1,136 +1,239 @@
-<!-- ================= Layout Container ================= -->
-<div class="container mx-auto px-4 md:px-6 lg:px-8">
+<div class="mx-auto max-w-[1280px] px-6 py-6" *ngIf="user">
 
-    <!-- ================= Top Card ================= -->
-    <div
-        class="top-card w-full flex flex-col md:flex-row md:gap-15 md:p-8">
+  <div class="top-card w-full flex flex-col md:flex-row md:gap-10 py-8 px-16 shadow-md rounded-2xl mb-6">
 
-        <!-- 左邊: 貓咪照片 -->
-        <div class="flex justify-center items-center">
-            <img [src]="user?.catPhoto" alt="user cat"
-                class="rounded-2xl w-36 md:w-40 lg:w-48 h-full object-cover border-3 border-amber-800" />
-        </div>
+    <div class="flex justify-center items-center flex-shrink-0 relative">
 
-        <!-- 右邊內容 -->
-        <div class="flex-1 flex flex-col gap-4 w-full">
-            <span class="text-lg font-semibold text-center md:text-left">Your Cat</span>
+      <div>
+        <img [src]="user.catPhoto" alt="user cat" class="w-full h-full object-contain" />
+      </div>
 
-            <!-- 能量條 + 等級 -->
-            <div class="w-full">
-                <div class="flex justify-between mb-2">
-                    <span>Lv. {{ level }}</span>
-                    <span>{{ energy }}%</span>
-                </div>
-                <div class="bg-green-200 h-5 rounded-full">
-                    <div class="bg-green-500 h-5 rounded-full transition-all duration-300" [style.width.%]="energy">
-                    </div>
-                </div>
-            </div>
+      <div class="chat-bubble hidden md:block w-72 p-4 rounded-2xl shadow-sm relative">
+        <p class="text-xl text-gray-600 font-semibold leading-relaxed">{{ questStatus.text }}</p>
 
-            <span class="font-semibold">Rewards</span>
-
-            <!-- 道具 + Feed -->
-            <div class="flex justify-between items-center mt-4 w-full">
-                <div class="flex gap-8 flex-wrap items-center">
-                    <!-- Fish -->
-                    <div class="relative flex flex-col items-center cursor-pointer"
-                        [class.selected]="selectedItem === 'fish'" (click)="selectItem('fish')">
-                        <img src="assets/fish.png" class="w-10 md:w-12 h-10 md:h-12 rounded-full scale-x-[-1]">
-                        <span
-                            class="absolute -top-2 -right-2 bg-orange-400 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">{{
-                            fishCount }}</span>
-                    </div>
-
-                    <!-- Toy -->
-                    <div class="relative flex flex-col items-center cursor-pointer"
-                        [class.selected]="selectedItem === 'toy'" (click)="selectItem('toy')">
-                        <img src="assets/toy.png" class="w-10 md:w-12 h-10 md:h-12 rounded-full">
-                        <span
-                            class="absolute -top-2 -right-2 bg-orange-400 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">{{
-                            toyCount }}</span>
-                    </div>
-
-                    <!-- Heart -->
-                    <div class="relative flex flex-col items-center cursor-pointer"
-                        [class.selected]="selectedItem === 'heart'" (click)="selectItem('heart')">
-                        <img src="assets/heart.png" class="w-10 md:w-12 h-10 md:h-12 rounded-full">
-                        <span
-                            class="absolute -top-2 -right-2 bg-orange-400 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">{{
-                            heartCount }}</span>
-                    </div>
-                </div>
-
-                <!-- Feed 按鈕 -->
-                <button type="button" class="btn-feed min-w-[130px] px-4" (click)="feed(selectedItem)"
-                    [disabled]="isFeedDisabled()">
-                    Feed
-                </button>
-            </div>
-        </div>
+        <button *ngIf="questStatus.canCollect" (click)="onFishClick()"
+          class="mt-2 w-full py-1 bg-orange-500 text-white rounded-lg text-xs font-bold hover:bg-orange-600 transition-colors">
+          領取小魚 🎁
+        </button>
+      </div>
     </div>
 
-    <!-- ================= Bottom Section (2:1 Ratio) ================= -->
-    <div class="bottom-section w-full max-w-full mt-6 grid grid-cols-3 gap-6">
+    <!------------------------- 1-2 Text & Energy bar ------------------------->
+    <div class="flex-1 flex flex-col gap-4 w-full">
 
-        <!-- 左邊卡片 (占 2/3) -->
-        <div class="left-card col-span-2 w-full shadow-lg p-8">
-            <span class="text-2xl font-semibold block mb-4">Task Overview</span>
+      <span class="text-lg font-semibold text-center md:text-left text-gray-800">Your Cat</span>
 
-            <!-- KPI 區 -->
-            <div id="list-blocks" class="grid grid-cols-3 gap-4">
-                @for (kpi of kpis; track kpi.id) {
-                <mat-card class="text-white p-4 w-full" [ngClass]="kpi.bg">
-                    <div class="flex items-center gap-x-4">
-                        <mat-icon class="flex items-center p-4 text-3xl">{{ kpi.icon }}</mat-icon>
-                        <div>
-                            <div class="uppercase text-sm opacity-80">{{ kpi.title }}</div>
-                            <div class="text-2xl font-bold">{{ kpi.value }}</div>
-                        </div>
-                    </div>
-                </mat-card>
-                }
-            </div>
+      <div class="w-full">
+        <div class="flex justify-between mb-2 text-sm font-medium text-gray-600">
+          <span>Lv. {{ user.level }}</span>
+          <span>{{ user.energy }}%</span>
+        </div>
+        <div class="bg-gray-100 h-5 rounded-full overflow-hidden shadow-inner">
+          <div class="bg-green-500 h-5 rounded-full transition-all duration-500 ease-out"
+            [style.width.%]="user.energy > 100 ? 100 : user.energy">
+          </div>
+        </div>
+      </div>
 
-            <!-- Activity 標題 -->
-            <span class="text-2xl font-semibold block mt-8 mb-2">Activity</span>
+      <!------------------------- 1-3 Rewards ------------------------->
+      <span class="font-semibold text-gray-700">Rewards</span>
 
-            <!-- Activity 內容 -->
-            <div class="flex flex-col gap-3">
-                <div>
-                    <img src="assets/check circle.png" class="w-8 h-8 inline-block" />
-                    <span class="text-lg font-semibold">Completed {{ completedCount }} Tasks</span>
-                </div>
+      <div class="flex items-center justify-between mt-2">
+        <div class="flex gap-6 items-center">
 
-                <div>
-                    <img src="assets/star.png" class="w-8 h-8 inline-block" />
-                    <span class="text-lg font-semibold">Daily Challenge</span>
-                </div>
+          <!-- Fish -->
+          <div class="relative flex flex-col items-center cursor-pointer" [class.selected]="selectedItem === 'fish'"
+            (click)="selectItem('fish')">
+            <img src="assets/fish.png" class="w-18 h-16 rounded-full scale-x-[-1]">
+            <span
+              class="absolute -top-2 -right-2 bg-orange-400 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+              {{ user.fishCount }}
+            </span>
+          </div>
 
-                <mat-card class="card-challenge p-4 w-full">
-                    <div class="flex items-center gap-6">
-                        <p class="text-2xl font-semibold whitespace-nowrap">{{ completedCount }}/3</p>
+          <!-- Toy -->
+          <div class="relative flex flex-col items-center cursor-pointer" [class.selected]="selectedItem === 'toy'"
+            (click)="selectItem('toy')">
+            <img src="assets/toy.png" class="w-16 h-16 rounded-full">
+            <span
+              class="absolute -top-2 -right-2 bg-orange-400 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+              {{ user.toyCount }}
+            </span>
+          </div>
 
-                        <div class="bg-blue-200 h-4 rounded-full w-full">
-                            <div class="bg-blue-500 h-4 rounded-full transition-all duration-300"
-                                [style.width.%]="(completedCount / 3) * 100 || 5"></div>
-                        </div>
-
-                        <span class="text-lg"> + </span>
-                        <img src="assets/fish-re.png" alt="Claim Reward" class="w-16 h-14 cursor-pointer"
-                            [class.flash]="completedCount >= 3" (click)="claimDailyReward()" />
-                    </div>
-                    <div>
-                        <span class="text-lg">Progress</span>
-                    </div>
-                </mat-card>
-            </div>
+          <!-- Heart -->
+          <div class="relative flex flex-col items-center cursor-pointer" [class.selected]="selectedItem === 'heart'"
+            (click)="selectItem('heart')">
+            <img src="assets/heart.png" class="w-16 h-16 rounded-full">
+            <span
+              class="absolute -top-2 -right-2 bg-orange-400 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+              {{ user.heartCount }}
+            </span>
+          </div>
         </div>
 
-        <!-- 右邊兩塊卡片 (占 1/3) -->
-        <div class="right-section col-span-1 w-full max-w-full flex flex-col gap-6">
-            <div class="card-r1 w-full rounded-2xl shadow-lg p-4">Achievements</div>
-            <div class="card-r2 w-full rounded-2xl shadow-lg p-4">Chat</div>
+        <!-- Button -->
+        <button type="button"
+          class="btn-feed min-w-[130px] px-6 py-2 rounded-xl bg-orange-500 text-white font-bold shadow-lg hover:bg-orange-600 disabled:bg-gray-300"
+          (click)="feed(selectedItem)" [disabled]="isFeedDisabled()">Feed</button>
+
+      </div>
+    </div>
+  </div>
+
+  <!------------------------- 2-1 Task Overview ------------------------->
+  <div class="bottom-section w-full max-w-full grid grid-cols-3 gap-6">
+    <div class="left-card col-span-2 w-full shadow-md py-8 px-16 bg-white rounded-2xl">
+      <span class="text-2xl font-semibold block mb-6 text-gray-800">Task Overview</span>
+
+      <!-- Kpis -->
+      <div id="kpis" class="grid grid-cols-3 gap-8">
+        <!------------------------- TODAY ------------------------->
+        <mat-card class="p-4 !border-2 !border-blue-200 !bg-blue-100 rounded-2xl">
+          <div class="flex items-center gap-4">
+            <!-- icon -->
+            <div><img [src]="kpis[0].icon" /></div>
+            <!-- text -->
+            <div class="flex flex-col justify-center leading-none">
+              <div class="text-[10px] font-black text-blue-600 tracking-wider">TODAY</div>
+              <div class="text-3xl font-black text-gray-800">{{ kpis[0].value }}</div>
+            </div>
+          </div>
+        </mat-card>
+        <!------------------------- URGENT ------------------------->
+        <mat-card class="p-4 !border-2 !border-orange-200 !bg-orange-100 rounded-2xl">
+          <div class="flex items-center gap-4">
+            <!-- icon -->
+            <div><img [src]="kpis[1].icon" /></div>
+            <!-- text -->
+            <div class="flex flex-col justify-center leading-none">
+              <div class="text-[10px] font-black text-orange-400 tracking-wider">URGENT</div>
+              <div class="text-3xl font-black text-gray-800">{{ kpis[1].value }}</div>
+            </div>
+          </div>
+        </mat-card>
+        <!------------------------- OVERDUE ------------------------->
+        <mat-card class="p-4 !border-2 !border-red-200 !bg-red-100 rounded-2xl">
+          <div class="flex items-center gap-4">
+            <!-- icon -->
+            <div><img [src]="kpis[2].icon" /></div>
+            <!-- text -->
+            <div class="flex flex-col justify-center leading-none">
+              <div class="text-[10px] font-black text-red-500 tracking-wider">OVERDUE</div>
+              <div class="text-3xl font-black text-gray-800">{{ kpis[2].value }}</div>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+
+      <!------------------------- 2-2 Activity ------------------------->
+      <span class="text-2xl font-semibold block mt-10 mb-4 text-gray-800">Activity</span>
+
+      <div class="flex flex-col gap-4">
+
+        <div class="flex items-center gap-3">
+          <img src="assets/star.png" class="w-8 h-8" />
+          <span class="text-lg font-semibold text-gray-700">Daily Challenge</span>
         </div>
+
+        <!-- Collect Fish -->
+        <mat-card class="card-challenge p-6 w-full rounded-2xl">
+          <div class="flex items-center gap-6">
+            <p class="text-2xl font-black text-blue-600 whitespace-nowrap">
+              {{ user.rewardStatus === 'CLAIMED' ? 3 : (user.todayCompletedCount > 3 ? 3 : user.todayCompletedCount)
+              }}
+              / 3
+            </p>
+
+            <div class="bg-blue-100 h-4 rounded-full w-full overflow-hidden shadow-inner">
+              <div class="bg-blue-500 h-4 rounded-full transition-all duration-700 ease-in-out"
+                [style.width.%]="(user.rewardStatus === 'CLAIMED' ? 100 : (user.todayCompletedCount / 3 * 100))">
+              </div>
+            </div>
+
+            <span class="text-lg font-bold text-gray-400"> + </span>
+
+            <div [ngSwitch]="user.rewardStatus">
+              <img *ngSwitchCase="'READY'" src="assets/fish-re.png"
+                class="w-16 h-14 flash cursor-pointer drop-shadow-lg" (click)="onFishClick()" />
+              <img *ngSwitchDefault src="assets/fish-re.png" class="w-16 h-14 fish-collect" />
+            </div>
+
+          </div>
+
+          <div class="mt-2 text-sm text-gray-400 font-medium">Daily Progress</div>
+
+        </mat-card>
+
+      </div>
+    </div>
+
+    <div class="right-section col-span-1 w-full flex flex-col gap-6">
+
+      <!-- Achievements -->
+      <div class="card-r1 w-full flex-1 rounded-2xl shadow-md py-8 px-10 bg-white">
+        <span class="text-2xl font-semibold text-gray-800">Achievements</span>
+      </div>
+
+      <!-- Chat -->
+      <div class="card-r2 w-full flex-1 rounded-2xl shadow-md py-8 px-10 bg-white">
+        <span class="text-2xl font-semibold text-gray-800">Chat</span>
+      </div>
 
     </div>
+  </div>
+
+  <!------------------------- Level-Up ------------------------->
+        <!-- Level Up Modal -->
+        <div *ngIf="showLevelUpModal" class="modal-overlay">
+            <div class="modal-content">
+
+                <!-- light -->
+                <div class="light">
+                    <img src="assets/light.png" alt="light">
+                </div>
+
+                <!-- Banner star -->
+                <div class="level-banner">
+                    <img src="assets/banner.png" alt="banner">
+                </div>
+
+                <div class="modal-layer-inner">
+
+                    <!-- SVG 虛線 -->
+                    <svg class="border-svg" width="100%" height="100%">
+                        <rect x="3" y="3" width="calc(100% - 6px)" height="calc(100% - 6px)" rx="80" ry="80" fill="none"
+                            stroke="#ff9f43" stroke-width="6" stroke-dasharray="25 25" />
+                    </svg>
+
+                    <!-- 內層內容 -->
+                    <div class="modal-inner-content">
+                        <h2>Level Up!</h2>
+                        <span>Lv. {{ newLevel }}</span>
+
+                        <div class="rewards">
+                            <!-- Fish -->
+                            <div class="reward-item">
+                                <img src="assets/fish.png" class="reward-icon">
+                                <span class="reward-badge">{{ rewards.fish }}</span>
+                            </div>
+
+                            <!-- Toy -->
+                            <div class="reward-item">
+                                <img src="assets/toy.png" class="reward-icon">
+                                <span class="reward-badge">{{ rewards.toy }}</span>
+                            </div>
+
+                            <!-- Heart -->
+                            <div class="reward-item">
+                                <img src="assets/heart.png" class="reward-icon">
+                                <span class="reward-badge">{{ rewards.heart }}</span>
+                            </div>
+                        </div>
+                        <p class="reward-title">Rewards</p>
+                    </div>
+                </div>
+                <button class="btn-ok" (click)="closeLevelUpModal()">Collect</button>
+            </div>
+        </div>
 </div>

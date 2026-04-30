@@ -147,61 +147,7 @@ export class TodoDetailComponent implements OnInit {
       }
     });
   }
-  /*-----load all infos-----
-  private loadData(id: number) {
 
-    // 1. get all users
-    this.userService.getUsers().subscribe(users => {
-      this.users = users;
-    });
-
-    // 2. get current user
-    this.userService.getCurrentUser().subscribe(user => {
-      this.currentUser = user;
-    });
-
-    // 3.get all Contacts
-    this.contactService.getContacts().subscribe(contacts => {
-      this.allContacts = contacts;
-      this.filteredContacts = contacts;
-
-
-      // get todo
-      if (!this.isNewTodo && id > 0) {
-        this.todoService.getTodo(id).subscribe(todo => {
-          this.todo = todo;
-
-          // 用 patchValue 更新 form
-          this.todoForm.patchValue({
-            id: todo.id,
-            title: todo.title,
-            completed: todo.completed,
-            priority: todo.priority || 1,
-            dueDate: todo.dueDate || '',
-            description: todo.description || '',
-            memberIds: todo.memberIds || [],
-            projectId: todo.projectId || null,
-            userIds: todo.userIds || []
-          });
-
-
-          // initial selectedContacts(chips)
-          if (this.todo.memberIds && this.allContacts.length) {
-            this.selectedContacts = this.todo.memberIds
-              .map(id => this.allContacts.find(c => c.id === id))
-              .filter((c): c is Contact => c !== undefined);
-          }
-        });
-      }
-    });
-
-    // 4.get all projects
-    this.projectService.getProjects().subscribe(projects => {
-      this.projects = projects;
-    });
-
-  }
-*/
 
   onSave() {
 
@@ -224,16 +170,29 @@ export class TodoDetailComponent implements OnInit {
     formValue.priority = Number(formValue.priority);
 
     if (this.isNewTodo) {
-      // 新增不帶 id
+      // ------------------ 1. Add New Task -----------------
       delete formValue.id;
       this.todoService.addTodo(formValue).subscribe(() => {
-        this.snackbar.open('Created!', '', { duration: 1000 });
+        this.snackbar.open('Task complete — +10 XP!', '', { duration: 1000 });
+
+      // Task Completed + XP
+      if (formValue.completed && this.currentUser) {
+        this.currentUser.energy += 10; 
+        this.userService.updateUser(this.currentUser).subscribe();
+      }
         this.close.emit();
 
       });
     } else {
       this.todoService.updateTodo(formValue).subscribe(() => {
         this.snackbar.open('Updated!', '', { duration: 1000 });
+
+        // Task marked as complete
+        if (formValue.completed) {
+          this.currentUser.energy += 10; 
+          this.userService.updateUser(this.currentUser).subscribe();
+          console.log('Progress updated — +10 XP!');
+        }
         this.close.emit();
       });
     }

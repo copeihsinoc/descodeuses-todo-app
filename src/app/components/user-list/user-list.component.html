@@ -1,33 +1,44 @@
-<div class="flex h-full p-4 gap-4">
+<div class="flex h-screen p-4 gap-4 items-stretch">
     <mat-card class="card1">
-        <form [formGroup]="formGroup">
-            <!-- input -->
+        <form [formGroup]="formGroup" class="flex flex-col gap-2 mb-4 w-full">
+            <!-- Search-->
             <mat-form-field appearance="outline" class="w-full input1">
                 <mat-icon matPrefix>search</mat-icon>
                 <input matInput formControlName="textSearch" (input)="onSearch()" placeholder="Search user...">
             </mat-form-field>
 
-            <!-- button -->
-            <button class="btn-add w-full" (click)="addUser()">
+            <!-- Add -->
+            <button class="btn-add w-full" (click)="addUser()" [class.selected]="selectedUserId === 0">
+
                 <img src="assets/catBtn.png" alt="Add" class="w-10 h-10" />
                 Add User
             </button>
         </form>
         <!-- User List with Checkboxes -->
-        <mat-list class="space-y-5">
-            @for(user of users; track user.id){
-            <mat-list-item (click)="openUserDetail(user.id)" class="list-item"
-                [class.selected]="selectedUserId === user.id">
-                <div>
-                    <div class="flex items-center gap-2">
-                        <mat-checkbox [checked]="checked(user)" (change)="select(user)"
-                            (click)="stopClick($event)"></mat-checkbox>
-                        {{user.firstname}}, {{user.lastname}}
+        <div class="list-container">
+            <mat-list class="space-y-5">
+                @for(user of users; track user.id){
+                <mat-list-item (click)="openUserDetail(user.id)" class="list-item"
+                    [class.selected]="selectedUserId === user.id">
+
+                    <div class="flex items-center justify-between w-full">
+                        <div class="flex items-center gap-3"> <mat-checkbox [checked]="checked(user)"
+                                (change)="select(user)" (click)="stopClick($event)"></mat-checkbox>
+
+                            <img [src]="user.catPhoto || 'assets/default-cat.png'" alt="cat"
+                                class="w-10 h-10 rounded-full object-cover border border-amber-100 shadow-sm" />
+
+                            <span class="text-amber-900 font-medium">
+                                {{user.firstname}} {{user.lastname}}
+                            </span>
+                        </div>
                     </div>
-                </div>
-            </mat-list-item>
-            }
-        </mat-list>
+
+                </mat-list-item>
+                }
+            </mat-list>
+        </div>
+
         <!-- Delete Button -->
         <div class="form-actions">
             <button type="button" class="btn-delete w-30" (click)="deleteUser()">

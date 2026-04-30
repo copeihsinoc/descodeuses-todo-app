@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from './services/auth.service';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { MatSidenav } from '@angular/material/sidenav';
 import { ProjectService } from './services/project.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -9,6 +9,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Contact } from './models/contact.model';
 import { ContactService } from './services/contact.service';
 import { TodoService } from './services/todo.service';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +21,7 @@ export class AppComponent implements OnInit {
 
   @ViewChild('sidenav') sidenav!: MatSidenav;
 
-  title = 'My Tasks';
+  title = 'Kitty Tasks';
 
   navLinks = [
     { path: 'dashboard', label: 'Dashboard', icon: 'home' },
@@ -53,6 +54,8 @@ export class AppComponent implements OnInit {
   // Tasks 是否被點擊
   activeTasks = false;
 
+  isEntryPage = false;
+
   constructor(
     public authService: AuthService,
     private router: Router,
@@ -62,6 +65,11 @@ export class AppComponent implements OnInit {
     private snackBar: MatSnackBar,
     private fb: FormBuilder
   ) {
+    this.router.events.subscribe(() => {
+      const url = this.router.url;
+      this.isEntryPage = url.includes('login') || url.includes('signup') || url === '/';
+    });
+
     this.projectForm = this.fb.group({
       project: ['', Validators.required]
     });
@@ -110,21 +118,42 @@ export class AppComponent implements OnInit {
   }
 
   /* -----Tasks----- */
-  fetchTasks() {
-    this.todoService.getTodos().subscribe((todos) => {
-      const today = new Date();
+ fetchTasks() {
+  this.todoService.getTodos().subscribe((todos) => {
 
-      const countToday = todos.filter(t => new Date(t.dueDate).toDateString() === today.toDateString()).length;
-      const countUrgent = todos.filter(t => t.priority === '1' && !t.completed).length;
-      const countOverdue = todos.filter(t => new Date(t.dueDate) < today && !t.completed).length;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // ✅ 關鍵：時間歸零
 
-      this.tasksSummary = [
-        { label: "Today's Tasks", icon: 'today', count: countToday },
-        { label: 'Urgent', icon: 'priority_high', count: countUrgent },
-        { label: 'Overdue', icon: 'warning', count: countOverdue }
-      ];
-    });
-  }
+    const todayStr = today.toDateString();
+
+    // ✅ Today（未完成）
+    const countToday = todos.filter(t =>
+      t.dueDate &&
+      new Date(t.dueDate).toDateString() === todayStr &&
+      !t.completed
+    ).length;
+
+    // ✅ Overdue（優先）
+    const countOverdue = todos.filter(t =>
+      t.dueDate &&
+      new Date(t.dueDate) < today &&
+      !t.completed
+    ).length;
+
+    // ✅ Urgent（排除 overdue）
+    const countUrgent = todos.filter(t =>
+      t.priority === '1' &&
+      !t.completed &&
+      !(t.dueDate && new Date(t.dueDate) < today) // ❗關鍵：不重複算
+    ).length;
+
+    this.tasksSummary = [
+      { label: "Today's Tasks", icon: 'today', count: countToday },
+      { label: 'Urgent', icon: 'priority_high', count: countUrgent },
+      { label: 'Overdue', icon: 'warning', count: countOverdue }
+    ];
+  });
+}
 
   /* -----Project----- */
 

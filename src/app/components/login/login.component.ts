@@ -47,13 +47,13 @@ export class LoginComponent implements OnInit {
       const credentials = this.loginForm.value;
 
       //can see username/password
-      console.log('✅ Sending login data:', credentials);
+      //console.log('✅ Sending login data:', credentials);
 
       this.authService.login(credentials).subscribe({
         next: (res) => {
 
           //can see role
-          console.log('✅ Login success:', res);
+          //console.log('✅ Login success:', res);
 
           // ✅ 這裡存 token 與角色
           sessionStorage.setItem('authToken', res.token);

@@ -1,43 +1,45 @@
-<div class="flex h-full p-4 gap-4">
+<div class="flex h-screen p-4 gap-4 items-stretch">
     <!-- 左邊：任務清單 -->
     <mat-card class="card1" [class.expanded]="selectedTodoId !== null">
         <div class="flex flex-col gap-2 mb-4 w-full">
-            <!-- search -->
+            <!-- Search -->
             <mat-form-field appearance="outline" class="w-full input1">
                 <mat-icon matPrefix>search</mat-icon>
                 <input matInput [(ngModel)]="searchTask" (input)="onSearch()" placeholder="Search tasks..." />
             </mat-form-field>
 
-            <!-- add -->
-            <button class="btn-add w-full" (click)="addTodo()">
-                <img src="assets/fish.png" alt="Add" class="w-14 h-10" />
+            <!-- Add -->
+            <button class="btn-add w-full" (click)="addTodo()" [class.selected]="selectedTodoId === 0"> <img
+                    src="assets/fish.png" alt="Add" class="w-14 h-10" />
                 Add Task
             </button>
         </div>
 
-        <!-- list -->
-        <mat-list class="space-y-5">
-            <mat-list-item *ngFor="let todo of filteredTodos" class="list-item"
-                [class.selected]="selectedTodoId === todo.id" (click)="openTodoDetail(todo.id)">
-                <div class="flex items-center gap-3 w-full">
+        <!-- List -->
+        <div class="list-container">
+            <mat-list class="space-y-5">
+                <mat-list-item *ngFor="let todo of filteredTodos" class="list-item"
+                    [class.selected]="selectedTodoId === todo.id" (click)="openTodoDetail(todo.id)">
+                    <div class="flex items-center gap-3 w-full">
 
-                    <!-- ✅ completed icon -->
-                    <img *ngIf="todo.completed" src="assets/check.png" alt="completed" class="status-icon" />
-                    <span *ngIf="!todo.completed" class="status-placeholder"></span>
+                        <!-- ✅ completed icon -->
+                        <img *ngIf="todo.completed" src="assets/check.png" alt="completed" class="status-icon" />
+                        <span *ngIf="!todo.completed" class="status-placeholder"></span>
 
-                    <!-- title -->
-                    <span class="flex-1" [class.completed]="todo.completed">
-                        {{ todo.title }}
-                    </span>
+                        <!-- title -->
+                        <span class="flex-1" [class.completed]="todo.completed">
+                            {{ todo.title }}
+                        </span>
 
-                    <!-- ✅ multi delete checkbox（在最後） -->
-                    <mat-checkbox class="delete-checkbox" (click)="$event.stopPropagation()"
-                        (change)="toggleDelete(todo)" [checked]="isSelectedForDelete(todo)">
-                    </mat-checkbox>
+                        <!-- ✅ multi delete checkbox（在最後） -->
+                        <mat-checkbox class="delete-checkbox" (click)="$event.stopPropagation()"
+                            (change)="toggleDelete(todo)" [checked]="isSelectedForDelete(todo)">
+                        </mat-checkbox>
 
-                </div>
-            </mat-list-item>
-        </mat-list>
+                    </div>
+                </mat-list-item>
+            </mat-list>
+        </div>
 
         <!-- multi delete action -->
         <div class="form-actions">
@@ -49,7 +51,7 @@
         </div>
     </mat-card>
 
-    <!-- 右邊：詳細 -->
+    <!--R：Add New Task / Task's detail -->
     <div class="flex-1 drawer" [class.open]="selectedTodoId !== null">
         <app-todo-detail [todoId]="selectedTodoId" (close)="onCloseDetail()">
         </app-todo-detail>

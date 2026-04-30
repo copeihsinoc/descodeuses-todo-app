@@ -1,133 +1,150 @@
 <mat-sidenav-container class="sidenav-container">
-    <mat-sidenav #sidenav mode="side" style="width: 260px;">
-
-        <!-- 主選單 -->
+    <mat-sidenav #sidenav mode="side" [opened]="!isEntryPage" style="width: 260px;" *ngIf="!isEntryPage">
+        
         <ng-container *ngIf="!activeMainLink && !activeTasks">
             <mat-nav-list>
-                <mat-nav-list class="!ml-6 !mt-10">
+                <mat-nav-list class="!px-0 !mt-10">
                     <a mat-list-item *ngFor="let link of navLinks" (click)="openSubMenu(link)"
-                        class="hover:bg-[#f8af61] transition rounded-lg p-0 my-2">
-                        <div class="flex items-center gap-4 w-full py-4">
-                            <mat-icon class="custom-icon">{{ link.icon }}</mat-icon>
-                            <span class="text-xl font-medium">{{ link.label }}</span>
+                        class="!rounded-none !p-0 !h-auto hover:bg-[#f8af61] block w-full">
+                        <div class="flex items-center justify-center w-full py-5">
+                            <div class="flex items-center gap-8 w-52">
+                                <mat-icon class="custom-icon flex-none text-white !h-8 !w-8 text-3xl">{{ link.icon }}</mat-icon>
+                                <span class="text-xl font-medium text-white whitespace-nowrap">{{ link.label }}</span>
+                            </div>
                         </div>
                     </a>
                 </mat-nav-list>
             </mat-nav-list>
         </ng-container>
 
-        <!-- 子選單 -->
         <ng-container *ngIf="activeMainLink">
-            <!-- Header -->
-            <div class="flex justify-between items-center p-2 mb-2">
-                <!-- 左側: logo + Menu -->
-                <div class="flex items-center gap-2">
-                    <img src="assets/07.png" alt="Logo" class="w-8 h-8 rounded-full" />
-                    <span>Menu</span>
+            <div class="flex justify-between items-center p-4 mb-4">
+                <div class="flex items-center gap-3">
+                    <img src="assets/07.png" alt="Logo" class="w-9 h-9 rounded-full" />
+                    <span class="text-white text-xl font-bold tracking-tight">Menu</span>
                 </div>
                 <div>
-                    <button mat-icon-button (click)="backToMainMenu()">
+                    <button mat-icon-button (click)="backToMainMenu()" class="text-white/60">
                         <mat-icon>arrow_back</mat-icon>
                     </button>
                 </div>
             </div>
-            <mat-nav-list>
-                <ng-container *ngFor="let child of activeMainLink?.children">
-                    <ng-container *ngIf="!child.requiresAdmin || authService.isAdmin">
-                        <a mat-list-item [routerLink]="child.path" (click)="closeSidenav()">
-                            <mat-icon>{{ child.icon }}</mat-icon>
-                            <span>{{ child.label }}</span>
-                        </a>
+
+            <div class="px-2">
+                <mat-nav-list class="!p-0">
+                    <ng-container *ngFor="let child of activeMainLink?.children">
+                        <ng-container *ngIf="!child.requiresAdmin || authService.isAdmin">
+                            <a mat-list-item [routerLink]="child.path" (click)="closeSidenav()" 
+                               class="!h-auto !p-0 block">
+                                <div class="flex items-center w-full px-4 py-2 hover:bg-white/5 rounded-xl transition-all">
+                                    <div class="flex-none w-10 flex items-center">
+                                        <mat-icon class="text-white/70 !text-[20px]">{{ child.icon }}</mat-icon>
+                                    </div>
+                                    <span class="flex-1 text-white/90 text-lg font-medium tracking-wide">
+                                        {{ child.label }}
+                                    </span>
+                                </div>
+                            </a>
+                        </ng-container>
                     </ng-container>
-                </ng-container>
-            </mat-nav-list>
+                </mat-nav-list>
+            </div>
         </ng-container>
 
-        <!-- Tasks widget -->
         <ng-container *ngIf="activeTasks">
-            <!-- Header -->
-            <div class="flex justify-between items-center p-2 mb-2">
-                <!-- 左側: logo + Menu -->
-                <div class="flex items-center gap-2">
-                    <img src="assets/07.png" alt="Logo" class="w-8 h-8 rounded-full" />
-                    <span>Menu</span>
+            <div class="flex justify-between items-center p-4 mb-4">
+                <div class="flex items-center gap-3">
+                    <img src="assets/07.png" alt="Logo" class="w-9 h-9 rounded-full" />
+                    <span class="text-white text-xl font-bold tracking-tight">Menu</span>
                 </div>
                 <div>
-                    <button mat-icon-button (click)="backToMainMenu()">
+                    <button mat-icon-button (click)="backToMainMenu()" class="text-white/60">
                         <mat-icon>arrow_back</mat-icon>
                     </button>
                 </div>
             </div>
+            
             <div class="p-2">
-                <span class="block mb-4">Tasks</span>
-
-                <!-- KPI Summary -->
-                <div class="grid grid-cols-1 gap-2 mb-4">
-                    <div *ngFor="let task of tasksSummary" class="flex items-center justify-between p-2 rounded">
-                        <div class="flex items-center gap-2">
-                            <mat-icon>{{ task.icon }}</mat-icon>
-                            <span>{{ task.label }}</span>
+                <span class="block mb-3 px-4 text-white/40 text-[13px] font-semibold uppercase tracking-[0.15em]">Tasks</span>
+                <div class="flex flex-col mb-10">
+                    <div *ngFor="let task of tasksSummary" class="flex items-center w-full px-4 py-1.5 hover:bg-white/5 rounded-lg transition-all">
+                        <div class="flex-none w-10 flex items-center">
+                            <mat-icon class="text-white/70 !text-[20px]">{{ task.icon }}</mat-icon>
                         </div>
-                        <span class="badge">{{ task.count }}</span>
+                        <span class="flex-1 text-white/90 text-lg truncate tracking-wide">{{ task.label }}</span>
+                        <div class="flex-none w-6 h-6 flex items-center justify-center bg-white/10 text-white/60 rounded-full text-[11px] font-bold">
+                            {{ task.count }}
+                        </div>
                     </div>
                 </div>
 
-                <!-- Projects -->
-                <div>
-                    <span>Projects</span>
-                    <mat-list>
-                        <mat-list-item *ngFor="let project of projects">
-                            <span>{{ project.title }}</span>
-                            <button mat-icon-button color="warn" (click)="deleteProject(project.id)">
-                                <mat-icon>delete</mat-icon>
+                <span class="block mb-3 px-4 text-white/40 text-[13px] font-semibold uppercase tracking-[0.15em]">Projects</span>
+                <mat-list class="!p-0 mb-10">
+                    <mat-list-item *ngFor="let project of projects" class="!h-auto !p-0">
+                        <div class="flex items-center w-full px-4 py-1.5 hover:bg-white/5 rounded-lg transition-all group">
+                            <div class="flex-none w-10 flex items-center">
+                                <img src="assets/fish-re.png" alt="Project Icon" class="w-7 h-7 object-contain opacity-80">
+                            </div>
+                            <span class="flex-1 text-white/90 text-lg truncate tracking-wide">{{ project.title }}</span>
+                            <button mat-icon-button color="warn" (click)="deleteProject(project.id)"
+                                class="flex-none opacity-0 group-hover:opacity-100 transition-opacity !w-8 !h-8">
+                                <mat-icon class="!text-[18px]">delete</mat-icon>
                             </button>
-                        </mat-list-item>
-                        <mat-list-item>
-                            <form [formGroup]="projectForm" (ngSubmit)="addProject()">
-                                <button mat-icon-button type="submit">
-                                    <mat-icon>add</mat-icon>
+                        </div>
+                    </mat-list-item>
+                    <mat-list-item class="!h-auto !p-0">
+                        <form [formGroup]="projectForm" (ngSubmit)="addProject()" class="flex items-center w-full px-4 py-1">
+                            <div class="flex-none w-10 flex items-center">
+                                <button mat-icon-button type="submit" class="!w-8 !h-8 !p-0 flex items-center justify-center">
+                                    <mat-icon class="text-white !m-0 !text-xl">add</mat-icon>
                                 </button>
-                                <input placeholder="Add new project" formControlName="project">
-                            </form>
-                        </mat-list-item>
-                    </mat-list>
-                </div>
+                            </div>
+                            <input placeholder="Add new project" formControlName="project"
+                                class="flex-1 bg-transparent border-none text-white outline-none text-lg placeholder:text-white/50">
+                        </form>
+                    </mat-list-item>
+                </mat-list>
 
-                <!-- Contacts -->
-                <div>
-                    <span>Contacts</span>
-                    <mat-list>
-                        <mat-list-item *ngFor="let contact of contacts">
-                            <span>{{ contact.firstName }} {{ contact.lastName }}</span>
-                            <button mat-icon-button color="warn" (click)="deleteContact(contact.id)">
-                                <mat-icon>delete</mat-icon>
+                <span class="block mb-3 px-4 text-white/40 text-[13px] font-semibold uppercase tracking-[0.15em]">Contacts</span>
+                <mat-list class="!p-0">
+                    <mat-list-item *ngFor="let contact of contacts" class="!h-auto !p-0">
+                        <div class="flex items-center w-full px-4 py-1.5 hover:bg-white/5 rounded-lg transition-all group">
+                            <div class="flex-none w-10 flex items-center">
+                                <img src="assets/catBtn.png" alt="Contact Icon" class="w-6 h-6 rounded-full object-cover">
+                            </div>
+                            <span class="flex-1 text-white/90 text-lg truncate tracking-wide">{{ contact.firstName }} {{ contact.lastName }}</span>
+                            <button mat-icon-button color="warn" (click)="deleteContact(contact.id)"
+                                class="flex-none opacity-0 group-hover:opacity-100 transition-opacity !w-8 !h-8">
+                                <mat-icon class="!text-[18px]">delete</mat-icon>
                             </button>
-                        </mat-list-item>
-                        <mat-list-item>
-                            <form [formGroup]="contactForm" (ngSubmit)="addContact()">
-                                <button mat-icon-button type="submit">
-                                    <mat-icon>add</mat-icon>
+                        </div>
+                    </mat-list-item>
+                    <mat-list-item class="!h-auto !p-0">
+                        <form [formGroup]="contactForm" (ngSubmit)="addContact()" class="flex items-center w-full px-4 py-1">
+                            <div class="flex-none w-10 flex items-center">
+                                <button mat-icon-button type="submit" class="!w-8 !h-8 !p-0 flex items-center justify-center">
+                                    <mat-icon class="text-white !m-0 !text-xl">add</mat-icon>
                                 </button>
-                                <input placeholder="Add new contact" formControlName="contact">
-                            </form>
-                        </mat-list-item>
-                    </mat-list>
-                </div>
-
+                            </div>
+                            <input placeholder="Add new contact" formControlName="contact"
+                                class="flex-1 bg-transparent border-none text-white outline-none text-lg placeholder:text-white/50">
+                        </form>
+                    </mat-list-item>
+                </mat-list>
             </div>
         </ng-container>
 
-    </mat-sidenav>
+        </mat-sidenav>
 
     <mat-sidenav-content>
-        <mat-toolbar>
+        <mat-toolbar *ngIf="!isEntryPage" class="toolbar">
             <button mat-icon-button (click)="sidenav.toggle()">
                 <mat-icon>menu</mat-icon>
             </button>
             <span>{{ title }}</span>
         </mat-toolbar>
 
-        <div class="flex-1 p-4">
+        <div [class.p-4]="!isEntryPage" [class.h-full]="!isEntryPage" class="flex flex-col">
             <router-outlet></router-outlet>
         </div>
     </mat-sidenav-content>

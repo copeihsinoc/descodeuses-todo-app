@@ -24,7 +24,7 @@ export class ToDoListComponent implements OnInit {
   constructor(
     private todoService: TodoService,
     private snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.fetchTodos();
@@ -45,6 +45,7 @@ export class ToDoListComponent implements OnInit {
     );
   }
 
+  // Add Btn
   addTodo() {
     this.selectedTodoId = 0;
   }
@@ -58,17 +59,8 @@ export class ToDoListComponent implements OnInit {
     this.selectedTodoId = id;
   }
 
-  // ✅ 原本的：刪單筆（完全不動）
-  onDeleteTodo(id: number | null) {
-    if (id === null || id === 0) return;
 
-    this.todoService.deleteTodo(id).subscribe(() => {
-      this.fetchTodos();
-      this.snackBar.open('Deleted !', '', { duration: 1000 });
-    });
-  }
-
-  // ✅ 原本的：completed（完全不動）
+  // Task completed
   onCheckChange(event: MatCheckboxChange, todo: Todo) {
     todo.completed = event.checked;
 
@@ -81,10 +73,17 @@ export class ToDoListComponent implements OnInit {
     });
   }
 
-  // =========================
-  // ✅ 新增：multi delete 專用
-  // =========================
+  /* Delete one task
+  onDeleteTodo(id: number | null) {
+    if (id === null || id === 0) return;
 
+    this.todoService.deleteTodo(id).subscribe(() => {
+      this.fetchTodos();
+      this.snackBar.open('Deleted !', '', { duration: 1000 });
+    });
+  }*/
+
+  //Check V delete
   toggleDelete(todo: Todo) {
     const index = this.selectedForDelete.indexOf(todo.id);
     if (index > -1) {
@@ -98,19 +97,21 @@ export class ToDoListComponent implements OnInit {
     return this.selectedForDelete.includes(todo.id);
   }
 
+  //Delete Btn
   deleteSelectedTodos() {
     if (this.selectedForDelete.length === 0) return;
 
+    // 1. Update the UI first
+    this.filteredTodos = this.filteredTodos.filter(t => !this.selectedForDelete.includes(t.id));
+    this.todos = this.todos.filter(t => !this.selectedForDelete.includes(t.id));
+
+    // 2. Synchronize with the database later
     this.selectedForDelete.forEach(id => {
       this.todoService.deleteTodo(id).subscribe();
     });
 
-    this.snackBar.open(
-      `Deleted ${this.selectedForDelete.length} tasks`,
-      '',
-      { duration: 1200 }
-    );
-
-    this.fetchTodos();
+    // 3. Show Message
+    this.snackBar.open(`Deleted ${this.selectedForDelete.length} tasks`, '', { duration: 1200 });
+    this.selectedForDelete = [];
   }
 }
