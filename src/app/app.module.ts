@@ -17,7 +17,7 @@ import { EnregistrerComponent } from './components/enregistrer/enregistrer.compo
 import {MatSelectModule} from '@angular/material/select';
 import { ToDoListComponent } from './components/to-do-list/to-do-list.component';
 import {MatCardModule} from '@angular/material/card';
-import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptors } from '@angular/common/http';
+import { HttpClient, provideHttpClient } from '@angular/common/http';
 import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api'
 import { InMemoryDataService } from './services/in-memory-data.service';
 import { UserListComponent } from './components/user-list/user-list.component';
@@ -33,11 +33,13 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatAutocompleteModule } from '@angular/material/autocomplete';
-import { AuthInterceptor } from './auth/auth.interceptor';
+
 import { SignupComponent } from './components/signup/signup.component';
 import { ProjectDetailComponent } from './components/project-detail/project-detail.component';
 import { LogOutComponent } from './components/log-out/log-out.component';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { AuthInterceptor } from './auth/auth.interceptor';
 @NgModule({
   declarations: [
     AppComponent,
@@ -80,12 +82,15 @@ import { MatExpansionModule } from '@angular/material/expansion';
   providers: [
     provideNativeDateAdapter(),
 
-{
-    provide: HTTP_INTERCEPTORS,
-    useClass: AuthInterceptor,
-    multi: true
-  },
-  provideHttpClient(),
+// ✅ 2. 改用這三行註冊，這對 AppModule 最管用
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    },
+
+    // 只需要最簡約的 provideHttpClient()
+    provideHttpClient(),
     //injecter in-memory-data.service.ts
     //comme il est @Injectable-
     /*
@@ -94,8 +99,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
     ]),
      */
     { provide: LOCALE_ID, useValue: 'fr'}
+    
   ],
-
   bootstrap: [AppComponent],
 
 //localisation pour affichage en format francais (devise, date...)    

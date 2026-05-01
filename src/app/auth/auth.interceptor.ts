@@ -7,8 +7,8 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = sessionStorage.getItem('authToken');
     
-    // 🔍 如果這個 Log 出現，代表攔截器終於動了！
-    console.log('🚀 [Class Interceptor] 執行中, 網址:', req.url);
+    // 🔬 這行 Log 一定要印出來才算成功
+    console.log('🚀 [Interceptor] 類別型攔截器正在運行:', req.url);
 
     if (token) {
       const cloned = req.clone({
@@ -16,11 +16,11 @@ export class AuthInterceptor implements HttpInterceptor {
           Authorization: `Bearer ${token}`
         }
       });
-      console.log('✅ Token 已成功放入 Header');
+      console.log('✅ [Interceptor] 已注入 Token');
       return next.handle(cloned);
     }
-    
-    console.warn('❌ 沒找到 Token，將以匿名身份發送');
+
+    console.warn('⚠️ [Interceptor] 沒找到 Token');
     return next.handle(req);
   }
 }
