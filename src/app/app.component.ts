@@ -78,26 +78,37 @@ export class AppComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    //1.確認使用者角色
-    console.log('User is admin:', this.authService.isAdmin);
+ ngOnInit(): void {
+  const token = sessionStorage.getItem('authToken');
+  
+  // 使用 router.url 來判斷，但要考慮到初始載入可能是空字串或 '/'
+  const currentUrl = this.router.url;
+  const isAuthPage = currentUrl.includes('login') || currentUrl.includes('signup') || currentUrl === '/';
 
-    // 2. 獲取 Token
-    const token = sessionStorage.getItem('authToken');
+  console.log('🛠️ [Debug] Token:', !!token, ' | Admin:', this.authService.isAdmin, ' | Path:', currentUrl);
 
-    // 3. 只有當有 Token 且不在登入/註冊頁面時，才抓取資料
-    if (token && !this.isEntryPage) {
-      this.fetchTasks();
-      this.fetchProjects();
-      this.fetchContacts();
+  // 情況 A：如果你在登入相關頁面
+  if (isAuthPage) {
+    // 檢查：如果已經有 Token 了，其實可以考慮直接導向 dashboard
+    if (token) {
+      console.log('✅ 已有 Token，自動導向 Dashboard');
+      this.router.navigate(['/dashboard']);
     }
-
-    /* 妳原本的角色檢查邏輯（建議也檢查 token 是否存在）
-    if (token && !this.authService.isAdmin) {
-      // 這裡的邏輯可以根據妳的需求調整，
-      // 通常如果不是 Admin，可能會導向特定的 User 首頁而非根目錄
-    }*/
+    return; // 在登入頁就不執行後面的抓取動作
   }
+
+  // 情況 B：如果你在後台頁面 (Dashboard, Tasks 等)
+  if (token) {
+    // 有 Token 才抓資料
+    this.fetchTasks();
+    this.fetchProjects();
+    this.fetchContacts();
+  } else {
+    // 沒 Token 卻想看後台 -> 踢回登入
+    console.warn('🚫 無 Token，跳轉至 Login');
+    this.router.navigate(['/login']);
+  }
+}
 
   // 點擊主選單
   openSubMenu(link: any) {
