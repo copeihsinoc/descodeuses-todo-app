@@ -7,7 +7,7 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = sessionStorage.getItem('authToken');
     
-    // 🔬 這個 Log 出現在主控台，就代表我們贏了！
+    // 🔍 檢查這個日誌有沒有在瀏覽器 Console 出現
     console.log('🚀 [Interceptor] 攔截器啟動！請求網址:', req.url);
 
     if (token) {
