@@ -85,18 +85,16 @@ export class AppComponent implements OnInit {
     // 2. 獲取 Token
     const token = sessionStorage.getItem('authToken');
 
-    // 3. 只有當有 Token 且不在登入/註冊頁面時，才抓取資料
-    if (token && !this.isEntryPage) {
+    // 3. 如果已經登入且不在登入頁，再抓資料
+    if (token) {
       this.fetchTasks();
       this.fetchProjects();
       this.fetchContacts();
+      console.log('Logged in successfully, data retrieval completed.');
+    } else {
+      // 4. 如果沒 Token 又想進 Dashboard，才踢回登入頁
+      this.router.navigate(['/login']);
     }
-
-    /* 妳原本的角色檢查邏輯（建議也檢查 token 是否存在）
-    if (token && !this.authService.isAdmin) {
-      // 這裡的邏輯可以根據妳的需求調整，
-      // 通常如果不是 Admin，可能會導向特定的 User 首頁而非根目錄
-    }*/
   }
 
   // 點擊主選單
