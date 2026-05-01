@@ -79,15 +79,24 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //確認使用者角色
+    //1.確認使用者角色
     console.log('User is admin:', this.authService.isAdmin);
 
-    if (!this.authService.isAdmin) {
-      this.router.navigate(['/']);
+    // 2. 獲取 Token
+    const token = sessionStorage.getItem('authToken');
+
+    // 3. 只有當有 Token 且不在登入/註冊頁面時，才抓取資料
+    if (token && !this.isEntryPage) {
+      this.fetchTasks();
+      this.fetchProjects();
+      this.fetchContacts();
     }
-    this.fetchTasks();
-    this.fetchProjects();
-    this.fetchContacts();
+
+    // 妳原本的角色檢查邏輯（建議也檢查 token 是否存在）
+    if (token && !this.authService.isAdmin) {
+      // 這裡的邏輯可以根據妳的需求調整，
+      // 通常如果不是 Admin，可能會導向特定的 User 首頁而非根目錄
+    }
   }
 
   // 點擊主選單
@@ -118,42 +127,42 @@ export class AppComponent implements OnInit {
   }
 
   /* -----Tasks----- */
- fetchTasks() {
-  this.todoService.getTodos().subscribe((todos) => {
+  fetchTasks() {
+    this.todoService.getTodos().subscribe((todos) => {
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // ✅ 關鍵：時間歸零
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // ✅ 關鍵：時間歸零
 
-    const todayStr = today.toDateString();
+      const todayStr = today.toDateString();
 
-    // ✅ Today（未完成）
-    const countToday = todos.filter(t =>
-      t.dueDate &&
-      new Date(t.dueDate).toDateString() === todayStr &&
-      !t.completed
-    ).length;
+      // ✅ Today（未完成）
+      const countToday = todos.filter(t =>
+        t.dueDate &&
+        new Date(t.dueDate).toDateString() === todayStr &&
+        !t.completed
+      ).length;
 
-    // ✅ Overdue（優先）
-    const countOverdue = todos.filter(t =>
-      t.dueDate &&
-      new Date(t.dueDate) < today &&
-      !t.completed
-    ).length;
+      // ✅ Overdue（優先）
+      const countOverdue = todos.filter(t =>
+        t.dueDate &&
+        new Date(t.dueDate) < today &&
+        !t.completed
+      ).length;
 
-    // ✅ Urgent（排除 overdue）
-    const countUrgent = todos.filter(t =>
-      t.priority === '1' &&
-      !t.completed &&
-      !(t.dueDate && new Date(t.dueDate) < today) // ❗關鍵：不重複算
-    ).length;
+      // ✅ Urgent（排除 overdue）
+      const countUrgent = todos.filter(t =>
+        t.priority === '1' &&
+        !t.completed &&
+        !(t.dueDate && new Date(t.dueDate) < today) // ❗關鍵：不重複算
+      ).length;
 
-    this.tasksSummary = [
-      { label: "Today's Tasks", icon: 'today', count: countToday },
-      { label: 'Urgent', icon: 'priority_high', count: countUrgent },
-      { label: 'Overdue', icon: 'warning', count: countOverdue }
-    ];
-  });
-}
+      this.tasksSummary = [
+        { label: "Today's Tasks", icon: 'today', count: countToday },
+        { label: 'Urgent', icon: 'priority_high', count: countUrgent },
+        { label: 'Overdue', icon: 'warning', count: countOverdue }
+      ];
+    });
+  }
 
   /* -----Project----- */
 
