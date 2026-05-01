@@ -38,8 +38,9 @@ import { SignupComponent } from './components/signup/signup.component';
 import { ProjectDetailComponent } from './components/project-detail/project-detail.component';
 import { LogOutComponent } from './components/log-out/log-out.component';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { AuthInterceptor } from './auth/auth.interceptor';
+
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'; // 👈 導入 HTTP_INTERCEPTORS
+import { AuthInterceptor } from './auth/auth.interceptor'; // 👈 確保路徑對
 @NgModule({
   declarations: [
     AppComponent,
@@ -82,15 +83,12 @@ import { AuthInterceptor } from './auth/auth.interceptor';
   providers: [
     provideNativeDateAdapter(),
 
-// ✅ 2. 改用這三行註冊，這對 AppModule 最管用
+// ✨ 這裡才是真正的魔法！強制註冊攔截器
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
     },
-
-    // 只需要最簡約的 provideHttpClient()
-    provideHttpClient(),
     //injecter in-memory-data.service.ts
     //comme il est @Injectable-
     /*
