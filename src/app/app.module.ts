@@ -81,9 +81,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
     provideNativeDateAdapter(),
 
     provideHttpClient(
-      withInterceptors([
-        authInterceptor
-      ])
+      withInterceptors([authInterceptor])
     ),
     //injecter in-memory-data.service.ts
     //comme il est @Injectable-
@@ -93,8 +91,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
     ]),
      */
     { provide: LOCALE_ID, useValue: 'fr'}
-    
   ],
+  
   bootstrap: [AppComponent],
 
 //localisation pour affichage en format francais (devise, date...)    
