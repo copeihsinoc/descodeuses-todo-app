@@ -17,7 +17,7 @@ import { EnregistrerComponent } from './components/enregistrer/enregistrer.compo
 import {MatSelectModule} from '@angular/material/select';
 import { ToDoListComponent } from './components/to-do-list/to-do-list.component';
 import {MatCardModule} from '@angular/material/card';
-import { HttpClient, provideHttpClient, withInterceptors } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptors } from '@angular/common/http';
 import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api'
 import { InMemoryDataService } from './services/in-memory-data.service';
 import { UserListComponent } from './components/user-list/user-list.component';
@@ -33,7 +33,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatAutocompleteModule } from '@angular/material/autocomplete';
-import { authInterceptor } from './auth/auth.interceptor';
+import { AuthInterceptor } from './auth/auth.interceptor';
 import { SignupComponent } from './components/signup/signup.component';
 import { ProjectDetailComponent } from './components/project-detail/project-detail.component';
 import { LogOutComponent } from './components/log-out/log-out.component';
@@ -80,9 +80,12 @@ import { MatExpansionModule } from '@angular/material/expansion';
   providers: [
     provideNativeDateAdapter(),
 
-    provideHttpClient(
-      withInterceptors([authInterceptor])
-    ),
+{
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true
+  },
+  provideHttpClient(),
     //injecter in-memory-data.service.ts
     //comme il est @Injectable-
     /*
@@ -92,7 +95,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
      */
     { provide: LOCALE_ID, useValue: 'fr'}
   ],
-  
+
   bootstrap: [AppComponent],
 
 //localisation pour affichage en format francais (devise, date...)    

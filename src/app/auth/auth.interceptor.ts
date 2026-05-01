@@ -1,18 +1,26 @@
-import { HttpInterceptorFn } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
-export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const token = sessionStorage.getItem('authToken');
-  
-  // 🔬 加上這行 Log 看看有沒有印出來
-  console.log('--- Interceptor 執行中！路徑是：', req.url);
+@Injectable()
+export class AuthInterceptor implements HttpInterceptor {
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    const token = sessionStorage.getItem('authToken');
+    
+    // 🔍 如果這個 Log 出現，代表攔截器終於動了！
+    console.log('🚀 [Class Interceptor] 執行中, 網址:', req.url);
 
-  if (token) {
-    req = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`
-      }
-    });
+    if (token) {
+      const cloned = req.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      console.log('✅ Token 已成功放入 Header');
+      return next.handle(cloned);
+    }
+    
+    console.warn('❌ 沒找到 Token，將以匿名身份發送');
+    return next.handle(req);
   }
-
-  return next(req);
-};
+}
