@@ -1,5 +1,5 @@
 <mat-sidenav-container class="sidenav-container">
-    <mat-sidenav #sidenav mode="side" [opened]="!isEntryPage" style="width: 260px;" *ngIf="!isEntryPage">
+    <mat-sidenav #sidenav mode="side" [opened]="!isEntryPage" style="width: 260px;" *ngIf="!isEntryPage && isLoggedIn">
         
         <ng-container *ngIf="!activeMainLink && !activeTasks">
             <mat-nav-list>

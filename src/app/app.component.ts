@@ -56,6 +56,8 @@ export class AppComponent implements OnInit {
 
   isEntryPage = false;
 
+  isLoggedIn = false;
+
   constructor(
     public authService: AuthService,
     private router: Router,
@@ -80,6 +82,7 @@ export class AppComponent implements OnInit {
 
  ngOnInit(): void {
   const token = sessionStorage.getItem('authToken');
+  this.isLoggedIn = !!token; // 根據有無 Token 決定狀態
   
   // 使用 router.url 來判斷，但要考慮到初始載入可能是空字串或 '/'
   const currentUrl = this.router.url;
@@ -97,18 +100,21 @@ export class AppComponent implements OnInit {
     return; // 在登入頁就不執行後面的抓取動作
   }
 
-  // 情況 B：如果你在後台頁面 (Dashboard, Tasks 等)
-  if (token) {
-    // 有 Token 才抓資料
+if (token) {
+      this.loadAllData(); // 把抓取動作包起來
+    } else {
+      this.router.navigate(['/login']);
+    }
+  }
+
+  // 封裝所有抓取動作，方便管理
+  loadAllData() {
     this.fetchTasks();
     this.fetchProjects();
     this.fetchContacts();
-  } else {
-    // 沒 Token 卻想看後台 -> 踢回登入
-    console.warn('🚫 無 Token，跳轉至 Login');
-    this.router.navigate(['/login']);
   }
-}
+
+
 
   // 點擊主選單
   openSubMenu(link: any) {
