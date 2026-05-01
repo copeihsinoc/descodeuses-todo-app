@@ -92,11 +92,11 @@ export class AppComponent implements OnInit {
       this.fetchContacts();
     }
 
-    // 妳原本的角色檢查邏輯（建議也檢查 token 是否存在）
+    /* 妳原本的角色檢查邏輯（建議也檢查 token 是否存在）
     if (token && !this.authService.isAdmin) {
       // 這裡的邏輯可以根據妳的需求調整，
       // 通常如果不是 Admin，可能會導向特定的 User 首頁而非根目錄
-    }
+    }*/
   }
 
   // 點擊主選單
