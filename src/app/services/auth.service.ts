@@ -9,30 +9,26 @@ import { environment } from '../../environments/environment';
 export class AuthService {
   //private apiUrl = 'http://localhost:8080/auth/login'
 
-  private apiURL = environment.apiUrl + '/api/auth/login';
+  private authUrl = `${environment.apiUrl}/auth`;
 
   constructor(private http: HttpClient) { }
 
   //payload infos: email/password to send to back
+
   login(payload: any): Observable<any> {
-
-    //http post login
-    //Send the request → data flows through a pipeline 
-    // → do a side task (store token/role) → original data keeps flowing.
-    return this.http.post(`${this.apiURL}`, payload).pipe(
+    // 最終路徑：.../api/auth/login
+    return this.http.post(`${this.authUrl}/login`, payload).pipe(
       tap((response: any) => {
-
-        // if back send... { token: '...', role: '...' }
-        //save token
-        if (response.token) {
-          sessionStorage.setItem('authToken', response.token);
-        }
-        //save role
-        if (response.role) {
-          sessionStorage.setItem('authRole', response.role);
-        }
+        if (response.token) sessionStorage.setItem('authToken', response.token);
+        if (response.role) sessionStorage.setItem('authRole', response.role);
       })
     );
+  }
+
+  /* 新增：註冊方法 */
+  signUp(payload: any): Observable<any> {
+    // 最終路徑：.../api/auth/sign-up
+    return this.http.post(`${this.authUrl}/sign-up`, payload);
   }
 
   // logout
