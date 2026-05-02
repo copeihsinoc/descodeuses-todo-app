@@ -13,7 +13,7 @@ export interface UserProfile {
 })
 export class ProfileService {
 
-  private apiURL = environment.apiUrl + '/api/profile';
+  private apiURL = environment.apiUrl + '/profile';
 
   constructor(private http: HttpClient) { }
 

@@ -11,7 +11,7 @@ export class UserService {
 
   //private apiURL = 'http://localhost:8080/api/user'
 
-  private apiURL = environment.apiUrl + '/api/user';
+  private apiURL = environment.apiUrl + '/user';
 
   constructor(private http: HttpClient) { }
 
