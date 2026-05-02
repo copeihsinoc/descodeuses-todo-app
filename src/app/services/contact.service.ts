@@ -14,7 +14,7 @@ export class ContactService {
   /*contact link */
   //private apiURL = 'http://localhost:8080/api/contact';
 
-  private apiURL = environment.apiUrl + '/api/contact';
+  private apiURL = environment.apiUrl + '/contact';
 
   constructor(private http: HttpClient) { }
 

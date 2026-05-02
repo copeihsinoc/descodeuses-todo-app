@@ -16,7 +16,7 @@ export class TodoService {
 
   //private apiURL = 'http://localhost:8080/api/action'; //'api/todos'
 
-  private apiURL = environment.apiUrl + '/api/action'; //'api/todos'
+  private apiURL = environment.apiUrl + '/action'; //'api/todos'
 
   //HttpClient pour communiquer avec le API/Backend
   constructor(private http: HttpClient) { } 

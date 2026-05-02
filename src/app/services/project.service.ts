@@ -10,7 +10,7 @@ export class ProjectService {
 
   //private apiURL = 'http://localhost:8080/api/project';
 
-  private apiURL = environment.apiUrl + '/api/project';
+  private apiURL = environment.apiUrl + '/project';
 
   constructor(private http: HttpClient) { }
 
