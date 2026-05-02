@@ -137,8 +137,9 @@
         </mat-sidenav>
 
     <mat-sidenav-content>
-        <mat-toolbar *ngIf="!isEntryPage" class="toolbar">
-            <button mat-icon-button (click)="sidenav.toggle()">
+        <!-- 修改處：加入 && isLoggedIn 確保 toolbar 按鈕與 sidenav 同時存在 -->
+        <mat-toolbar *ngIf="!isEntryPage && isLoggedIn" class="toolbar">
+            <button mat-icon-button (click)="toggleSidenav()">
                 <mat-icon>menu</mat-icon>
             </button>
             <span>{{ title }}</span>

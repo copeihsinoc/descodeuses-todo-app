@@ -31,7 +31,6 @@ export class AppComponent implements OnInit {
       icon: 'settings',
       children: [
         { path: 'profile', label: 'Profile', icon: 'person' },
-
         // 只有 Admin 可見
         { path: 'user', label: 'Users', icon: 'group', requiresAdmin: true }
       ]
@@ -41,7 +40,6 @@ export class AppComponent implements OnInit {
 
   // Sidebar data
   tasksSummary: any[] = [];
-
   projects: Project[] = [];
   contacts: Contact[] = [];
 
@@ -55,7 +53,6 @@ export class AppComponent implements OnInit {
   activeTasks = false;
 
   isEntryPage = false;
-
   isLoggedIn = false;
 
   constructor(
@@ -67,11 +64,6 @@ export class AppComponent implements OnInit {
     private snackBar: MatSnackBar,
     private fb: FormBuilder
   ) {
-    this.router.events.subscribe(() => {
-      const url = this.router.url;
-      this.isEntryPage = url.includes('login') || url.includes('signup') || url === '/';
-    });
-
     this.projectForm = this.fb.group({
       project: ['', Validators.required]
     });
@@ -80,63 +72,61 @@ export class AppComponent implements OnInit {
     });
   }
 
- ngOnInit(): void {
-  const token = sessionStorage.getItem('authToken');
-  this.isLoggedIn = !!token; // 根據有無 Token 決定狀態
-  
-  // 使用 router.url 來判斷，但要考慮到初始載入可能是空字串或 '/'
-  const currentUrl = this.router.url;
-  const isAuthPage = currentUrl.includes('login') || currentUrl.includes('signup') || currentUrl === '/';
+  ngOnInit(): void {
+    this.checkLoginStatus();
 
-  console.log('🛠️ [Debug] Token:', !!token, ' | Admin:', this.authService.isAdmin, ' | Path:', currentUrl);
+    // 監聽路由變化，即時更新 isLoggedIn 與 isEntryPage
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.checkLoginStatus();
+      
+      const url = this.router.url;
+      this.isEntryPage = url.includes('login') || url.includes('signup') || url === '/';
 
-  // 情況 A：如果你在登入相關頁面
-  if (isAuthPage) {
-    // 檢查：如果已經有 Token 了，其實可以考慮直接導向 dashboard
-    if (token) {
-      console.log('✅ 已有 Token，自動導向 Dashboard');
-      this.router.navigate(['/dashboard']);
-    }
-    return; // 在登入頁就不執行後面的抓取動作
+      if (this.isLoggedIn) {
+        if (this.isEntryPage) {
+          this.router.navigate(['/dashboard']);
+        } else {
+          this.loadAllData();
+        }
+      } else if (!this.isEntryPage) {
+        this.router.navigate(['/login']);
+      }
+    });
   }
 
-if (token) {
-      this.loadAllData(); // 把抓取動作包起來
-    } else {
-      this.router.navigate(['/login']);
+  // 封裝登入檢查邏輯
+  checkLoginStatus() {
+    const token = sessionStorage.getItem('authToken');
+    this.isLoggedIn = !!token;
+  }
+
+  // 安全的切換側邊欄方法
+  toggleSidenav() {
+    if (this.sidenav) {
+      this.sidenav.toggle();
     }
   }
 
-  // 封裝所有抓取動作，方便管理
+  // 封裝所有抓取動作
   loadAllData() {
     this.fetchTasks();
     this.fetchProjects();
     this.fetchContacts();
   }
 
-
-
   // 點擊主選單
   openSubMenu(link: any) {
     if (link.children) {
-      this.activeMainLink = link; // 保留完整子選單
+      this.activeMainLink = link; 
       this.activeTasks = false;
-
     } else if (link.path === 'to-do-list') {
-      // 點 Tasks
       this.activeTasks = true;
       this.activeMainLink = null;
-
-      //make sure it loads data
-      this.fetchTasks();
-      this.fetchProjects();
-      this.fetchContacts();
-
-      // 導向 route
+      this.loadAllData();
       this.router.navigate(['/to-do-list']);
-
     } else if (link.path) {
-      //dashboard/logout
       this.router.navigate([link.path]);
       this.activeMainLink = null;
       this.activeTasks = false;
@@ -146,31 +136,26 @@ if (token) {
   /* -----Tasks----- */
   fetchTasks() {
     this.todoService.getTodos().subscribe((todos) => {
-
       const today = new Date();
-      today.setHours(0, 0, 0, 0); // ✅ 關鍵：時間歸零
-
+      today.setHours(0, 0, 0, 0);
       const todayStr = today.toDateString();
 
-      // ✅ Today（未完成）
       const countToday = todos.filter(t =>
         t.dueDate &&
         new Date(t.dueDate).toDateString() === todayStr &&
         !t.completed
       ).length;
 
-      // ✅ Overdue（優先）
       const countOverdue = todos.filter(t =>
         t.dueDate &&
         new Date(t.dueDate) < today &&
         !t.completed
       ).length;
 
-      // ✅ Urgent（排除 overdue）
       const countUrgent = todos.filter(t =>
         t.priority === '1' &&
         !t.completed &&
-        !(t.dueDate && new Date(t.dueDate) < today) // ❗關鍵：不重複算
+        !(t.dueDate && new Date(t.dueDate) < today)
       ).length;
 
       this.tasksSummary = [
@@ -182,9 +167,7 @@ if (token) {
   }
 
   /* -----Project----- */
-
   fetchProjects() {
-    //Communication asynchrone donc il faut ecouter le retour
     this.projectService.getProjects().subscribe((data) => {
       this.projects = data;
     });
@@ -192,26 +175,21 @@ if (token) {
 
   addProject() {
     if (this.projectForm.valid) {
-      const formValue = this.projectForm.value;
-
       const project: Project = {
-        id: null, //id est genere sur le serveur pour cela il est envoye null
-        title: formValue.project, //Seulement title est remplis depuis le formulaire
+        id: null,
+        title: this.projectForm.value.project,
         description: null
       };
-
-      this.projectService.addProject(project).subscribe(data => {
-        //Actualiser la liste apres l'ajout
+      this.projectService.addProject(project).subscribe(() => {
         this.snackBar.open('Project added!', '', { duration: 1000 });
         this.projectForm.reset();
         this.fetchProjects();
       });
     }
   }
-  deleteProject(id: number | null) {
-    if (id === null)
-      return; //pas de retour
 
+  deleteProject(id: number | null) {
+    if (id === null) return;
     this.projectService.deleteProject(id).subscribe(() => {
       this.fetchProjects();
       this.snackBar.open('Deleted !', '', { duration: 1000 });
@@ -235,33 +213,29 @@ if (token) {
         lastName: lastName || '',
         genre: 'unknown'
       };
-
       this.contactService.addContact(newContact).subscribe(() => {
-        this.fetchContacts(); // 刷新列表
+        this.fetchContacts();
         this.snackBar.open('Contact added!', '', { duration: 1000 });
         this.contactForm.reset();
       });
     }
   }
-  deleteContact(id: number | null) {
-    if (id === null)
-      return; //pas de retour
 
+  deleteContact(id: number | null) {
+    if (id === null) return;
     this.contactService.deleteContact(id).subscribe(() => {
       this.fetchContacts();
       this.snackBar.open('Deleted !', '', { duration: 1000 });
     });
   }
 
-
   backToMainMenu() {
     this.activeMainLink = null;
     this.activeTasks = false;
   }
 
-  //version mobile
   closeSidenav() {
-    if (window.innerWidth < 768) {
+    if (window.innerWidth < 768 && this.sidenav) {
       this.sidenav.close();
     }
   }
