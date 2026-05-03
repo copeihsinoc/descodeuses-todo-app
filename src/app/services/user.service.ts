@@ -50,7 +50,7 @@ export class UserService {
   }
 
   deleteUsers(ids: number[]) {
-    return this.http.request('delete', this.apiURL + '/batch', { body: ids });
+    return this.http.post(`${this.apiURL}/delete-batch`, ids);
   }
 
   // 新增每日獎勵 API
