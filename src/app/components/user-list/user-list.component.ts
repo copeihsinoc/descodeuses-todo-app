@@ -100,28 +100,31 @@ export class UserListComponent implements OnInit {
     }
   }
 
-  deleteUser() {
-    if (this.selectedUsers.length === 0) return;
+deleteUser() {
+  if (this.selectedUsers.length === 0) return;
 
-    const idsToDelete = this.selectedUsers.map(u => u.id);
+  const idsToDelete = this.selectedUsers.map(u => u.id);
 
-    // 1. 
-    this.users = this.users.filter(u => !idsToDelete.includes(u.id));
-    this.userFilter = this.userFilter.filter(u => !idsToDelete.includes(u.id));
+  // 🔥 加在這裡（發 request 前）
+  console.log('TOKEN =', sessionStorage.getItem('authToken'));
 
-    // 2. 
-    this.userService.deleteUsers(idsToDelete).subscribe({
-      next: () => {
-        this.snackBar.open('Successfully deleted!', '', { duration: 1200 });
-      },
-      error: (err) => {
-        console.error('Delete failed!', err);
-        this.fetchUsers();
-      }
-    });
+  // 1. UI 先更新
+  this.users = this.users.filter(u => !idsToDelete.includes(u.id));
+  this.userFilter = this.userFilter.filter(u => !idsToDelete.includes(u.id));
 
-    this.selectedUsers = [];
-  }
+  // 2. call API
+  this.userService.deleteUsers(idsToDelete).subscribe({
+    next: () => {
+      this.snackBar.open('Successfully deleted!', '', { duration: 1200 });
+    },
+    error: (err) => {
+      console.error('Delete failed!', err);
+      this.fetchUsers();
+    }
+  });
+
+  this.selectedUsers = [];
+}
   addUser() {
     this.selectedUserId = 0;
   }
