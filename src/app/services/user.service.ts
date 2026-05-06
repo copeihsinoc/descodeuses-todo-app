@@ -49,9 +49,10 @@ export class UserService {
     return this.http.delete(`${this.apiURL}/${id}`);
   }
 
-  deleteUsers(ids: number[]) {
-    return this.http.post(`${this.apiURL}/delete-batch`, ids);
-  }
+deleteUsers(ids: number[]) {
+  console.log("🔥 FRONTEND IDS =", ids);
+  return this.http.post(`${this.apiURL}/delete-batch`, ids);
+}
 
   // 新增每日獎勵 API
   claimDailyReward(): Observable<User> {
