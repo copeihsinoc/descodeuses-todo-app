@@ -82,7 +82,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
   ],
   providers: [
     provideNativeDateAdapter(),
-    provideHttpClient(),
+    //provideHttpClient(),
 
 // ✨ 這裡才是真正的魔法！強制註冊攔截器
     {
