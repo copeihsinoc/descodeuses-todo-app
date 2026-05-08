@@ -29,6 +29,8 @@ export class DashboardComponent implements OnInit {
   // Feed Btn
   selectedItem: 'fish' | 'toy' | 'heart' = 'fish';
 
+  currentMessage: string = '';// 用來存放暫時性的互動訊息
+
   constructor(private todoService: TodoService, private userService: UserService) { }
 
   ngOnInit(): void {
@@ -133,15 +135,23 @@ export class DashboardComponent implements OnInit {
   selectItem(item: 'fish' | 'toy' | 'heart') { this.selectedItem = item; }
 
   isFeedDisabled(): boolean {
-    const map = { 
-      fish: this.user?.fishCount, 
-      toy: this.user?.toyCount, 
-      heart: this.user?.heartCount };
+    const map = {
+      fish: this.user?.fishCount,
+      toy: this.user?.toyCount,
+      heart: this.user?.heartCount
+    };
     return (map[this.selectedItem] || 0) <= 0;
   }
 
   feed(item: 'fish' | 'toy' | 'heart') {
     if (!this.user || this.isFeedDisabled()) return;
+
+    // 設置餵食對話
+    const feedMessages = ["Yummy! More, please~ 🐟", "Meow! I love this toy! 🎾", "Purrr... so much love! ❤️"];
+    this.currentMessage = feedMessages[Math.floor(Math.random() * feedMessages.length)];
+
+    // 3秒後恢復正常任務對話
+    setTimeout(() => this.currentMessage = '', 3000);
 
     const bonus = { fish: 30, toy: 20, heart: 25 };
     this.user.energy += bonus[item];

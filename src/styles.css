@@ -201,6 +201,16 @@ mat-toolbar {
   }
 }
 
+.chat-bubble.highlight {
+  border: 2px solid #fb923c;
+  animation: float 3s ease-in-out infinite, shake 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes shake {
+  from { transform: rotate(-1deg) translateY(-6px); }
+  to { transform: rotate(1deg) translateY(-6px); }
+}
+
 /* ----------------------------------------------------------------------------- */
 .card1 {
   position: relative;

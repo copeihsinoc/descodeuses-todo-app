@@ -9,7 +9,7 @@
       </div>
 
       <div class="chat-bubble hidden md:block w-72 p-4 rounded-2xl shadow-sm relative">
-        <p class="text-xl text-gray-600 font-semibold leading-relaxed">{{ questStatus.text }}</p>
+        <p class="text-xl text-gray-600 font-semibold leading-relaxed">{{ currentMessage || questStatus.text }}</p>
 
         <button *ngIf="questStatus.canCollect" (click)="onFishClick()"
           class="mt-2 w-full py-1 bg-orange-500 text-white rounded-lg text-xs font-bold hover:bg-orange-600 transition-colors">
