@@ -8,14 +8,14 @@ export class AuthInterceptor implements HttpInterceptor {
 
     console.log('🚀 [Interceptor] Requete sortante vers:', req.url);
 
-    // ✅ 1. 不攔截 login / register
+    // 1. login / sign up
     if (req.url.includes('/auth/login') || req.url.includes('/auth/register')) {
       return next.handle(req);
     }
 
     const token = sessionStorage.getItem('authToken');
 
-    // ✅ 2. 有 token → 加 header
+    // 2. V token → add header
     if (token) {
       console.log('🔥 Token trouvé, ajout Authorization header');
 
@@ -26,7 +26,7 @@ export class AuthInterceptor implements HttpInterceptor {
       return next.handle(cloned);
     }
 
-    // ⚠️ 3. 沒 token（但不是 login）
+    // 3. N token
     console.warn('⚠️ Aucun jeton trouvé dans le sessionStorage');
     return next.handle(req);
   }
