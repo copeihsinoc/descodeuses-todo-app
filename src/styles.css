@@ -1088,16 +1088,17 @@ select.custom-input1 option {
 
   .chat-bubble::before,
   .chat-bubble::after {
-    display: none;
+    display: none !important;
   }
 
-  /* 修正：強制 Daily Challenge卡片裡的星標圖案保持 32px，絕不變大 */
-  .card-challenge img { 
+  /* 🌟 修正選取器：精準鎖定 Daily Challenge 卡片裡的星標 img，讓星星百分之百乖乖縮小！ */
+  .card-challenge .flex img, 
+  .card-challenge mat-card img,
+  img[src="assets/star.png"] { 
     width: 32px !important; 
     height: 32px !important; 
   }
 
-  /* 🌟 補上這行：確保包裹貓咪和對話框的外殼，在中等螢幕下不會被右邊內容擠壓變形 */
   .top-card .flex-shrink-0 {
     max-width: 100% !important;
     min-width: 0 !important;
