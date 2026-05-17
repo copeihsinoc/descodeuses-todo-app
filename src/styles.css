@@ -49,7 +49,7 @@ mat-toolbar {
 .left-card {
   background-color: #FFFAF0;
   border-radius: 15px;
-  width: 100% !important;
+  width: auto !important;
 }
 
 .card-challenge {
@@ -1091,5 +1091,5 @@ select.custom-input1 option {
     display: none;
   }
 
-
+.card-challenge img { width: 32px !important; height: 32px !important; }
 }
