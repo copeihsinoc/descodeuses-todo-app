@@ -1080,22 +1080,50 @@ select.custom-input1 option {
 /*------------------------------響應式佈局 (Media Queries)------------------------------*/
 @media (max-width: 1023px) {
 
-/* 🌟 核心修正：當螢幕縮小時，強制拿掉往左推的 margin，改為上下留白，把貓咪溫柔地拉回正中央！ */
-  .chat-bubble {
-    margin-left: 0 !important;
-    margin-top: 12px !important;
+/* 1. 讓貓咪和對話框的外殼容器在縮小時變成一個「相對定位的獨立舞台」，並在畫面中居中 */
+  .top-card .flex.flex-col.lg\:flex-row {
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
     width: 100% !important;
-    max-width: 280px !important;/* 鎖定泡泡最大寬度，防止它橫向無限膨脹把貓咪擠出去 */
-text-align: center !important;
+    max-width: 320px !important; /* 限制寬度防禦跑版 */
+    height: 310px !important;    /* 關鍵：強制給定固定高度，預留上方泡泡浮空的垂直空間 */
+    margin: 0 auto !important;   /* 讓整個組合在淡橘色大卡片裡絕對居中 */
+    gap: 0 !important;
   }
 
-  /* 隱藏上下排列時會穿幫的對話框小箭頭 */
-  .chat-bubble::before,
-  .chat-bubble::after {
+  /* 2. 讓貓咪頭像固定坐在這個舞台的底部，並且絕對水平置中 */
+  .top-card .w-40.h-40 {
+    position: absolute !important;
+    bottom: 10px !important;     /* 坐在底部 */
+    left: 50% !important;
+    transform: translateX(-50%) !important; /* 完美水平居中 */
+    margin: 0 !important;
+    z-index: 5 !important;
+  }
+
+  /* 3. 🌟 核心：讓對話框變成絕對定位，直接浮空在小貓頭頂，完全不佔任何寬度與排版空間！ */
+  .top-card .chat-bubble {
+    position: absolute !important;
+    top: 0px !important;         /* 浮空在最上方，貼著舞台頂部 */
+    left: 50% !important;
+    transform: translateX(-50%) !important; /* 泡泡本身水平精準置中 */
+    width: 100% !important;
+    max-width: 260px !important; /* 鎖定泡泡寬度 */
+    margin: 0 !important;
+    text-align: center !important; /* 讓泡泡內的文字與按鈕完美置中 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05) !important;
+    z-index: 10 !important;
+  }
+
+  /* 4. 隱藏垂直上下排時會穿幫刺到貓咪身體的左右兩側舊小箭頭 */
+  .top-card .chat-bubble::before,
+  .top-card .chat-bubble::after {
     display: none !important;
   }
 
-  /* 確保外層包裝盒寬度保持正常 */
+  /* 5. 確保包裹容器在中等螢幕下不會受到外部推力干擾 */
   .top-card .flex-shrink-0 {
     max-width: 100% !important;
     min-width: 0 !important;
