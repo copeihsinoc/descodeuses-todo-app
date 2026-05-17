@@ -1,8 +1,7 @@
 <div class="mx-auto max-w-[1280px] px-6 py-6" *ngIf="user">
 
   <div class="top-card w-full flex flex-col md:flex-row gap-4 lg:gap-10 py-8 px-4 md:px-8 lg:px-16 shadow-md rounded-2xl mb-6">
-    <div class="flex justify-center items-center flex-shrink-0 relative">
-
+<div class="flex justify-center items-center flex-shrink-0 relative w-40 h-40 md:w-52 md:h-52">
       <div>
         <img [src]="user.catPhoto" alt="user cat" class="w-full h-full object-contain" />
       </div>
@@ -74,7 +73,7 @@
     </div>
   </div>
 
-<div id="kpis" class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+<div id="kpis" class="grid grid-cols-3 gap-4 md:grid-cols-3">
     <div class="left-card md:col-span-2 w-full shadow-md py-8 px-4 lg:px-16 bg-white rounded-2xl">
       <span class="text-2xl font-semibold block mb-6 text-gray-800">Task Overview</span>
 
@@ -113,7 +112,7 @@
       <div class="flex flex-col gap-4">
 
         <div class="flex items-center gap-3">
-          <img src="assets/star.png" class="w-8 h-8" />
+          <img src="assets/star.png" class="w-8 h-8 object-contain" />
           <span class="text-lg font-semibold text-gray-700">Daily Challenge</span>
         </div>
 
