@@ -1080,52 +1080,16 @@ select.custom-input1 option {
 /*------------------------------響應式佈局 (Media Queries)------------------------------*/
 @media (max-width: 1023px) {
 
-  /* 1. 頂部大卡片：強制解除固定高度，允許它隨內容往下長高，防止 Feed 按鈕被割斷 */
-  .top-card {
-    height: auto !important;
-    min-height: 250px !important;
-    padding: 24px 16px !important; /* 縮小中低螢幕的留白，還給內容空間 */
-  }
-
-  /* 解決 Feed 按鈕在拉窄時衝出淡橘色邊框外的 Bug */
-  .top-card .flex.items-center.justify-between {
-    flex-wrap: wrap !important; /* 寬度不夠時，Feed按鈕主動換行到下方 */
-    gap: 16px !important;
-  }
-
-  /* 對話框移除左邊距，改成跟貓咪上下排列 */
   .chat-bubble {
-    margin-left: 0 !important;
-    margin-top: 16px !important;
-    width: 100% !important;
+    margin-left: 0;
+    margin-top: 16px;
+    width: 100%;
   }
-  
-  /* 隱藏上下排列時會穿幫的對話框小箭頭 */
+
   .chat-bubble::before,
   .chat-bubble::after {
-    display: none !important;
+    display: none;
   }
 
-  /* 2. 中間主區塊：在中等螢幕下，放生強勢的 100% 寬度限制，改由彈性 Grid 調配 */
-  .left-card {
-    width: auto !important; /* ❌ 丟掉寫死的 100%，讓它在 Grid 裡乖乖聽話 */
-    padding: 24px 16px !important; /* 縮小內邊距，解決 TODAY 卡片被往內擠扁的危機 */
-  }
 
-  /* 3. 核心修復：徹底解決三個 KPI 指標卡片（TODAY、URGENT 等）垂直重疊黏在一起的嚴重跑版 */
-  #kpis mat-card {
-    height: auto !important;          /* 確保高度隨內部字體與圖片自動撐開，絕不重疊 */
-    min-height: 90px !important;
-    margin-bottom: 12px !important;    /* 🌟 最關鍵：卡片跟卡片之間強制補上 12px 的安全隔離防線！ */
-  }
-
-  /* 縮小卡片內的小圖標與數字，防止在中等寬度時兩者打架疊字 */
-  #kpis .text-3xl, #kpis .text-2xl {
-    font-size: 1.5rem !important; /* 強制縮小大數字，防止它折行把卡片擠爆 */
-  }
-
-  #kpis .flex.items-center > div:first-child {
-    width: 45px !important;  /* 微調貓咪指標圖標尺寸 */
-    height: 45px !important;
-  }
 }
