@@ -89,34 +89,17 @@ export class DashboardComponent implements OnInit {
   }
 
   //--------------------------------- KPIs ---------------------------------
-  fetchTodo() {
-    this.todoService.getTodos().subscribe((data) => {
+fetchTodo() {
+    // 🌟 在 (data: Todo[]) 加上強型別宣告，這樣 this.todos = data 就不會報錯了！
+    this.todoService.getTodos().subscribe((data: Todo[]) => {
       this.todos = data;
+    });
 
-      const todayStr = new Date().toDateString();
-      const now = new Date();
-      now.setHours(0, 0, 0, 0);
-
-      // 1. Today
-      this.kpis[0].value = this.todos.filter(t =>
-        t.dueDate &&
-        new Date(t.dueDate).toDateString() === todayStr &&
-        !t.completed
-      ).length;
-
-      // 2. Urgent（✅ 修正：排除 overdue）
-      this.kpis[1].value = this.todos.filter(t =>
-        String(t.priority) === '1' &&
-        !t.completed &&
-        !(t.dueDate && new Date(t.dueDate) < now)
-      ).length;
-
-      // 3. Overdue
-      this.kpis[2].value = this.todos.filter(t =>
-        t.dueDate &&
-        new Date(t.dueDate) < now &&
-        !t.completed
-      ).length;
+    // 訂閱狀態流
+    this.todoService.kpiSummary$.subscribe((summary: any[]) => {
+      this.kpis[0].value = summary[0].count; // Today's Tasks
+      this.kpis[1].value = summary[1].count; // Urgent
+      this.kpis[2].value = summary[2].count; // Overdue
     });
   }
 

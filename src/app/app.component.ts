@@ -11,6 +11,8 @@ import { ContactService } from './services/contact.service';
 import { TodoService } from './services/todo.service';
 import { filter } from 'rxjs/operators';
 
+
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -135,36 +137,11 @@ export class AppComponent implements OnInit {
 
   /* -----Tasks----- */
   fetchTasks() {
-    this.todoService.getTodos().subscribe((todos) => {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      const todayStr = today.toDateString();
-
-      const countToday = todos.filter(t =>
-        t.dueDate &&
-        new Date(t.dueDate).toDateString() === todayStr &&
-        !t.completed
-      ).length;
-
-      const countOverdue = todos.filter(t =>
-        t.dueDate &&
-        new Date(t.dueDate) < today &&
-        !t.completed
-      ).length;
-
-      const countUrgent = todos.filter(t =>
-        t.priority === '1' &&
-        !t.completed &&
-        !(t.dueDate && new Date(t.dueDate) < today)
-      ).length;
-
-      this.tasksSummary = [
-        { label: "Today's Tasks", icon: 'today', count: countToday },
-        { label: 'Urgent', icon: 'priority_high', count: countUrgent },
-        { label: 'Overdue', icon: 'warning', count: countOverdue }
-      ];
+    // 🌟 這裡加上 (summary: any[]) 告訴它是一個陣列
+    this.todoService.kpiSummary$.subscribe((summary: any[]) => {
+      this.tasksSummary = summary;
     });
-  }
+  } 
 
   /* -----Project----- */
   fetchProjects() {
