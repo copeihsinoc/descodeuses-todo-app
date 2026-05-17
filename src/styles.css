@@ -1085,7 +1085,8 @@ select.custom-input1 option {
     margin-left: 0 !important;
     margin-top: 12px !important;
     width: 100% !important;
-    max-width: 280px !important; /* 鎖定泡泡最大寬度，防止它橫向無限膨脹把貓咪擠出去 */
+    max-width: 280px !important;/* 鎖定泡泡最大寬度，防止它橫向無限膨脹把貓咪擠出去 */
+text-align: center !important;
   }
 
   /* 隱藏上下排列時會穿幫的對話框小箭頭 */
