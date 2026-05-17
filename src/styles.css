@@ -1080,10 +1080,10 @@ select.custom-input1 option {
 /*------------------------------響應式佈局 (Media Queries)------------------------------*/
 @media (max-width: 1023px) {
 
-  .chat-bubble {
-    margin-left: 0;
-    margin-top: 16px;
-    width: 100%;
+.chat-bubble {
+    margin-left: 0 !important;
+    margin-top: 12px !important;
+    width: 100% !important;
   }
 
   .chat-bubble::before,
@@ -1091,5 +1091,15 @@ select.custom-input1 option {
     display: none;
   }
 
-.card-challenge img { width: 32px !important; height: 32px !important; }
+  /* 修正：強制 Daily Challenge卡片裡的星標圖案保持 32px，絕不變大 */
+  .card-challenge img { 
+    width: 32px !important; 
+    height: 32px !important; 
+  }
+
+  /* 🌟 補上這行：確保包裹貓咪和對話框的外殼，在中等螢幕下不會被右邊內容擠壓變形 */
+  .top-card .flex-shrink-0 {
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
 }
