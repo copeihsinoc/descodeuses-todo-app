@@ -23,57 +23,48 @@ export class TodoService {
   // 🌟 新增：全域共享的 KPI 狀態流 (初始值為 0)
   private kpiSummarySubject = new BehaviorSubject<any[]>([
     { label: "Today's Tasks", icon: 'today', count: 0 },
-    { label: 'Urgent', icon: 'priority_high', count: 0 },
+    { label: 'Urgent', icon: 'urgent', count: 0 },
     { label: 'Overdue', icon: 'warning', count: 0 }
   ]);
 
   // 🌟 新增：暴露給外部組件訂閱的 Observable
   kpiSummary$ = this.kpiSummarySubject.asObservable();
 
+
   //HttpClient pour communiquer avec le API/Backend
   constructor(private http: HttpClient) { }
 
-  // 🌟 核心：全域唯一的刷新機制（換成對法文語系/時區完全免疫的純數字版）
   refreshKPIs() {
     this.getTodos().subscribe((todos: Todo[]) => {
-      // 1. 取得今天的年、月、日純數字
-      const today = new Date();
-      const tYear = today.getFullYear();
-      const tMonth = today.getMonth();
-      const tDate = today.getDate();
+      
+      // 1. 取得今天在當地的純文字日期格式 (例如: "Sun May 17 2026")
+      const todayStr = new Date().toDateString();
+      
+      // 2. 取得今天午夜的時間（用來單純判斷是否過期）
+      const now = new Date();
+      now.setHours(0, 0, 0, 0);
 
-      // 2. 建立一個今天午夜的絕對時間戳（不帶時區干擾）
-      const todayMidnight = new Date(tYear, tMonth, tDate).getTime();
+      // --- 3. 執行最直覺、跟妳 Dashboard 完全對齊的過濾公式 ---
 
-      // 3. 計算 Today's Tasks (年月日必須完全跟今天一樣)
-      const countToday = todos.filter(t => {
-        if (!t.dueDate || t.completed) return false;
-        const d = new Date(t.dueDate);
-        return d.getFullYear() === tYear && d.getMonth() === tMonth && d.getDate() === tDate;
-      }).length;
+      // 計算 TODAY
+      const countToday = todos.filter(t => 
+        t.dueDate && new Date(t.dueDate).toDateString() === todayStr && !t.completed
+      ).length;
 
-      // 4. 計算 Overdue (到期日的午夜小於今天的午夜)
-      const countOverdue = todos.filter(t => {
-        if (!t.dueDate || t.completed) return false;
-        const d = new Date(t.dueDate);
-        const dMidnight = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
-        return dMidnight < todayMidnight;
-      }).length;
+      // 計算 URGENT（只要優先級是 '1' 且未完成，就直接算進去，防止任何時差誤殺）
+      const countUrgent = todos.filter(t => 
+        String(t.priority) === '1' && !t.completed
+      ).length;
 
-      // 5. 計算 Urgent (優先級為1，且未完成，且到期日大於或等於今天午夜)
-      const countUrgent = todos.filter(t => {
-        if (String(t.priority) !== '1' || t.completed) return false;
-        if (!t.dueDate) return true; // 如果沒有設到期日，高優先級直接算 Urgent
+      // 計算 OVERDUE
+      const countOverdue = todos.filter(t => 
+        t.dueDate && new Date(t.dueDate) < now && !t.completed
+      ).length;
 
-        const d = new Date(t.dueDate);
-        const dMidnight = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
-        return dMidnight >= todayMidnight; // 🌟 只要是今天或今天之後，就是 Urgent，絕不被誤殺！
-      }).length;
-
-      // 6. 統一廣播出去，這時兩邊收到的數字絕對百分之百相同！
+      // 4. 廣播最正確的數據給兩邊。這裡的 label 與 icon 完全保留妳的自訂命名
       this.kpiSummarySubject.next([
         { label: "Today's Tasks", icon: 'today', count: countToday },
-        { label: 'Urgent', icon: 'priority_high', count: countUrgent },
+        { label: 'Urgent', icon: 'urgent', count: countUrgent },
         { label: 'Overdue', icon: 'warning', count: countOverdue }
       ]);
     });
