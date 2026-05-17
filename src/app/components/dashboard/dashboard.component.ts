@@ -90,16 +90,23 @@ export class DashboardComponent implements OnInit {
 
   //--------------------------------- KPIs ---------------------------------
 fetchTodo() {
-    // 🌟 在 (data: Todo[]) 加上強型別宣告，這樣 this.todos = data 就不會報錯了！
-    this.todoService.getTodos().subscribe((data: Todo[]) => {
-      this.todos = data;
+    // 1. 🌟 讓 Service 去發動抓取與計算
+    this.todoService.refreshKPIs();
+
+    // 2. 🌟 這裡只負責接收廣播，把數值填到畫面的陣列裡
+    this.todoService.kpiSummary$.subscribe((summary: any[]) => {
+      const todayData = summary.find(s => s.label === "Today's Tasks");
+      const urgentData = summary.find(s => s.label === 'Urgent');
+      const overdueData = summary.find(s => s.label === 'Overdue');
+
+      if (todayData) this.kpis[0].value = todayData.count;
+      if (urgentData) this.kpis[1].value = urgentData.count;
+      if (overdueData) this.kpis[2].value = overdueData.count;
     });
 
-    // 訂閱狀態流
-    this.todoService.kpiSummary$.subscribe((summary: any[]) => {
-      this.kpis[0].value = summary[0].count; // Today's Tasks
-      this.kpis[1].value = summary[1].count; // Urgent
-      this.kpis[2].value = summary[2].count; // Overdue
+    // 3. 畫面如果仍需要完整的 todos 陣列做其他渲染，單純拿資料即可
+    this.todoService.getTodos().subscribe((data: Todo[]) => {
+      this.todos = data;
     });
   }
 

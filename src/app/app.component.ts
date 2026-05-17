@@ -114,6 +114,7 @@ export class AppComponent implements OnInit {
   // 封裝所有抓取動作
   loadAllData() {
     this.fetchTasks();
+    this.todoService.refreshKPIs();
     this.fetchProjects();
     this.fetchContacts();
   }
