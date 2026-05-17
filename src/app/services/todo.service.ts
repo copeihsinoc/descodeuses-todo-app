@@ -37,21 +37,21 @@ export class TodoService {
   refreshKPIs() {
     this.getTodos().subscribe((todos: Todo[]) => {
       
-      // 1. 取得今天在當地的純文字日期格式 (例如: "Sun May 17 2026")
+      // 1. get today's ("Sun May 17 2026")
       const todayStr = new Date().toDateString();
       
       // 2. 取得今天午夜的時間（用來單純判斷是否過期）
       const now = new Date();
       now.setHours(0, 0, 0, 0);
 
-      // --- 3. 執行最直覺、跟妳 Dashboard 完全對齊的過濾公式 ---
+      // --- 3. 公式 ---
 
       // 計算 TODAY
       const countToday = todos.filter(t => 
         t.dueDate && new Date(t.dueDate).toDateString() === todayStr && !t.completed
       ).length;
 
-      // 計算 URGENT（只要優先級是 '1' 且未完成，就直接算進去，防止任何時差誤殺）
+      // 計算 URGENT（ priority :'1'& incompleted）
       const countUrgent = todos.filter(t => 
         String(t.priority) === '1' && !t.completed
       ).length;
@@ -61,7 +61,7 @@ export class TodoService {
         t.dueDate && new Date(t.dueDate) < now && !t.completed
       ).length;
 
-      // 4. 廣播最正確的數據給兩邊。這裡的 label 與 icon 完全保留妳的自訂命名
+      // 4. 
       this.kpiSummarySubject.next([
         { label: "Today's Tasks", icon: 'today', count: countToday },
         { label: 'Urgent', icon: 'urgent', count: countUrgent },
