@@ -1,12 +1,13 @@
 <div class="mx-auto max-w-[1280px] px-6 py-6" *ngIf="user">
 
   <div class="top-card w-full flex flex-col md:flex-row gap-4 lg:gap-10 py-8 px-4 md:px-8 lg:px-16 shadow-md rounded-2xl mb-6">
-<div class="flex justify-center items-center flex-shrink-0 relative w-40 h-40 md:w-52 md:h-52">
-      <div>
+    
+    <div class="flex flex-col sm:flex-row justify-center items-center flex-shrink-0 relative w-full md:w-auto gap-4">
+      <div class="w-40 h-40 md:w-52 md:h-52 flex-shrink-0">
         <img [src]="user.catPhoto" alt="user cat" class="w-full h-full object-contain" />
       </div>
 
-      <div class="chat-bubble block w-full md:w-72 p-4 rounded-2xl shadow-sm relative max-md:ml-0 max-md:mt-4">
+      <div class="chat-bubble block w-full md:w-72 p-4 rounded-2xl shadow-sm relative max-md:ml-0">
         <p class="text-xl text-gray-600 font-semibold leading-relaxed">{{ currentMessage || questStatus.text }}</p>
 
         <button *ngIf="questStatus.canCollect" (click)="onFishClick()"
@@ -16,7 +17,7 @@
       </div>
     </div>
 
-    <div class="flex-1 flex flex-col gap-4 w-full">
+    <div class="flex-1 flex flex-col gap-4 w-full justify-center">
 
       <span class="text-lg font-semibold text-center md:text-left text-gray-800">Your Cat</span>
 
@@ -73,35 +74,35 @@
     </div>
   </div>
 
-<div id="kpis" class="grid grid-cols-3 gap-4 md:grid-cols-3">
-    <div class="left-card md:col-span-2 w-full shadow-md py-8 px-4 lg:px-16 bg-white rounded-2xl">
+  <div class="bottom-section w-full max-w-full grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="left-card md:col-span-2 w-full shadow-md py-8 px-4 lg:px-12 bg-white rounded-2xl">
       <span class="text-2xl font-semibold block mb-6 text-gray-800">Task Overview</span>
 
-<div id="kpis" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <mat-card class="p-4 !border-2 !border-blue-200 !bg-blue-100 rounded-2xl">
-          <div class="flex items-center gap-2 xl:gap-4">
-            <div><img [src]="kpis[0].icon" /></div>
-            <div class="flex flex-col justify-center leading-none">
-              <div class="text-[10px] font-black text-blue-600 tracking-wider">TODAY</div>
-              <div class="text-2xl xl:text-3xl font-black text-gray-800">{{ kpis[0].value }}</div>
+      <div id="kpis" class="grid grid-cols-3 gap-2 sm:gap-4">
+        <mat-card class="!p-2 sm:!p-4 !border-2 !border-blue-200 !bg-blue-100 rounded-2xl">
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3">
+            <div class="w-8 h-8 sm:w-12 sm:h-12 flex-shrink-0"><img [src]="kpis[0].icon" class="w-full h-full object-contain" /></div>
+            <div class="flex flex-col justify-center items-center sm:items-start leading-none">
+              <div class="text-[9px] sm:text-[10px] font-black text-blue-600 tracking-wider">TODAY</div>
+              <div class="text-xl sm:text-3xl font-black text-gray-800 mt-1">{{ kpis[0].value }}</div>
             </div>
           </div>
         </mat-card>
-        <mat-card class="p-4 !border-2 !border-orange-200 !bg-orange-100 rounded-2xl">
-          <div class="flex items-center gap-2 xl:gap-4">
-            <div><img [src]="kpis[1].icon" /></div>
-            <div class="flex flex-col justify-center leading-none">
-              <div class="text-[10px] font-black text-orange-400 tracking-wider">URGENT</div>
-              <div class="text-2xl xl:text-3xl font-black text-gray-800">{{ kpis[1].value }}</div>
+        <mat-card class="!p-2 sm:!p-4 !border-2 !border-orange-200 !bg-orange-100 rounded-2xl">
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3">
+            <div class="w-8 h-8 sm:w-12 sm:h-12 flex-shrink-0"><img [src]="kpis[1].icon" class="w-full h-full object-contain" /></div>
+            <div class="flex flex-col justify-center items-center sm:items-start leading-none">
+              <div class="text-[9px] sm:text-[10px] font-black text-orange-400 tracking-wider">URGENT</div>
+              <div class="text-xl sm:text-3xl font-black text-gray-800 mt-1">{{ kpis[1].value }}</div>
             </div>
           </div>
         </mat-card>
-        <mat-card class="p-4 !border-2 !border-red-200 !bg-red-100 rounded-2xl">
-          <div class="flex items-center gap-2 xl:gap-4">
-            <div><img [src]="kpis[2].icon" /></div>
-            <div class="flex flex-col justify-center leading-none">
-              <div class="text-[10px] font-black text-red-500 tracking-wider">OVERDUE</div>
-              <div class="text-2xl xl:text-3xl font-black text-gray-800">{{ kpis[2].value }}</div>
+        <mat-card class="!p-2 sm:!p-4 !border-2 !border-red-200 !bg-red-100 rounded-2xl">
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3">
+            <div class="w-8 h-8 sm:w-12 sm:h-12 flex-shrink-0"><img [src]="kpis[2].icon" class="w-full h-full object-contain" /></div>
+            <div class="flex flex-col justify-center items-center sm:items-start leading-none">
+              <div class="text-[9px] sm:text-[10px] font-black text-red-500 tracking-wider">OVERDUE</div>
+              <div class="text-xl sm:text-3xl font-black text-gray-800 mt-1">{{ kpis[2].value }}</div>
             </div>
           </div>
         </mat-card>
@@ -110,7 +111,6 @@
       <span class="text-2xl font-semibold block mt-10 mb-4 text-gray-800">Activity</span>
 
       <div class="flex flex-col gap-4">
-
         <div class="flex items-center gap-3">
           <img src="assets/star.png" class="w-8 h-8 object-contain" />
           <span class="text-lg font-semibold text-gray-700">Daily Challenge</span>
@@ -119,8 +119,7 @@
         <mat-card class="card-challenge p-6 w-full rounded-2xl">
           <div class="flex items-center gap-6">
             <p class="text-2xl font-black text-blue-600 whitespace-nowrap">
-              {{ user.rewardStatus === 'CLAIMED' ? 3 : (user.todayCompletedCount > 3 ? 3 : user.todayCompletedCount)
-              }}
+              {{ user.rewardStatus === 'CLAIMED' ? 3 : (user.todayCompletedCount > 3 ? 3 : user.todayCompletedCount) }}
               / 3
             </p>
 
@@ -137,18 +136,13 @@
                 class="w-16 h-14 flash cursor-pointer drop-shadow-lg" (click)="onFishClick()" />
               <img *ngSwitchDefault src="assets/fish-re.png" class="w-16 h-14 fish-collect" />
             </div>
-
           </div>
-
           <div class="mt-2 text-sm text-gray-400 font-medium">Daily Progress</div>
-
         </mat-card>
-
       </div>
     </div>
 
     <div class="right-section col-span-1 w-full flex flex-col gap-6">
-
       <div class="card-r1 w-full flex-1 rounded-2xl shadow-md py-8 px-10 bg-white">
         <span class="text-2xl font-semibold text-gray-800">Achievements</span>
       </div>
@@ -156,13 +150,11 @@
       <div class="card-r2 w-full flex-1 rounded-2xl shadow-md py-8 px-10 bg-white">
         <span class="text-2xl font-semibold text-gray-800">Chat</span>
       </div>
-
     </div>
   </div>
 
   <div *ngIf="showLevelUpModal" class="modal-overlay">
     <div class="modal-content">
-
       <div class="light">
         <img src="assets/light.png" alt="light">
       </div>
@@ -172,7 +164,6 @@
       </div>
 
       <div class="modal-layer-inner">
-
         <svg class="border-svg" width="100%" height="100%">
           <rect x="3" y="3" width="calc(100% - 6px)" height="calc(100% - 6px)" rx="80" ry="80" fill="none"
             stroke="#ff9f43" stroke-width="6" stroke-dasharray="25 25" />

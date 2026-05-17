@@ -1079,7 +1079,6 @@ select.custom-input1 option {
 
 /*------------------------------響應式佈局 (Media Queries)------------------------------*/
 @media (max-width: 1023px) {
-
   .chat-bubble {
     margin-left: 0;
     margin-top: 16px;
@@ -1089,6 +1088,14 @@ select.custom-input1 option {
   .chat-bubble::before,
   .chat-bubble::after {
     display: none;
+  }
+
+  /* 🌟 補上這段：確保三個卡片在橫向並排縮小時，高度為自動，且內部的 flex 保持置中 */
+  #kpis mat-card {
+    height: auto !important;
+    min-height: 70px !important;
+    box-sizing: border-box !important;
+    padding: 8px 4px !important; /* 縮小內邊距，防止大數字擠爆 */
   }
 
 
