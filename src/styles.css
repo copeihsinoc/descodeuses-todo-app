@@ -1080,7 +1080,8 @@ select.custom-input1 option {
 /*------------------------------響應式佈局 (Media Queries)------------------------------*/
 @media (max-width: 1023px) {
 
-.chat-bubble {
+/* 1. 解除對話框往左邊擠推的 margin，徹底解放貓咪頭像，直接拉回卡片中心 */
+  .top-card .chat-bubble {
     margin-left: 0 !important;
     margin-top: 12px !important;
     width: 100% !important;
@@ -1091,12 +1092,12 @@ select.custom-input1 option {
     display: none !important;
   }
 
-  /* 🌟 修正選取器：精準鎖定 Daily Challenge 卡片裡的星標 img，讓星星百分之百乖乖縮小！ */
-  .card-challenge .flex img, 
-  .card-challenge mat-card img,
-  img[src="assets/star.png"] { 
+  /* 2. 終極擊碎舊 CSS 的 100% 魔咒：把 Daily Challenge 的星星強制鎖死在 32px！ */
+  .card-challenge .flex img,
+  .left-card img[src="assets/star.png"] { 
     width: 32px !important; 
     height: 32px !important; 
+    transform: none !important;
   }
 
   .top-card .flex-shrink-0 {

@@ -1,11 +1,13 @@
 <div class="mx-auto max-w-[1280px] px-6 py-6" *ngIf="user">
 
-<div class="top-card w-full flex flex-col lg:flex-row gap-4 lg:gap-10 py-8 px-4 md:px-8 lg:px-16 shadow-md rounded-2xl mb-6">
-<div class="flex flex-col lg:flex-row justify-center items-center flex-shrink-0 relative w-full lg:w-auto gap-4">      <div class="w-40 h-40 md:w-52 md:h-52 flex-shrink-0">
+  <div class="top-card w-full flex flex-col xl:flex-row gap-6 lg:gap-10 py-8 px-4 md:px-8 lg:px-16 shadow-md rounded-2xl mb-6 overflow-hidden">
+    
+    <div class="flex flex-col sm:flex-row justify-center items-center flex-shrink-0 relative w-full xl:w-auto gap-4">
+      <div class="w-40 h-40 md:w-52 md:h-52 flex-shrink-0">
         <img [src]="user.catPhoto" alt="user cat" class="w-full h-full object-contain" />
       </div>
 
-      <div class="chat-bubble block w-full md:w-72 p-4 rounded-2xl shadow-sm relative max-md:ml-0">
+      <div class="chat-bubble block w-full md:w-72 p-4 rounded-2xl shadow-sm relative max-md:ml-0 flex-shrink-0">
         <p class="text-xl text-gray-600 font-semibold leading-relaxed">{{ currentMessage || questStatus.text }}</p>
 
         <button *ngIf="questStatus.canCollect" (click)="onFishClick()"
@@ -15,7 +17,7 @@
       </div>
     </div>
 
-    <div class="flex-1 flex flex-col gap-4 w-full justify-center">
+    <div class="flex-1 flex flex-col gap-4 w-full justify-center min-w-0">
 
       <span class="text-lg font-semibold text-center md:text-left text-gray-800">Your Cat</span>
 
@@ -34,7 +36,7 @@
       <span class="font-semibold text-gray-700">Rewards</span>
 
       <div class="flex items-center justify-between flex-wrap lg:flex-nowrap gap-4 mt-2">
-        <div class="flex gap-6 items-center">
+        <div class="flex gap-6 items-center flex-wrap">
 
           <div class="relative flex flex-col items-center cursor-pointer" [class.selected]="selectedItem === 'fish'"
             (click)="selectItem('fish')">
