@@ -49,6 +49,7 @@ mat-toolbar {
 .left-card {
   background-color: #FFFAF0;
   border-radius: 15px;
+  width: 100% !important;
 }
 
 .card-challenge {
