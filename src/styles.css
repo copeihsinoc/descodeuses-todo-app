@@ -1080,26 +1080,21 @@ select.custom-input1 option {
 /*------------------------------響應式佈局 (Media Queries)------------------------------*/
 @media (max-width: 1023px) {
 
-/* 1. 解除對話框往左邊擠推的 margin，徹底解放貓咪頭像，直接拉回卡片中心 */
-  .top-card .chat-bubble {
+/* 🌟 核心修正：當螢幕縮小時，強制拿掉往左推的 margin，改為上下留白，把貓咪溫柔地拉回正中央！ */
+  .chat-bubble {
     margin-left: 0 !important;
     margin-top: 12px !important;
     width: 100% !important;
+    max-width: 280px !important; /* 鎖定泡泡最大寬度，防止它橫向無限膨脹把貓咪擠出去 */
   }
 
+  /* 隱藏上下排列時會穿幫的對話框小箭頭 */
   .chat-bubble::before,
   .chat-bubble::after {
     display: none !important;
   }
 
-  /* 2. 終極擊碎舊 CSS 的 100% 魔咒：把 Daily Challenge 的星星強制鎖死在 32px！ */
-  .card-challenge .flex img,
-  .left-card img[src="assets/star.png"] { 
-    width: 32px !important; 
-    height: 32px !important; 
-    transform: none !important;
-  }
-
+  /* 確保外層包裝盒寬度保持正常 */
   .top-card .flex-shrink-0 {
     max-width: 100% !important;
     min-width: 0 !important;
