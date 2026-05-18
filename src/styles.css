@@ -2160,235 +2160,148 @@ select.custom-input1 option {
 /*------------------------------響應式佈局 (Media Queries)------------------------------*/
 @media (max-width: 1023px) {
 
-  /* =========================
-     TOP CARD
-  ========================== */
-
   .top-card {
     flex-direction: column !important;
-    padding: clamp(20px, 3vw, 32px) !important;
-    gap: 28px !important;
+    padding: clamp(16px, 3vw, 24px) !important;
+    gap: 24px !important;
   }
 
-  /* =========================
-     貓咪 + 對話框區塊
-  ========================== */
-
-  .top-card .flex.flex-col.lg\:flex-row.justify-center.items-center {
+  /* 貓咪 + 對話框 */
+  .top-card .flex.flex-col.lg\:flex-row {
     display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
     justify-content: center !important;
 
-    width: 100% !important;
-    max-width: 100% !important;
+    gap: clamp(12px, 3vw, 24px) !important;
 
-    gap: clamp(12px, 3vw, 28px) !important;
-
-    position: relative !important;
+    width: 100%;
+    max-width: 100%;
   }
 
-  /* =========================
-     貓咪圖片
-  ========================== */
+  /* 貓咪 */
+  .top-card .w-40.h-40 {
+    width: clamp(120px, 22vw, 200px) !important;
+    height: clamp(120px, 22vw, 200px) !important;
 
-  .top-card .w-40.h-40.md\:w-52.md\:h-52 {
-    width: clamp(120px, 22vw, 208px) !important;
-    height: clamp(120px, 22vw, 208px) !important;
-
-    flex-shrink: 0 !important;
+    flex-shrink: 0;
   }
 
-  /* =========================
-     Chat Bubble
-  ========================== */
-
+  /* bubble */
   .top-card .chat-bubble {
-
     position: relative !important;
 
-    width: clamp(160px, 30vw, 280px) !important;
+    width: clamp(140px, 28vw, 240px) !important;
 
     margin: 0 !important;
 
-    padding: clamp(10px, 2vw, 16px) !important;
+    animation: float 3s ease-in-out infinite;
 
-    flex-shrink: 1 !important;
-
-    animation: float 3s ease-in-out infinite !important;
+    flex-shrink: 1;
   }
 
   .top-card .chat-bubble p {
-
-    font-size: clamp(13px, 1.8vw, 20px) !important;
-
-    line-height: 1.5 !important;
+    font-size: clamp(12px, 1.8vw, 18px) !important;
   }
 
-  /* bubble 箭頭 */
+  @keyframes floatMobileCustomRow {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-6px); }
+  }
 
+  /* 箭頭指向貓咪臉頰 */
   .top-card .chat-bubble::before {
-
+    display: block !important;
     left: -10px !important;
-
-    top: 50% !important;
-
-    transform: translateY(-50%) !important;
+    top: 25px !important;
+    transform: none !important;
+    border-width: 6px 10px 6px 0 !important;
+    border-color: transparent #fff7ed transparent transparent !important;
   }
-
+  
   .top-card .chat-bubble::after {
-
+    display: block !important;
     left: -11px !important;
-
-    top: 50% !important;
-
-    transform: translateY(-50%) !important;
+    top: 25px !important;
+    transform: none !important;
+    border-width: 6px 11px 6px 0 !important;
+    border-color: transparent #fed7aa transparent transparent !important;
+    z-index: -1;
   }
 
-  /* =========================
-     右邊內容區
-  ========================== */
-
-  .top-card .flex-1.flex.flex-col {
-
-    width: 100% !important;
-
+  .top-card .flex-shrink-0 {
     max-width: 100% !important;
-
     min-width: 0 !important;
   }
 
-  /* =========================
-     Rewards Row
-  ========================== */
-
-  .top-card .flex.items-center.justify-between.flex-nowrap.mt-4.w-full.gap-4 {
-
-    display: flex !important;
-
-    flex-wrap: wrap !important;
-
-    justify-content: space-between !important;
-
-    align-items: center !important;
-
-    gap: 16px !important;
-
+  /* ================= 🌟 2. 右半邊容器（等級、Rewards）：寬度滿血大回歸 ================= */
+  .top-card .flex-1.flex.flex-col {
+    margin-top: 0 !important;
     width: 100% !important;
+    max-width: 100% !important;        /* 🌟 解鎖 100% 全寬舞台 */
+    align-items: stretch !important;    /* 🌟 強迫左右撐滿兩端拉開 */
   }
 
-  /* =========================
-     左邊 rewards items
-  ========================== */
-
-  .top-card .flex.items-center.flex-nowrap.gap-4.sm\:gap-6.flex-shrink-0 {
-
+  /* ================= 🌟 3. 百分百完美橫排（左邊放3物品、右邊放按鈕，永不縮小換行） ================= */
+  
+  /* 鎖死 Rewards 這整列：絕對不准換行，強制左右兩端極限對齊 */
+  .top-card .flex.items-center.justify-between.flex-nowrap {
     display: flex !important;
-
-    flex-wrap: nowrap !important;
-
+    flex-direction: row !important;
+    justify-content: space-between !important; /* 🌟 核心：物品永遠在左、按鈕永遠在右 */
     align-items: center !important;
-
-    gap: clamp(10px, 2vw, 20px) !important;
-
-    min-width: 0 !important;
+    flex-wrap: wrap !important;
+      gap: 16px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
 
-  /* =========================
-     rewards icon
-  ========================== */
+  /* 物品內圈容器：老老實實橫排 */
+  .top-card .flex.gap-3.sm\:gap-6.items-center.flex-nowrap,
+  .top-card .flex.gap-4.sm\:gap-6.items-center.flex-nowrap {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    gap: 16px !important;                      /* 維持工整漂亮的 16px 舒適物品間距 */
+    flex-shrink: 0 !important;
+  }
 
+  /* 🌟 三個項目小圖案：在任何中等、手機螢幕下都 100% 撐住大尺寸（64px/72px），絕對不需要變小！ */
   .top-card div[class*="relative flex flex-col items-center"] img {
-
-    width: clamp(44px, 7vw, 64px) !important;
-
-    height: clamp(44px, 7vw, 64px) !important;
-
+    width: 64px !important;                    
+    height: 64px !important;
     object-fit: contain !important;
   }
-
+  
   .top-card .w-18.h-16 {
-
-    width: clamp(52px, 8vw, 72px) !important;
-
-    height: clamp(44px, 7vw, 64px) !important;
+    width: 72px !important;                    
+    height: 64px !important;
   }
 
-  /* =========================
-     badge
-  ========================== */
-
-  .top-card .absolute.-top-2.-right-2 {
-
-    width: clamp(18px, 3vw, 22px) !important;
-
-    height: clamp(18px, 3vw, 22px) !important;
-
-    font-size: clamp(10px, 1.5vw, 12px) !important;
-  }
-
-  /* =========================
-     Feed Button
-  ========================== */
-
+  /* 🌟 Feed 按鈕防禦：100% 鋼筋死死鎖定靓麗橘色與最初的大尺寸，永不變小、也絕不變灰！ */
   .top-card .btn-feed {
+    margin: 0 !important;                      
+    background-color: #F9A158 !important;     /* 鎖死最美大橘色 */
+    color: #FFFAEF !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 12px rgba(249, 162, 88, 0.4) !important;
+    border: none !important;
+    
+    /* 🌟 元件規格原封不動：任何尺寸都不縮小，比例一模一樣 */
+  width: clamp(90px, 18vw, 130px) !important;
 
-    width: clamp(90px, 18vw, 130px) !important;
+  height: clamp(40px, 6vw, 50px) !important;
 
-    height: clamp(40px, 6vw, 50px) !important;
+  font-size: clamp(14px, 2vw, 20px) !important;
 
-    font-size: clamp(14px, 2vw, 20px) !important;
-
-    padding: 0 16px !important;
-
-    border-radius: 14px !important;
-
-    flex-shrink: 0 !important;
-
-    margin-left: auto !important;
+    flex-shrink: 0 !important;                 /* 強力防禦：不准被左右任何寬度壓扁 */
+    
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
-
-}
-
-
-/* =========================
-   手機版微調
-========================== */
-
-@media (max-width: 640px) {
-
-  .top-card {
-
-    padding: 20px 16px !important;
-  }
-
-  /* rewards 改上下排列 */
-
-  .top-card .flex.items-center.justify-between.flex-nowrap.mt-4.w-full.gap-4 {
-
-    flex-direction: column !important;
-
-    align-items: stretch !important;
-  }
-
-  /* feed button 滿版 */
-
-  .top-card .btn-feed {
-
-    width: 100% !important;
-
-    margin-left: 0 !important;
-  }
-
-  /* bubble 不要太大 */
-
-  .top-card .chat-bubble {
-
-    width: 100% !important;
-
-    max-width: 240px !important;
-  }
-
 
 
 }
