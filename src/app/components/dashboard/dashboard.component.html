@@ -34,42 +34,29 @@
 
       <span class="font-semibold text-gray-700">Rewards</span>
 
-      <div class="flex items-center justify-between flex-wrap lg:flex-nowrap gap-4 mt-2">
-        <div class="flex gap-6 items-center flex-wrap">
+<div class="flex items-center justify-between flex-nowrap gap-2 sm:gap-4 mt-2 w-full">
+  <div class="flex gap-3 sm:gap-6 items-center flex-nowrap">
 
-          <div class="relative flex flex-col items-center cursor-pointer" [class.selected]="selectedItem === 'fish'"
-            (click)="selectItem('fish')">
-            <img src="assets/fish.png" class="w-18 h-16 rounded-full scale-x-[-1]">
-            <span
-              class="absolute -top-2 -right-2 bg-orange-400 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
-              {{ user.fishCount }}
-            </span>
-          </div>
+    <div class="relative flex flex-col items-center cursor-pointer" [class.selected]="selectedItem === 'fish'" (click)="selectItem('fish')">
+      <img src="assets/fish.png" class="w-18 h-16 rounded-full scale-x-[-1]">
+      <span class="absolute -top-2 -right-2 bg-orange-400 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">{{ user.fishCount }}</span>
+    </div>
 
-          <div class="relative flex flex-col items-center cursor-pointer" [class.selected]="selectedItem === 'toy'"
-            (click)="selectItem('toy')">
-            <img src="assets/toy.png" class="w-16 h-16 rounded-full">
-            <span
-              class="absolute -top-2 -right-2 bg-orange-400 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
-              {{ user.toyCount }}
-            </span>
-          </div>
+    <div class="relative flex flex-col items-center cursor-pointer" [class.selected]="selectedItem === 'toy'" (click)="selectItem('toy')">
+      <img src="assets/toy.png" class="w-16 h-16 rounded-full">
+      <span class="absolute -top-2 -right-2 bg-orange-400 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">{{ user.toyCount }}</span>
+    </div>
 
-          <div class="relative flex flex-col items-center cursor-pointer" [class.selected]="selectedItem === 'heart'"
-            (click)="selectItem('heart')">
-            <img src="assets/heart.png" class="w-16 h-16 rounded-full">
-            <span
-              class="absolute -top-2 -right-2 bg-orange-400 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
-              {{ user.heartCount }}
-            </span>
-          </div>
-        </div>
+    <div class="relative flex flex-col items-center cursor-pointer" [class.selected]="selectedItem === 'heart'" (click)="selectItem('heart')">
+      <img src="assets/heart.png" class="w-16 h-16 rounded-full">
+      <span class="absolute -top-2 -right-2 bg-orange-400 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">{{ user.heartCount }}</span>
+    </div>
+  </div>
 
-        <button type="button"
-          class="btn-feed min-w-[130px] px-6 py-2 rounded-xl bg-orange-500 text-white font-bold shadow-lg hover:bg-orange-600 disabled:bg-gray-300"
-          (click)="feed(selectedItem)" [disabled]="isFeedDisabled()">Feed</button>
-
-      </div>
+  <button type="button"
+    class="btn-feed min-w-[100px] sm:min-w-[130px] px-4 sm:px-6 py-2 rounded-xl bg-orange-500 text-white font-bold shadow-lg hover:bg-orange-600 disabled:bg-gray-300 flex-shrink-0"
+    (click)="feed(selectedItem)" [disabled]="isFeedDisabled()">Feed</button>
+</div>
     </div>
   </div>
 
