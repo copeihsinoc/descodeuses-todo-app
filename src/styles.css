@@ -2162,55 +2162,62 @@ select.custom-input1 option {
 
   /* 1. 外殼舞台：保持橫向並排，並在大卡片裡水平置中 */
   .top-card .flex.flex-col.lg\:flex-row {
-    flex-direction: row !important;
+    flex-direction: row !important;      /* 保持橫向並排 */
     align-items: center !important;
-    justify-content: center !important;
+    justify-content: center !important;  /* 讓整個舞台置中 */
     position: relative !important;
     width: 100% !important;
-    max-w-width: 440px !important;
-    height: 220px !important;
-    margin: 0 auto !important;
+    max-width: 440px !important;         /* 稍微加大舞台，確保放得下大貓咪與移到更右邊的泡泡 */
+    height: 220px !important;            /* 固定舞台高度 */
+    margin: 0 auto !important;           /* 讓這個舞台在外層淡橘色大卡片裡絕對置中 */
     gap: 0 !important;
   }
 
   /* 2. 貓咪頭像：維持原本的放大尺寸（208px），並且在舞台裡「絕對正中央置中」 */
   .top-card .w-40.h-40 {
     position: absolute !important;
-    width: 208px !important;
+    width: 208px !important;             /* 維持本來的大尺寸 */
     height: 208px !important;
-    left: 50% !important;
+    left: 50% !important;                /* 推到大框架的 50% 中央 */
     top: 50% !important;
-    transform: translate(-50%, -50%) !important;
+    transform: translate(-50%, -50%) !important; /* 完美水平與垂直絕對置中！ */
     margin: 0 !important;
     z-index: 5 !important;
   }
 
-  /* 3. 浮空對話框：再度向右外推，達到 100% 完全不遮到貓咪任何毛髮的效果！ */
+  /* 3. 🌟 浮空對話框：再度向右外推，達到 100% 完全不遮到貓咪任何毛髮的效果！ */
   .top-card .chat-bubble {
     position: absolute !important;
+    
+    /* 🌟 終極微調坐標：
+       之前是 calc(50% + 60px)，現在我們把它加到 calc(50% + 110px)！
+       這樣泡泡的左側邊界，就會剛好落在置中貓咪（半寬104px）的身體外面，徹底移開、完全零遮擋！ */
     left: calc(50% + 110px) !important;   
-    top: 30px !important;
-    transform: none !important;
-    width: 150px !important;
-    padding: 10px !important;
+    top: 30px !important;                /* 控制泡泡的高度，讓它維持在右側偏上的可愛位置 */
+    transform: none !important;          
+    
+    width: 150px !important;             /* 保持精緻的小寬度 */
+    padding: 10px !important;            
     margin: 0 !important;
-    text-align: left !important;
+    text-align: left !important;         
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06) !important;
     z-index: 10 !important;
     animation: floatMobileCustomRow 3s ease-in-out infinite !important;
   }
 
+  /* 調整小泡泡內的字體，確保文字完美呈現 */
   .top-card .chat-bubble p {
     font-size: 13px !important;
     line-height: 1.4 !important;
   }
 
+  /* 4. 浮空動畫（上下微微晃動） */
   @keyframes floatMobileCustomRow {
     0%, 100% { transform: translateY(0px); }
     50% { transform: translateY(-6px); }
   }
 
-  /* 指向置中貓咪的小箭頭 */
+  /* 5. 🌟 同步調整指向貓咪的小箭頭位置，讓它看起來依舊從泡泡拉出來指向置中的小貓 */
   .top-card .chat-bubble::before {
     display: block !important;
     left: -10px !important;
@@ -2230,23 +2237,44 @@ select.custom-input1 option {
     z-index: -1;
   }
 
-  /* 4. 確保外殼寬度防禦 */
+  /* 6. 外殼寬度防禦 */
   .top-card .flex-shrink-0 {
     max-width: 100% !important;
     min-width: 0 !important;
   }
 
-  /* 5. 讓右半邊整體容器在縮小時稍微調整一下與置中貓咪的上下間距 */
+  /* ================= 🌟 2. 新增：右半邊 Rewards 與進度條美化控制 ================= */
+  
+  /* 讓等級條、Your Cat 標題等在小螢幕時自動整體居中，看起來不歪斜 */
   .top-card .flex-1.flex.flex-col {
-    margin-top: 20px !important;
+    align-items: center !important;
+    text-align: center !important;
+    width: 100% !important;
+    max-width: 480px !important;
+    margin: 0 auto !important;
+  }
+
+  /* 🌟 核心修正：強制讓裝著 3 個小圖案與 Feed 按鈕的外殼，在小螢幕下也水平置中排列 */
+  .top-card .justify-between.flex-wrap {
+    justify-content: center !important;
+    gap: 16px !important;
     width: 100% !important;
   }
 
-  /* 縮放頁面時，讓 3 個獎勵小圖案保持 48px 大小，在小螢幕時最好看 */
-  .top-card .w-18.h-16,
-  .top-card .w-16.h-16 {
-    width: 48px !important;
-    height: 48px !important;
+  /* 🌟 核心修正：強制這 3 個獎勵圖案（魚、肉球、心）永遠保持「橫向一整排」，絕不垂直掉下去！ */
+  .top-card .flex.gap-6.items-center.flex-wrap {
+    flex-direction: row !important;    /* 強制橫排 */
+    justify-content: center !important; /* 置中 */
+    gap: 20px !important;               /* 縮小一點點間距防止爆開 */
+    flex-wrap: nowrap !important;       /* 🌟 嚴格禁止換行掉下去！ */
+  }
+
+  /* 讓 Feed 按鈕在縮小時跟著精緻居中，不歪去右邊 */
+  .top-card .btn-feed {
+    margin: 0 auto !important;
+    width: 120px !important;
+    height: 44px !important;
+    font-size: 1.1rem !important;
   }
 
 }
