@@ -2158,10 +2158,16 @@ select.custom-input1 option {
 }
 
 /*------------------------------響應式佈局 (Media Queries)------------------------------*/
-/*------------------------------ 🌟 響應式佈局全面校正 (Media Queries) ------------------------------*/
 @media (max-width: 1023px) {
 
-  /* ================= 1. 貓咪與對話框流體彈性控制 ================= */
+  /* 🌟 終極通關核心：強迫整張淡橘色大卡片在小螢幕時轉為垂直排列 (flex-column)，徹底解放右半邊寬度限制！ */
+  .top-card {
+    flex-direction: column !important;
+    padding: 24px 20px !important;
+    gap: 24px !important;
+  }
+
+  /* 1. 貓咪頭像與對話框的專屬圓形大舞台 */
   .top-card .flex.flex-col.lg\:flex-row {
     flex-direction: row !important;
     align-items: center !important;
@@ -2174,6 +2180,7 @@ select.custom-input1 option {
     gap: 0 !important;
   }
 
+  /* 貓咪頭像：維持原本最完美的放大尺寸（208px），在大舞台中央絕對置中 */
   .top-card .w-40.h-40 {
     position: absolute !important;
     width: 208px !important;
@@ -2185,15 +2192,13 @@ select.custom-input1 option {
     z-index: 5 !important;
   }
 
-  /* 🌟 絲滑修正一：讓對話框的寬度與定位隨著視窗寬度 (vw) 產生漸進流動，拒絕突兀跳躍！ */
+  /* 浮空對話框：完美向右外推 110px 且帶有滑順浮空動畫，100% 絕不遮臉 */
   .top-card .chat-bubble {
     position: absolute !important;
-    /* 隨著寬度平滑移動，拉小時自動往左靠攏 */
-    left: calc(50% + 10vw) !important;   
+    left: calc(50% + 110px) !important;   
     top: 30px !important;
     transform: none !important;
-    /* 🌟 寬度流體化：在 120px 到 160px 之間跟著網頁平滑伸縮變大變小 */
-    width: clamp(120px, 15vw, 160px) !important;
+    width: 150px !important;
     padding: 10px !important;
     margin: 0 !important;
     text-align: left !important;
@@ -2203,7 +2208,7 @@ select.custom-input1 option {
   }
 
   .top-card .chat-bubble p {
-    font-size: clamp(11px, 1.2vw, 13px) !important; /* 字體同步絲滑縮放 */
+    font-size: 13px !important;
     line-height: 1.4 !important;
   }
 
@@ -2212,6 +2217,7 @@ select.custom-input1 option {
     50% { transform: translateY(-6px); }
   }
 
+  /* 箭頭指向貓咪臉頰 */
   .top-card .chat-bubble::before {
     display: block !important;
     left: -10px !important;
@@ -2236,60 +2242,65 @@ select.custom-input1 option {
     min-width: 0 !important;
   }
 
-  /* ================= 🌟 2. 右半邊整體外殼：徹底解鎖寬度 ================= */
+  /* ================= 🌟 2. 右半邊容器（等級、Rewards）：寬度滿血大回歸 ================= */
   .top-card .flex-1.flex.flex-col {
-    margin-top: 20px !important;
+    margin-top: 0 !important;
     width: 100% !important;
-    max-width: 100% !important;        
-    align-items: stretch !important;    
+    max-width: 100% !important;        /* 🌟 解鎖 100% 全寬舞台 */
+    align-items: stretch !important;    /* 🌟 強迫左右撐滿兩端拉開 */
   }
 
-  /* ================= 🌟 3. 完美絲滑兩端拉開（過渡期流體縮小，最終手機版維持原尺寸） ================= */
+  /* ================= 🌟 3. 百分百完美橫排（左邊放3物品、右邊放按鈕，永不縮小換行） ================= */
   
-  /* 鎖死外層橫排不換行，左物品、右按鈕 */
+  /* 鎖死 Rewards 這整列：絕對不准換行，強制左右兩端極限對齊 */
   .top-card .flex.items-center.justify-between.flex-nowrap {
     display: flex !important;
     flex-direction: row !important;
-    justify-content: space-between !important; 
+    justify-content: space-between !important; /* 🌟 核心：物品永遠在左、按鈕永遠在右 */
     align-items: center !important;
-    flex-wrap: nowrap !important;              
+    flex-wrap: nowrap !important;              /* 🌟 核心：死都不准換行掉下去 */
     width: 100% !important;
     box-sizing: border-box !important;
   }
 
-  /* 3個物品格子的內容器 */
-  .top-card .flex.items-center.flex-nowrap.gap-3.sm\:gap-4 {
+  /* 物品內圈容器：老老實實橫排 */
+  .top-card .flex.gap-3.sm\:gap-6.items-center.flex-nowrap,
+  .top-card .flex.gap-4.sm\:gap-6.items-center.flex-nowrap {
     display: flex !important;
     flex-direction: row !important;
     justify-content: flex-start !important;
     align-items: center !important;
     flex-wrap: nowrap !important;
-    /* 🌟 絲滑修正二：圖標之間的間距改用 vw 視窗百分比！拉動時它們會非常自然、慢慢地向左擠靠攏 */
-    gap: clamp(6px, 1.8vw, 16px) !important; 
-    flex-shrink: 1 !important; /* 允許過渡期小幅度內縮移動 */
+    gap: 16px !important;                      /* 維持工整漂亮的 16px 舒適物品間距 */
+    flex-shrink: 0 !important;
   }
 
-  /* 🌟 絲滑修正三：利用 clamp 函數，讓這 3 個 Rewards 的圖標大小在中螢幕過渡期「跟著滑鼠流暢變小（從 64px 縮到 46px）」，騰出完美的移動避讓空間；但當妳一縮到最小的手機版頁面，它們又會乖乖撐回最漂亮的原始大尺寸，絕不影響手機版視覺！ */
-  .fluid-reward-img {
-    width: clamp(46px, 6.5vw, 64px) !important;
-    height: clamp(46px, 6.5vw, 64px) !important;
-    transition: width 0.1s linear, height 0.1s linear !important; /* 讓拖曳反應極致流暢 */
+  /* 🌟 三個項目小圖案：在任何中等、手機螢幕下都 100% 撐住大尺寸（64px/72px），絕對不需要變小！ */
+  .top-card div[class*="relative flex flex-col items-center"] img {
+    width: 64px !important;                    
+    height: 64px !important;
+    object-fit: contain !important;
+  }
+  
+  .top-card .w-18.h-16 {
+    width: 72px !important;                    
+    height: 64px !important;
   }
 
-  /* 🌟 靚麗大橘 Feed 按鈕：100% 保證妳要的最初最完美的大尺寸，死都拒絕縮小，老實貼在最右側邊界 */
+  /* 🌟 Feed 按鈕防禦：100% 鋼筋死死鎖定靓麗橘色與最初的大尺寸，永不變小、也絕不變灰！ */
   .top-card .btn-feed {
     margin: 0 !important;                      
-    background-color: #F9A158 !important;     
+    background-color: #F9A158 !important;     /* 鎖死最美大橘色 */
     color: #FFFAEF !important;
     border-radius: 12px !important;
     box-shadow: 0 4px 12px rgba(249, 162, 88, 0.4) !important;
     border: none !important;
     
-    /* 鋼筋鎖死大螢幕尺寸規格：完全不縮小、不褪色 */
-    width: 130px !important;                   
-    height: 50px !important;                   
-    font-size: 1.25rem !important;             
-    flex-shrink: 0 !important;                 /* 強力防禦：任何寬度下都不准被壓扁 */
+    /* 🌟 元件規格原封不動：任何尺寸都不縮小，比例一模一樣 */
+    width: 130px !important;                   /* 100% 維持原本大按鈕的 130px 寬度 */
+    height: 50px !important;                   /* 100% 維持原本大按鈕的 50px 高度 */
+    font-size: 1.25rem !important;             /* 100% 維持原本大按鈕的字體大小 */
+    flex-shrink: 0 !important;                 /* 強力防禦：不准被左右任何寬度壓扁 */
     
     display: flex !important;
     align-items: center !important;
