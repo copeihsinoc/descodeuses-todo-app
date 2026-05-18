@@ -2158,24 +2158,29 @@ select.custom-input1 option {
 }
 
 /*------------------------------響應式佈局 (Media Queries)------------------------------*/
-/*------------------------------ 🌟 響應式佈局全面校正 (Media Queries) ------------------------------*/
-/*------------------------------ 🌟 響應式佈局全面校正 (Media Queries) ------------------------------*/
 @media (max-width: 1023px) {
 
-  /* 1. 外殼舞台：保持橫向並排，並在大卡片裡水平置中 */
+  /* 1. 外殼舞台：移除固定的 max-width 與 height，改用自然寬度與 padding，確保兩邊間距與外層完全同步 */
   .top-card .flex.flex-col.lg\:flex-row {
-    flex-direction: row !important;
+    flex-direction: column !important; /* 手機平板統一為上下層，但上方貓咪自成一格橫向舞台 */
     align-items: center !important;
     justify-content: center !important;
-    position: relative !important;
     width: 100% !important;
-    max-width: 440px !important;
-    height: 220px !important;
     margin: 0 auto !important;
-    gap: 0 !important;
+    gap: 1.5rem !important; /* 上下層的間距 */
   }
 
-  /* 2. 貓咪頭像：維持原本的放大尺寸（208px），並且在舞台裡「絕對正中央置中」 */
+  /* 新增：單獨包覆貓咪與對話框的舞台區 */
+  .cat-stage {
+    position: relative !important;
+    width: 100% !important;
+    max-width: 440px !important; /* 只有貓咪對話框舞台限寬 */
+    height: 220px !important;
+    margin: 0 auto !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* 2. 貓咪頭像：在 .cat-stage 舞台裡「絕對正中央置中」 */
   .top-card .w-40.h-40 {
     position: absolute !important;
     width: 208px !important;
@@ -2187,13 +2192,13 @@ select.custom-input1 option {
     z-index: 5 !important;
   }
 
-  /* 3. 浮空對話框：再度向右外推，達到 100% 完全不遮到貓咪任何毛髮的效果！ */
+  /* 3. 浮空對話框：相對於 .cat-stage 舞台定位 */
   .top-card .chat-bubble {
     position: absolute !important;
-    left: calc(50% + 110px) !important;   
+    left: calc(50% + 105px) !important;   
     top: 30px !important;
     transform: none !important;
-    width: 150px !important;
+    width: 140px !important;
     padding: 10px !important;
     margin: 0 !important;
     text-align: left !important;
@@ -2212,6 +2217,7 @@ select.custom-input1 option {
     50% { transform: translateY(-6px); }
   }
 
+  /* 對話框箭頭樣式保持 */
   .top-card .chat-bubble::before {
     display: block !important;
     left: -10px !important;
@@ -2231,21 +2237,20 @@ select.custom-input1 option {
     z-index: -1;
   }
 
-  .top-card .flex-shrink-0 {
-    max-width: 100% !important;
-    min-width: 0 !important;
-  }
-
+  /* 4. 下方 Your Cat 資訊區：強制寬度 100% 滿版，繼承外層相同的 Padding */
   .top-card .flex-1.flex.flex-col {
-    margin-top: 20px !important;
+    margin-top: 0 !important;
     width: 100% !important;
+    align-items: center !important; /* 讓內容物在區塊內全面置中 */
   }
 
-  .top-card .w-18.h-16,
+  /* 縮小道具圖片 */
+  .top-card .w-14.h-14,
   .top-card .w-16.h-16 {
     width: 48px !important;
     height: 48px !important;
   }
+
 
 
 
