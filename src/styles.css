@@ -2233,66 +2233,68 @@ select.custom-input1 option {
     min-width: 0 !important;
   }
 
-  /* ================= 🌟 2. 右半邊整體寬度防禦 ================= */
+  /* ================= 🌟 2. 右半邊大外殼寬度解鎖（間距能自動縮短的關鍵！） ================= */
   .top-card .flex-1.flex.flex-col {
     margin-top: 20px !important;
     width: 100% !important;
-    align-items: stretch !important; 
+    max-width: 100% !important;        /* 🌟 強制解鎖右側外殼的寬度限制，讓它有 100% 彈性空間 */
+    align-items: stretch !important;    /* 🌟 改成 stretch，讓裡面的並排可以完美左右拉開、流動伸縮 */
   }
 
-  /* ================= 🌟 3. 完美兩端拉開（Flexible 且維持元件原尺寸不縮小） ================= */
+  /* ================= 🌟 3. 完美兩端拉開（空白間距彈性流動，元件 100% 保持大原尺寸） ================= */
   
   /* 強制覆蓋外層容器：粉碎任何換行魔咒，無論寬度多窄，永遠維持左邊物品、右邊按鈕兩端完美拉開！ */
   .top-card .flex.items-center.justify-between.flex-nowrap {
     display: flex !important;
     flex-direction: row !important;
-    justify-content: space-between !important; /* 🌟 永遠保持兩端對齊 */
+    justify-content: space-between !important; /* 永遠保持左右兩端對齊 */
     align-items: center !important;
-    flex-wrap: nowrap !important;              /* 🌟 核心防禦：打死都不準換行斷行 */
+    flex-wrap: nowrap !important;              /* 強制絕對不准換行斷行 */
     width: 100% !important;
-    gap: 12px !important;                      /* 給予舒適的最小邊距保護 */
+    box-sizing: border-box !important;
   }
 
-  /* 強制物品容器也絕不換行 */
+  /* 強制物品容器也絕不換行，並維持原汁原味的舒服間距 */
   .top-card .flex.gap-3.sm\:gap-6.items-center.flex-nowrap {
     display: flex !important;
     flex-direction: row !important;
     justify-content: flex-start !important;
     align-items: center !important;
     flex-wrap: nowrap !important;              /* 嚴禁小物品自己掉下去 */
-    gap: 16px !important;                      /* 縮小一點圖標間距（電腦版是 gap-6 = 24px，這裡定死為舒適的 16px） */
+    gap: 16px !important;                      /* 縮小一點圖標間距至工整的 16px，幫橫向釋放更多空白空間 */
   }
 
-  /* 🌟 核心：三個獎勵小圖案在小螢幕、手機版上「完全不縮小」，繼續維持原本放大的尺寸！ */
+  /* 🌟 三個獎勵小圖案：100% 保持妳最愛的最初原本大尺寸，死都不變小！ */
   .top-card div[class*="relative flex flex-col items-center"] img {
-    width: 64px !important;                    /* 16 * 4px = 64px，100% 維持原本大圖大小 */
+    width: 64px !important;                    /* 鎖定 64px，維持原本大圖大小 */
     height: 64px !important;
     object-fit: contain !important;
   }
   
   .top-card .w-18.h-16 {
-    width: 72px !important;                    /* 18 * 4px = 72px，小魚圖案同樣維持原本大小 */
+    width: 72px !important;                    /* 小魚圖案同樣維持原版 72px 大小 */
     height: 64px !important;
   }
 
-  /* 🌟 終極防禦：100% 強制鎖定客製化靚麗橘色與原版尺寸，消滅退化成灰色原生按鈕的 bug */
+  /* 🌟 Feed 按鈕防禦：100% 強制鎖定靚麗橘色與最初的大尺寸，絕對不縮小、也絕不變灰！ */
   .top-card .btn-feed {
-    margin: 0 !important;                      /* 清除居中外距干擾 */
-    background-color: #F9A158 !important;     /* 🌟 鎖死高質感橘色，絕不變灰！ */
+    margin: 0 !important;                      /* 清除外距干擾 */
+    background-color: #F9A158 !important;     /* 鎖死高質感橘色 */
     color: #FFFAEF !important;
     border-radius: 12px !important;
     box-shadow: 0 4px 12px rgba(249, 162, 88, 0.4) !important;
     border: none !important;
     
-    /* 🌟 尺寸規格完整鎖定：完全不用變小，維持之前最漂亮的精緻比例 */
-    width: 130px !important;                   /* 100% 維持原本大按鈕的寬度 */
-    height: 50px !important;                   /* 100% 維持原本大按鈕的高度 */
-    font-size: 1.25rem !important;             /* 100% 維持原本大按鈕的字體大小 */
-    flex-shrink: 0 !important;                 /* 🌟 核心防禦：防止按鈕被兩側擠壓變形或壓扁 */
+    /* 🌟 尺寸規格完整定死：完全不准縮小，維持最初最完美的黃金大比例 */
+    width: 130px !important;                   /* 維持原本大按鈕的 130px 寬度 */
+    height: 50px !important;                   /* 維持原本大按鈕的 50px 高度 */
+    font-size: 1.25rem !important;             /* 維持原本大按鈕的字體大小 */
+    flex-shrink: 0 !important;                 /* 🌟 最重要防禦：防止按鈕在頁面變窄時被硬生生擠扁 */
     
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
   }
+
 
 }
