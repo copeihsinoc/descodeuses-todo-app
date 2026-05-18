@@ -1162,4 +1162,38 @@ select.custom-input1 option {
     max-width: 100% !important;
     min-width: 0 !important;
   }
+
+  /* ================= 🌟 2. 新增：右半邊 Rewards 與進度條美化控制 ================= */
+  
+  /* 讓等級條、Your Cat 標題等在小螢幕時自動整體居中，看起來不歪斜 */
+  .top-card .flex-1.flex.flex-col {
+    align-items: center !important;
+    text-align: center !important;
+    width: 100% !important;
+    max-width: 480px !important;
+    margin: 0 auto !important;
+  }
+
+  /* 🌟 核心修正：強制讓裝著 3 個小圖案與 Feed 按鈕的外殼，在小螢幕下也水平置中排列 */
+  .top-card .justify-between.flex-wrap {
+    justify-content: center !important;
+    gap: 16px !important;
+    width: 100% !important;
+  }
+
+  /* 🌟 核心修正：強制這 3 個獎勵圖案（魚、肉球、心）永遠保持「橫向一整排」，絕不垂直掉下去！ */
+  .top-card .flex.gap-6.items-center.flex-wrap {
+    flex-direction: row !important;    /* 強制橫排 */
+    justify-content: center !important; /* 置中 */
+    gap: 20px !important;               /* 縮小一點點間距防止爆開 */
+    flex-wrap: nowrap !important;       /* 🌟 嚴格禁止換行掉下去！ */
+  }
+
+  /* 讓 Feed 按鈕在縮小時跟著精緻居中，不歪去右邊 */
+  .top-card .btn-feed {
+    margin: 0 auto !important;
+    width: 120px !important;
+    height: 44px !important;
+    font-size: 1.1rem !important;
+  }
 }
