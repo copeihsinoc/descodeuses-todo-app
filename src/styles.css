@@ -2158,112 +2158,72 @@ select.custom-input1 option {
 }
 
 /*------------------------------響應式佈局 (Media Queries)------------------------------*/
+/*------------------------------ 🌟 響應式佈局全面校正 (Media Queries) ------------------------------*/
 @media (max-width: 1023px) {
 
-  /* 🌟 終極通關核心：強迫整張淡橘色大卡片在小螢幕時轉為垂直排列 (flex-column)，徹底解放右半邊寬度限制！ */
+  /* 1. 當螢幕變窄時，大外殼卡片轉為直向，徹底解放右半邊寬度限制 */
   .top-card {
     flex-direction: column !important;
-    padding: 24px 20px !important;
-    gap: 24px !important;
-  }
-
-  /* 1. 貓咪頭像與對話框的專屬圓形大舞台 */
-  .top-card .flex.flex-col.lg\:flex-row {
-    flex-direction: row !important;
     align-items: center !important;
-    justify-content: center !important;
-    position: relative !important;
-    width: 100% !important;
-    max-width: 440px !important;
-    height: 220px !important;
-    margin: 0 auto !important;
-    gap: 0 !important;
+    gap: 24px !important;
+    padding: 24px 16px !important;
   }
 
-  /* 貓咪頭像：維持原本最完美的放大尺寸（208px），在大舞台中央絕對置中 */
+  /* 貓咪置中排好 */
+  .top-card .flex-shrink-0.relative {
+    width: auto !important;
+  }
+  
   .top-card .w-40.h-40 {
-    position: absolute !important;
-    width: 208px !important;
+    width: 208px !important; /* 保持最漂亮的大貓咪尺寸 */
     height: 208px !important;
-    left: 50% !important;
-    top: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    margin: 0 !important;
-    z-index: 5 !important;
   }
 
-  /* 浮空對話框：完美向右外推 110px 且帶有滑順浮空動畫，100% 絕不遮臉 */
-  .top-card .chat-bubble {
-    position: absolute !important;
-    left: calc(50% + 110px) !important;   
-    top: 30px !important;
-    transform: none !important;
-    width: 150px !important;
-    padding: 10px !important;
-    margin: 0 !important;
-    text-align: left !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06) !important;
-    z-index: 10 !important;
-    animation: floatMobileCustomRow 3s ease-in-out infinite !important;
-  }
-
-  .top-card .chat-bubble p {
-    font-size: 13px !important;
-    line-height: 1.4 !important;
-  }
-
-  @keyframes floatMobileCustomRow {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-6px); }
-  }
-
-  /* 箭頭指向貓咪臉頰 */
-  .top-card .chat-bubble::before {
-    display: block !important;
-    left: -10px !important;
-    top: 25px !important;
-    transform: none !important;
-    border-width: 6px 10px 6px 0 !important;
-    border-color: transparent #fff7ed transparent transparent !important;
-  }
-  
-  .top-card .chat-bubble::after {
-    display: block !important;
-    left: -11px !important;
-    top: 25px !important;
-    transform: none !important;
-    border-width: 6px 11px 6px 0 !important;
-    border-color: transparent #fed7aa transparent transparent !important;
-    z-index: -1;
-  }
-
-  .top-card .flex-shrink-0 {
+  /* 🌟 對話框：回歸最自然的相對定位，並隨著大外殼百分之百滑順向左微調 */
+  .chat-bubble {
+    margin-left: 0 !important;
+    margin-top: 12px !important;
     max-width: 100% !important;
-    min-width: 0 !important;
+    width: 280px !important; /* 保持精緻適中的寬度 */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06) !important;
   }
 
-  /* ================= 🌟 2. 右半邊容器（等級、Rewards）：寬度滿血大回歸 ================= */
+  /* 修正手機版對話框的指向箭頭改為朝上，指著上方的貓咪 */
+  .chat-bubble::before {
+    left: 50% !important;
+    top: -8px !important;
+    transform: translateX(-50%) !important;
+    border-width: 0 8px 8px 8px !important;
+    border-color: transparent transparent #fff7ed transparent !important;
+  }
+
+  .chat-bubble::after {
+    left: 50% !important;
+    top: -9px !important;
+    transform: translateX(-50%) !important;
+    border-width: 0 8px 9px 8px !important;
+    border-color: transparent transparent #fed7aa transparent transparent !important;
+  }
+
+  /* 2. 右半邊（進度條、Rewards、按鈕）容器 */
   .top-card .flex-1.flex.flex-col {
-    margin-top: 0 !important;
     width: 100% !important;
-    max-width: 100% !important;        /* 🌟 解鎖 100% 全寬舞台 */
-    align-items: stretch !important;    /* 🌟 強迫左右撐滿兩端拉開 */
+    max-width: 100% !important;
+    align-items: stretch !important;
   }
 
-  /* ================= 🌟 3. 百分百完美橫排（左邊放3物品、右邊放按鈕，永不縮小換行） ================= */
-  
-  /* 鎖死 Rewards 這整列：絕對不准換行，強制左右兩端極限對齊 */
+  /* 🌟 3. 完美兩端拉開（空白間距彈性流動，元件 100% 保持原本的大尺寸不變小） */
   .top-card .flex.items-center.justify-between.flex-nowrap {
     display: flex !important;
     flex-direction: row !important;
-    justify-content: space-between !important; /* 🌟 核心：物品永遠在左、按鈕永遠在右 */
+    justify-content: space-between !important; /* 🌟 確保物品在左、按鈕在右 */
     align-items: center !important;
-    flex-wrap: nowrap !important;              /* 🌟 核心：死都不准換行掉下去 */
+    flex-wrap: nowrap !important;              /* 🌟 核心防禦：打死都不准換行斷行 */
     width: 100% !important;
     box-sizing: border-box !important;
   }
 
-  /* 物品內圈容器：老老實實橫排 */
+  /* 3個 Rewards 橫向容器，不縮小 */
   .top-card .flex.gap-3.sm\:gap-6.items-center.flex-nowrap,
   .top-card .flex.gap-4.sm\:gap-6.items-center.flex-nowrap {
     display: flex !important;
@@ -2271,11 +2231,11 @@ select.custom-input1 option {
     justify-content: flex-start !important;
     align-items: center !important;
     flex-wrap: nowrap !important;
-    gap: 16px !important;                      /* 維持工整漂亮的 16px 舒適物品間距 */
+    gap: 16px !important;                      /* 物品之間維持舒服的 16px 固定間距 */
     flex-shrink: 0 !important;
   }
 
-  /* 🌟 三個項目小圖案：在任何中等、手機螢幕下都 100% 撐住大尺寸（64px/72px），絕對不需要變小！ */
+  /* 🌟 核心：三個獎勵小圖案 100% 撐住大尺寸（64px/72px），絕對不需要變小！ */
   .top-card div[class*="relative flex flex-col items-center"] img {
     width: 64px !important;                    
     height: 64px !important;
@@ -2287,25 +2247,25 @@ select.custom-input1 option {
     height: 64px !important;
   }
 
-  /* 🌟 Feed 按鈕防禦：100% 鋼筋死死鎖定靓麗橘色與最初的大尺寸，永不變小、也絕不變灰！ */
+  /* 🌟 Feed 按鈕防禦：100% 強制鎖定靚麗大橘色與原版尺寸規格，絕不變小也不變灰！ */
   .top-card .btn-feed {
     margin: 0 !important;                      
-    background-color: #F9A158 !important;     /* 鎖死最美大橘色 */
+    background-color: #F9A158 !important;     
     color: #FFFAEF !important;
     border-radius: 12px !important;
     box-shadow: 0 4px 12px rgba(249, 162, 88, 0.4) !important;
     border: none !important;
     
-    /* 🌟 元件規格原封不動：任何尺寸都不縮小，比例一模一樣 */
     width: 130px !important;                   /* 100% 維持原本大按鈕的 130px 寬度 */
     height: 50px !important;                   /* 100% 維持原本大按鈕的 50px 高度 */
     font-size: 1.25rem !important;             /* 100% 維持原本大按鈕的字體大小 */
-    flex-shrink: 0 !important;                 /* 強力防禦：不准被左右任何寬度壓扁 */
+    flex-shrink: 0 !important;                 /* 強力防禦：防止按鈕被兩側寬度擠歪 */
     
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
   }
+
 
 
 }
