@@ -2161,7 +2161,7 @@ select.custom-input1 option {
 /*------------------------------ 🌟 響應式佈局全面校正 (Media Queries) ------------------------------*/
 @media (max-width: 1023px) {
 
-  /* ================= 1. 貓咪與對話框設定（完全保留妳最愛的絕對置中右偏） ================= */
+  /* ================= 1. 貓咪與對話框設定（完全保留妳最愛的絕對置中、右偏完全不遮臉） ================= */
   .top-card .flex.flex-col.lg\:flex-row {
     flex-direction: row !important;
     align-items: center !important;
@@ -2233,58 +2233,63 @@ select.custom-input1 option {
     min-width: 0 !important;
   }
 
-  /* ================= 🌟 2. 右半邊（等級與進度條欄位）優化 ================= */
+  /* ================= 🌟 2. 右半邊整體寬度防禦 ================= */
   .top-card .flex-1.flex.flex-col {
     margin-top: 20px !important;
     width: 100% !important;
     align-items: stretch !important; 
   }
 
-  /* ================= 🌟 3. 深度修正：強制鎖死「左右拉開、等比例流動縮放」 ================= */
+  /* ================= 🌟 3. 完美兩端拉開（Flexible 且維持元件原尺寸不縮小） ================= */
   
-  /* 強制覆蓋外層容器：粉碎換行魔咒，無論寬度多窄，永遠維持左邊物品、右邊按鈕兩端拉開！ */
+  /* 強制覆蓋外層容器：粉碎任何換行魔咒，無論寬度多窄，永遠維持左邊物品、右邊按鈕兩端完美拉開！ */
   .top-card .flex.items-center.justify-between.flex-nowrap {
     display: flex !important;
     flex-direction: row !important;
-    justify-content: space-between !important; /* 永遠左右兩端對齊 */
+    justify-content: space-between !important; /* 🌟 永遠保持兩端對齊 */
     align-items: center !important;
-    flex-wrap: nowrap !important;              /* 強制絕對不准換行斷行 */
+    flex-wrap: nowrap !important;              /* 🌟 核心防禦：打死都不準換行斷行 */
     width: 100% !important;
-    gap: 8px !important;
+    gap: 12px !important;                      /* 給予舒適的最小邊距保護 */
   }
 
-  /* 強制物品容器也絕不換行，並且讓物品格子隨視窗縮小自動拉近距離 */
-  .top-card .flex.gap-3.sm:gap-6.items-center.flex-nowrap {
+  /* 強制物品容器也絕不換行 */
+  .top-card .flex.gap-3.sm\:gap-6.items-center.flex-nowrap {
     display: flex !important;
     flex-direction: row !important;
     justify-content: flex-start !important;
     align-items: center !important;
     flex-wrap: nowrap !important;              /* 嚴禁小物品自己掉下去 */
-    gap: 1.5vw !important;                     /* 🌟 間距隨視窗寬度彈性縮短，極度絲滑！ */
+    gap: 16px !important;                      /* 縮小一點圖標間距（電腦版是 gap-6 = 24px，這裡定死為舒適的 16px） */
   }
 
-  /* 🌟 核心修正：讓 3 個獎勵項目小圖案在小螢幕下流動式等比例變小，騰出完美的橫向空間 */
+  /* 🌟 核心：三個獎勵小圖案在小螢幕、手機版上「完全不縮小」，繼續維持原本放大的尺寸！ */
   .top-card div[class*="relative flex flex-col items-center"] img {
-    width: clamp(36px, 6vw, 64px) !important;  /* 🌟 使用響應式自適應函數，讓圖片在手機上等比例縮小，絕不擠爆！ */
-    height: clamp(36px, 6vw, 64px) !important;
+    width: 64px !important;                    /* 16 * 4px = 64px，100% 維持原本大圖大小 */
+    height: 64px !important;
     object-fit: contain !important;
   }
+  
+  .top-card .w-18.h-16 {
+    width: 72px !important;                    /* 18 * 4px = 72px，小魚圖案同樣維持原本大小 */
+    height: 64px !important;
+  }
 
-  /* 🌟 徹底消滅灰色按鈕 bug：高強度鎖死 Feed 按鈕的精緻橘色樣式，並跟著寬度等比例縮小寬度 */
+  /* 🌟 終極防禦：100% 強制鎖定客製化靚麗橘色與原版尺寸，消滅退化成灰色原生按鈕的 bug */
   .top-card .btn-feed {
-    margin: 0 !important;                      /* 清除居中干擾 */
-    background-color: #F9A158 !important;     /* 100% 強制鎖定客製化靚麗橘色，絕不變灰！ */
+    margin: 0 !important;                      /* 清除居中外距干擾 */
+    background-color: #F9A158 !important;     /* 🌟 鎖死高質感橘色，絕不變灰！ */
     color: #FFFAEF !important;
     border-radius: 12px !important;
     box-shadow: 0 4px 12px rgba(249, 162, 88, 0.4) !important;
     border: none !important;
     
-    /* 彈性自適應寬高與字體 */
-    width: clamp(75px, 12vw, 110px) !important;/* 🌟 按鈕寬度隨著視窗比例自動變小，但絕對不會爆開 */
-    height: 38px !important;                   /* 稍微下降高度符合小螢幕比例 */
-    font-size: clamp(12px, 2.2vw, 15px) !important; /* 字體跟著等比例變小 */
-    padding: 0 6px !important;
-    flex-shrink: 0 !important;                 /* 🌟 嚴格防禦：防止按鈕在極窄狀態下被左右擠扁 */
+    /* 🌟 尺寸規格完整鎖定：完全不用變小，維持之前最漂亮的精緻比例 */
+    width: 130px !important;                   /* 100% 維持原本大按鈕的寬度 */
+    height: 50px !important;                   /* 100% 維持原本大按鈕的高度 */
+    font-size: 1.25rem !important;             /* 100% 維持原本大按鈕的字體大小 */
+    flex-shrink: 0 !important;                 /* 🌟 核心防禦：防止按鈕被兩側擠壓變形或壓扁 */
+    
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
