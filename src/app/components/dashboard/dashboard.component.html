@@ -34,33 +34,34 @@
 
       <span class="font-semibold text-gray-700">Rewards</span>
 
-<div class="rewards-flex-container flex items-center justify-between flex-nowrap mt-2 w-full">
+<div class="flex items-center justify-between flex-nowrap mt-3 w-full gap-2">
         
-        <div class="cat-rewards-items flex items-center flex-nowrap">
+        <div class="flex items-center flex-nowrap gap-3 sm:gap-6 flex-shrink min-w-0">
 
-          <div class="relative flex flex-col items-center cursor-pointer" [class.selected]="selectedItem === 'fish'" (click)="selectItem('fish')">
-            <img src="assets/fish.png" class="reward-img-icon scale-x-[-1]">
-            <span class="reward-badge-num absolute -top-1 -right-1 bg-orange-400 text-white flex items-center justify-center">
+          <div class="relative flex flex-col items-center cursor-pointer flex-shrink" [class.selected]="selectedItem === 'fish'" (click)="selectItem('fish')">
+            <img src="assets/fish.png" class="w-12 h-12 sm:w-18 sm:h-16 object-contain rounded-full scale-x-[-1]">
+            <span class="absolute -top-1.5 -right-1.5 bg-orange-400 text-white text-[10px] sm:text-xs w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center">
               {{ user.fishCount }}
             </span>
           </div>
 
-          <div class="relative flex flex-col items-center cursor-pointer" [class.selected]="selectedItem === 'toy'" (click)="selectItem('toy')">
-            <img src="assets/toy.png" class="reward-img-icon">
-            <span class="reward-badge-num absolute -top-1 -right-1 bg-orange-400 text-white flex items-center justify-center">
+          <div class="relative flex flex-col items-center cursor-pointer flex-shrink" [class.selected]="selectedItem === 'toy'" (click)="selectItem('toy')">
+            <img src="assets/toy.png" class="w-12 h-12 sm:w-16 sm:h-16 object-contain rounded-full">
+            <span class="absolute -top-1.5 -right-1.5 bg-orange-400 text-white text-[10px] sm:text-xs w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center">
               {{ user.toyCount }}
             </span>
           </div>
 
-          <div class="relative flex flex-col items-center cursor-pointer" [class.selected]="selectedItem === 'heart'" (click)="selectItem('heart')">
-            <img src="assets/heart.png" class="reward-img-icon">
-            <span class="reward-badge-num absolute -top-1 -right-1 bg-orange-400 text-white flex items-center justify-center">
+          <div class="relative flex flex-col items-center cursor-pointer flex-shrink" [class.selected]="selectedItem === 'heart'" (click)="selectItem('heart')">
+            <img src="assets/heart.png" class="w-12 h-12 sm:w-16 sm:h-16 object-contain rounded-full">
+            <span class="absolute -top-1.5 -right-1.5 bg-orange-400 text-white text-[10px] sm:text-xs w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center">
               {{ user.heartCount }}
             </span>
           </div>
         </div>
 
-        <button type="button" class="btn-feed-responsive"
+        <button type="button"
+          class="btn-feed px-3 sm:px-6 py-2 rounded-xl bg-orange-500 text-white font-bold shadow-lg hover:bg-orange-600 disabled:bg-gray-300 flex-shrink-0"
           (click)="feed(selectedItem)" [disabled]="isFeedDisabled()">Feed</button>
 
       </div>

@@ -2157,6 +2157,7 @@ select.custom-input1 option {
   padding: 40px 40px 50px 40px !important;
 }
 
+/*------------------------------響應式佈局 (Media Queries)------------------------------*/
 /*------------------------------ 🌟 響應式佈局全面校正 (Media Queries) ------------------------------*/
 @media (max-width: 1023px) {
 
@@ -2232,74 +2233,61 @@ select.custom-input1 option {
     min-width: 0 !important;
   }
 
-  /* ================= 🌟 2. 右半邊（進度條與等級欄）的排版防禦 ================= */
+  /* ================= 🌟 2. 右半邊（等級與進度條欄位）優化 ================= */
   .top-card .flex-1.flex.flex-col {
-    margin-top: 24px !important;
+    margin-top: 20px !important;
     width: 100% !important;
     align-items: stretch !important; 
   }
 
-  /* ================= 🌟 3. 終極等比例自適應縮小（Flexible 且絕不換行置中） ================= */
+  /* ================= 🌟 3. 深度修正：強制鎖死「左右拉開、等比例流動縮放」 ================= */
   
-  /* 強制最外層容器在任何小螢幕都左右並排、兩端對齊（空間跟著頁面等比例縮放） */
-  .rewards-flex-container {
+  /* 強制覆蓋外層容器：粉碎換行魔咒，無論寬度多窄，永遠維持左邊物品、右邊按鈕兩端拉開！ */
+  .top-card .flex.items-center.justify-between.flex-nowrap {
     display: flex !important;
     flex-direction: row !important;
-    justify-content: space-between !important; /* 🌟 核心：永遠維持左邊物品、右邊按鈕 */
+    justify-content: space-between !important; /* 永遠左右兩端對齊 */
     align-items: center !important;
-    flex-wrap: nowrap !important;              /* 🌟 核心：打死都不準換行 */
+    flex-wrap: nowrap !important;              /* 強制絕對不准換行斷行 */
     width: 100% !important;
     gap: 8px !important;
   }
 
-  /* 圖標容器橫向靠左並排，並隨螢幕縮小拉近間距 */
-  .cat-rewards-items {
-    gap: 10px !important; /* 電腦版是 24px (gap-6)，手機與中螢幕等比例縮短到 10px */
+  /* 強制物品容器也絕不換行，並且讓物品格子隨視窗縮小自動拉近距離 */
+  .top-card .flex.gap-3.sm:gap-6.items-center.flex-nowrap {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;              /* 嚴禁小物品自己掉下去 */
+    gap: 1.5vw !important;                     /* 🌟 間距隨視窗寬度彈性縮短，極度絲滑！ */
   }
 
-  /* 🌟 三個小圖標尺寸自適應縮小：電腦版是 64px 以上，這裡降到超精緻的 42px，所以絕對不會塞不下！ */
-  .reward-img-icon {
-    width: 42px !important;
-    height: 42px !important;
+  /* 🌟 核心修正：讓 3 個獎勵項目小圖案在小螢幕下流動式等比例變小，騰出完美的橫向空間 */
+  .top-card div[class*="relative flex flex-col items-center"] img {
+    width: clamp(36px, 6vw, 64px) !important;  /* 🌟 使用響應式自適應函數，讓圖片在手機上等比例縮小，絕不擠爆！ */
+    height: clamp(36px, 6vw, 64px) !important;
     object-fit: contain !important;
   }
 
-  /* 數字 Badge 尺寸也跟著縮小，確保比例完美 */
-  .reward-badge-num {
-    width: 16px !important;
-    height: 16px !important;
-    font-size: 10px !important;
-    border-radius: 50% !important;
-  }
-
-  /* 🌟 Feed 按鈕尺寸同步等比例精緻縮小：靠右站好，而且絕不跑出去、絕不變寬撐滿 */
-  .btn-feed-responsive {
-    background-color: #F9A158;
-    color: #FFFAEF;
-    font-weight: 700;
+  /* 🌟 徹底消滅灰色按鈕 bug：高強度鎖死 Feed 按鈕的精緻橘色樣式，並跟著寬度等比例縮小寬度 */
+  .top-card .btn-feed {
+    margin: 0 !important;                      /* 清除居中干擾 */
+    background-color: #F9A158 !important;     /* 100% 強制鎖定客製化靚麗橘色，絕不變灰！ */
+    color: #FFFAEF !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 12px rgba(249, 162, 88, 0.4) !important;
     border: none !important;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(249, 162, 88, 0.4);
-    transition: background-color 0.2s ease;
-    cursor: pointer;
     
-    /* 彈性微調尺寸 */
-    width: 90px !important;    /* 🌟 從原本大螢幕的 130px 縮小到精緻的 90px */
-    height: 40px !important;   /* 高度稍微下降 */
-    font-size: 1rem !important;
-    flex-shrink: 0 !important; /* 防止按鈕被壓扁 */
+    /* 彈性自適應寬高與字體 */
+    width: clamp(75px, 12vw, 110px) !important;/* 🌟 按鈕寬度隨著視窗比例自動變小，但絕對不會爆開 */
+    height: 38px !important;                   /* 稍微下降高度符合小螢幕比例 */
+    font-size: clamp(12px, 2.2vw, 15px) !important; /* 字體跟著等比例變小 */
+    padding: 0 6px !important;
+    flex-shrink: 0 !important;                 /* 🌟 嚴格防禦：防止按鈕在極窄狀態下被左右擠扁 */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
-
-  .btn-feed-responsive:hover {
-    background-color: #f08f3f;
-  }
-  
-  .btn-feed-responsive:disabled {
-    background-color: #e5e7eb !important;
-    color: #9ca3af !important;
-    cursor: not-allowed;
-    box-shadow: none !important;
-  }
-
 
 }
