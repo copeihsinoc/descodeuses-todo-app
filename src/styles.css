@@ -1080,52 +1080,61 @@ select.custom-input1 option {
 /*------------------------------響應式佈局 (Media Queries)------------------------------*/
 @media (max-width: 1023px) {
 
-/* 1. 讓貓咪和對話框的外殼容器在縮小時變成一個「相對定位的獨立舞台」，並在畫面中居中 */
+  /* 1. 貓咪與對話框的外殼舞台 */
   .top-card .flex.flex-col.lg\:flex-row {
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
     position: relative !important;
     width: 100% !important;
-    max-width: 320px !important; /* 限制寬度防禦跑版 */
-    height: 310px !important;    /* 關鍵：強制給定固定高度，預留上方泡泡浮空的垂直空間 */
-    margin: 0 auto !important;   /* 讓整個組合在淡橘色大卡片裡絕對居中 */
+    max-width: 320px !important;
+    height: 310px !important;    /* 預留上方浮空泡泡的高度 */
+    margin: 0 auto !important;   /* 讓整個組合在城堡大卡片裡絕對置中 */
     gap: 0 !important;
   }
 
-  /* 2. 讓貓咪頭像固定坐在這個舞台的底部，並且絕對水平置中 */
+  /* 2. 貓咪頭像：永遠固定在舞台底部中央 */
   .top-card .w-40.h-40 {
     position: absolute !important;
-    bottom: 10px !important;     /* 坐在底部 */
+    bottom: 10px !important;
     left: 50% !important;
     transform: translateX(-50%) !important; /* 完美水平居中 */
     margin: 0 !important;
     z-index: 5 !important;
   }
 
-  /* 3. 🌟 核心：讓對話框變成絕對定位，直接浮空在小貓頭頂，完全不佔任何寬度與排版空間！ */
+  /* 3. 🌟 浮空對話框：精準往右微調偏移，絕不擋到貓咪！ */
   .top-card .chat-bubble {
     position: absolute !important;
-    top: 0px !important;         /* 浮空在最上方，貼著舞台頂部 */
+    top: 0px !important;         /* 浮空在最上方頂部 */
     left: 50% !important;
-    transform: translateX(-50%) !important; /* 泡泡本身水平精準置中 */
+    /* 🌟 核心微調：原本是 -50%（正中央），改成 -35% 就能讓對話框往右優雅漂移，把貓咪可愛的臉露出來！ */
+    transform: translateX(-35%) !important; 
     width: 100% !important;
-    max-width: 260px !important; /* 鎖定泡泡寬度 */
+    max-width: 260px !important;
     margin: 0 !important;
-    text-align: center !important; /* 讓泡泡內的文字與按鈕完美置中 */
+    text-align: center !important; /* 讓泡泡內的文字居中 */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05) !important;
     z-index: 10 !important;
+    animation: floatMobileCustom 3s ease-in-out infinite !important;
   }
 
-  /* 4. 隱藏垂直上下排時會穿幫刺到貓咪身體的左右兩側舊小箭頭 */
+  /* 4. 同步修正縮小時的浮空動畫（配合 translateX(-35%)） */
+  @keyframes floatMobileCustom {
+    0%, 100% { transform: translateX(-35%) translateY(0px); }
+    50% { transform: translateX(-35%) translateY(-6px); }
+  }
+
+  /* 5. 隱藏垂直上下排時會穿幫的舊左右對話小箭頭 */
   .top-card .chat-bubble::before,
   .top-card .chat-bubble::after {
     display: none !important;
   }
 
-  /* 5. 確保包裹容器在中等螢幕下不會受到外部推力干擾 */
+  /* 6. 確保外殼寬度防禦 */
   .top-card .flex-shrink-0 {
     max-width: 100% !important;
     min-width: 0 !important;
   }
+
 }
