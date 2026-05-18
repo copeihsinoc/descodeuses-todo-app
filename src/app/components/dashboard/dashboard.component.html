@@ -34,9 +34,9 @@
 
       <span class="font-semibold text-gray-700">Rewards</span>
 
-<div class="flex items-center justify-between flex-nowrap mt-3 w-full min-w-0 pr-1 sm:pr-0">
+<div class="flex items-center justify-center flex-wrap gap-y-4 gap-x-6 mt-4 w-full">
         
-        <div class="flex items-center flex-nowrap gap-4 sm:gap-6 flex-shrink-0">
+        <div class="flex gap-4 sm:gap-6 items-center flex-nowrap flex-shrink-0">
 
           <div class="relative flex flex-col items-center cursor-pointer" [class.selected]="selectedItem === 'fish'" (click)="selectItem('fish')">
             <img src="assets/fish.png" class="w-18 h-16 rounded-full scale-x-[-1]">
@@ -61,7 +61,7 @@
         </div>
 
         <button type="button"
-          class="btn-feed px-6 py-2 rounded-xl bg-orange-500 text-white font-bold shadow-lg hover:bg-orange-600 disabled:bg-gray-300 flex-shrink-0"
+          class="btn-feed min-w-[130px] px-6 py-2 rounded-xl bg-orange-500 text-white font-bold shadow-lg hover:bg-orange-600 disabled:bg-gray-300 flex-shrink-0"
           (click)="feed(selectedItem)" [disabled]="isFeedDisabled()">Feed</button>
 
       </div>
