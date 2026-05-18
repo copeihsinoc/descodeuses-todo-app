@@ -1165,48 +1165,53 @@ select.custom-input1 option {
 
   /* ================= 🌟 2. 新增：右半邊 Rewards 與進度條美化控制 ================= */
   
-  /* 讓等級條、Your Cat 標題等在小螢幕時自動整體居中，看起來不歪斜 */
+/* 讓等級條、Your Cat 標題等在小螢幕時自動整體寬度撐滿，排版更靈活、不歪斜 */
   .top-card .flex-1.flex.flex-col {
-    align-items: center !important;
+    align-items: stretch !important;  /* 改為 stretch 讓裡面的並排可以左右拉開 */
     text-align: center !important;
     width: 100% !important;
-    max-width: 480px !important;
-    margin: 0 auto !important;
+    max-width: 500px !important;
+    margin: 20px auto 0 !important;   /* 與上方置中貓咪拉開 20px 的舒服距離 */
   }
 
-  /* 🌟 彈性改善核心：將外殼改回兩端對齊（space-between），讓圖標靠左、按鈕靠右，且絕對不換行直排 */
-  .top-card .justify-between.flex-wrap {
+  /* 🌟 終極核心修正：精準點名妳 HTML 裡裝著「3個圖標與按鈕」的那個 flex 容器 */
+  .top-card .flex-1.flex.flex-col > div.flex.items-center.justify-between {
     display: flex !important;
     flex-direction: row !important;         /* 強制橫排 */
-    justify-content: space-between !important; /* 🌟 讓 3 個物品在左，Feed 按鈕在右，兩端漂亮拉開！ */
+    justify-content: space-between !important; /* 🌟 強制讓 3 個物品貼在最左，Feed 按鈕貼在最右，完美拉開！ */
     align-items: center !important;
-    flex-wrap: nowrap !important;           /* 🌟 嚴格禁止因為擠壓而掉下去，永遠保持一橫行 */
+    flex-wrap: nowrap !important;           /* 🌟 核心：嚴格禁止換行，絕不准按鈕掉到下面去！ */
     width: 100% !important;
     gap: 12px !important;
   }
 
-  /* 🌟 強制這 3 個獎勵圖案（魚、肉球、心）永遠保持「橫向一整排」 */
-  .top-card .flex.gap-6.items-center.flex-wrap {
+  /* 🌟 終極核心修正：精準點名妳 HTML 裡包裝「3個圖標」的內圈容器 */
+  .top-card .flex-1.flex.flex-col div.flex.gap-6.items-center.flex-wrap {
     display: flex !important;
     flex-direction: row !important;         /* 強制橫排 */
     justify-content: flex-start !important;
-    gap: 16px !important;                   /* 稍微縮小圖案間距，留出更多彈性空間 */
-    flex-wrap: nowrap !important;           /* 🌟 嚴格禁止換行掉下去！ */
+    align-items: center !important;
+    gap: 12px !important;                   /* 縮小圖標之間的間距，騰出更多彈性寬度 */
+    flex-wrap: nowrap !important;           /* 🌟 核心：嚴格禁止圖標自己換行變成直的！ */
   }
 
-  /* 調整 3 個小圖案本身的大小，讓它們在縮放頁面時更具靈活性（Flexible） */
-  .top-card .w-18.h-16,
-  .top-card .w-16.h-16 {
-    width: 48px !important;                 /* 縮小寬度，在中間寬度時最精緻漂亮 */
-    height: 48px !important;
+  /* 彈性微調 3 個獎勵圖案的外殼，確保在任何寬度下都不會把按鈕擠下去 */
+  .top-card div[class*="relative flex flex-col items-center"] {
+    width: 50px !important;                 /* 縮小每個物品格子的寬度限制 */
   }
 
-  /* 讓 Feed 按鈕在縮放時乖乖靠右，並維持原本漂亮的精緻尺寸 */
-  .top-card .btn-feed {
-    margin: 0 !important;                   /* 🌟 移除居中外距，讓它帥氣地靠右對齊 */
-    min-width: 110px !important;            /* 稍微調小寬度，增加橫向彈性空間 */
+  .top-card div[class*="relative flex flex-col items-center"] img {
+    width: 44px !important;                 /* 圖案等比例精緻縮小 */
     height: 44px !important;
+    object-fit: contain !important;
+  }
+
+  /* 讓 Feed 按鈕完美靠在最右側，並維持精緻尺寸 */
+  .top-card .btn-feed {
+    margin: 0 !important;                   /* 清除可能干擾的自動居中外距 */
+    width: 110px !important;                /* 給予最適合中窄螢幕的彈性寬度 */
+    height: 42px !important;
     font-size: 1.1rem !important;
-    flex-shrink: 0 !important;              /* 🌟 防止按鈕在變窄時被壓扁 */
+    flex-shrink: 0 !important;              /* 🌟 核心：防止按鈕在頁面變窄時被硬生生壓扁 */
   }
 }
