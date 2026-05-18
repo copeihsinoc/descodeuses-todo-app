@@ -2233,25 +2233,26 @@ select.custom-input1 option {
     min-width: 0 !important;
   }
 
-  /* ================= 🌟 2. 右半邊大外殼寬度解鎖（間距能自動縮短的關鍵！） ================= */
+  /* ================= 🌟 2. 右半邊大外殼寬度防禦（讓間距自動縮短的靈魂核心！） ================= */
   .top-card .flex-1.flex.flex-col {
     margin-top: 20px !important;
     width: 100% !important;
-    max-width: 100% !important;        /* 🌟 強制解鎖右側外殼的寬度限制，讓它有 100% 彈性空間 */
-    align-items: stretch !important;    /* 🌟 改成 stretch，讓裡面的並排可以完美左右拉開、流動伸縮 */
+    max-width: 100% !important;        /* 🌟 強制破除全域大螢幕的限制，讓寬度完全橫向舒展 */
+    align-items: stretch !important;    /* 🌟 改成 stretch，強迫內部的兩端對齊能夠往最左與最右極限拉開 */
   }
 
-  /* ================= 🌟 3. 完美兩端拉開（空白間距彈性流動，元件 100% 保持大原尺寸） ================= */
+  /* ================= 🌟 3. 完美兩端拉開（空白間距彈性流動，元件 100% 保持大原尺寸不變小） ================= */
   
-  /* 強制覆蓋外層容器：粉碎任何換行魔咒，無論寬度多窄，永遠維持左邊物品、右邊按鈕兩端完美拉開！ */
+  /* 強制點名外層容器：粉碎任何換行魔咒，無論寬度多窄，永遠維持左邊物品、右邊按鈕兩端完美拉開！ */
   .top-card .flex.items-center.justify-between.flex-nowrap {
     display: flex !important;
     flex-direction: row !important;
-    justify-content: space-between !important; /* 永遠保持左右兩端對齊 */
+    justify-content: space-between !important; /* 🌟 確保左邊永遠最左、右邊永遠最右 */
     align-items: center !important;
     flex-wrap: nowrap !important;              /* 強制絕對不准換行斷行 */
     width: 100% !important;
     box-sizing: border-box !important;
+    gap: 8px !important;                       /* 給予最小安全邊距保護 */
   }
 
   /* 強制物品容器也絕不換行，並維持原汁原味的舒服間距 */
@@ -2261,10 +2262,11 @@ select.custom-input1 option {
     justify-content: flex-start !important;
     align-items: center !important;
     flex-wrap: nowrap !important;              /* 嚴禁小物品自己掉下去 */
-    gap: 16px !important;                      /* 縮小一點圖標間距至工整的 16px，幫橫向釋放更多空白空間 */
+    gap: 16px !important;                      /* 縮小一點點圖標間距至工整的 16px，幫橫向釋放更多空白空間 */
+    flex-shrink: 0 !important;                 /* 🌟 核心防禦：強迫這排圖標區不能被壓扁，必須整坨往左邊靠齊 */
   }
 
-  /* 🌟 三個獎勵小圖案：100% 保持妳最愛的最初原本大尺寸，死都不變小！ */
+  /* 🌟 三個獎勵小圖案：100% 保持妳最愛的最初原本大尺寸，手機版跟中間頁面死都不變小！ */
   .top-card div[class*="relative flex flex-col items-center"] img {
     width: 64px !important;                    /* 鎖定 64px，維持原本大圖大小 */
     height: 64px !important;
@@ -2295,6 +2297,7 @@ select.custom-input1 option {
     align-items: center !important;
     justify-content: center !important;
   }
+
 
 
 }
