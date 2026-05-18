@@ -1078,53 +1078,54 @@ select.custom-input1 option {
 }
 
 /*------------------------------響應式佈局 (Media Queries)------------------------------*/
-/*------------------------------ 🌟 最終小螢幕：貓咪完美置中、對話框右側浮空 ------------------------------*/
 @media (max-width: 1023px) {
 
   /* 1. 外殼舞台：保持橫向並排，並在大卡片裡水平置中 */
   .top-card .flex.flex-col.lg\:flex-row {
-    flex-direction: row !important;      /* 保持橫向 */
+    flex-direction: row !important;      /* 保持橫向並排 */
     align-items: center !important;
-    justify-content: center !important;  /* 讓整個組合置中 */
+    justify-content: center !important;  /* 讓整個舞台置中 */
     position: relative !important;
     width: 100% !important;
-    max-width: 420px !important;         /* 擴大舞台寬度，確保塞得下大貓咪與右邊泡泡 */
+    max-width: 440px !important;         /* 稍微加大舞台，確保放得下大貓咪與移到更右邊的泡泡 */
     height: 220px !important;            /* 固定舞台高度 */
     margin: 0 auto !important;           /* 讓這個舞台在外層淡橘色大卡片裡絕對置中 */
     gap: 0 !important;
   }
 
-  /* 2. 🌟 貓咪頭像：維持本來的大尺寸，並且在舞台裡「絕對置中」！ */
+  /* 2. 貓咪頭像：維持原本的放大尺寸（208px），並且在舞台裡「絕對正中央置中」 */
   .top-card .w-40.h-40 {
     position: absolute !important;
     width: 208px !important;             /* 維持本來的大尺寸 */
     height: 208px !important;
-    left: 50% !important;                /* 🌟 先推到大框架的 50% 中央 */
+    left: 50% !important;                /* 推到大框架的 50% 中央 */
     top: 50% !important;
-    transform: translate(-50%, -50%) !important; /* 🌟 完美水平與垂直絕對置中！ */
+    transform: translate(-50%, -50%) !important; /* 完美水平與垂直絕對置中！ */
     margin: 0 !important;
     z-index: 5 !important;
   }
 
-  /* 3. 🌟 浮空對話框：完全不佔空間，精準定位在居中貓咪的「右側」 */
+  /* 3. 🌟 浮空對話框：再度向右外推，達到 100% 完全不遮到貓咪任何毛髮的效果！ */
   .top-card .chat-bubble {
     position: absolute !important;
     
-    /* 🌟 位置黃金坐標：因為貓咪在 50% 中央，我們把泡泡推到 50% 再往右加 60px，就能完美貼在貓咪右側不遮臉 */
-    left: calc(50% + 60px) !important;   
-    top: 25px !important;                /* 控制泡泡的高低位置 */
+    /* 🌟 終極微調坐標：
+       之前是 calc(50% + 60px)，現在我們把它加到 calc(50% + 110px)！
+       這樣泡泡的左側邊界，就會剛好落在置中貓咪（半寬104px）的身體外面，徹底移開、完全零遮擋！ */
+    left: calc(50% + 110px) !important;   
+    top: 30px !important;                /* 控制泡泡的高度，讓它維持在右側偏上的可愛位置 */
     transform: none !important;          
     
-    width: 150px !important;             /* 縮小泡泡寬度，精緻不臃腫，更適合小螢幕 */
-    padding: 10px !important;            /* 縮小內距 */
+    width: 150px !important;             /* 保持精緻的小寬度 */
+    padding: 10px !important;            
     margin: 0 !important;
-    text-align: left !important;         /* 內文靠左對齊 */
+    text-align: left !important;         
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06) !important;
     z-index: 10 !important;
     animation: floatMobileCustomRow 3s ease-in-out infinite !important;
   }
 
-  /* 調整小泡泡內的字體，確保文字塞得下 */
+  /* 調整小泡泡內的字體，確保文字完美呈現 */
   .top-card .chat-bubble p {
     font-size: 13px !important;
     line-height: 1.4 !important;
@@ -1136,11 +1137,11 @@ select.custom-input1 option {
     50% { transform: translateY(-6px); }
   }
 
-  /* 5. 讓左側指向貓咪的小箭頭單獨出現，並對準貓咪 */
+  /* 5. 🌟 同步調整指向貓咪的小箭頭位置，讓它看起來依舊從泡泡拉出來指向置中的小貓 */
   .top-card .chat-bubble::before {
     display: block !important;
     left: -10px !important;
-    top: 35px !important;
+    top: 25px !important;
     transform: none !important;
     border-width: 6px 10px 6px 0 !important;
     border-color: transparent #fff7ed transparent transparent !important;
@@ -1149,7 +1150,7 @@ select.custom-input1 option {
   .top-card .chat-bubble::after {
     display: block !important;
     left: -11px !important;
-    top: 35px !important;
+    top: 25px !important;
     transform: none !important;
     border-width: 6px 11px 6px 0 !important;
     border-color: transparent #fed7aa transparent transparent !important;
