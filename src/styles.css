@@ -2160,48 +2160,56 @@ select.custom-input1 option {
 /*------------------------------響應式佈局 (Media Queries)------------------------------*/
 @media (max-width: 1023px) {
 
+  /* 🌟 終極通關核心：強迫整張淡橘色大卡片在小螢幕時轉為垂直排列 (flex-column)，徹底解放右半邊寬度限制！ */
   .top-card {
     flex-direction: column !important;
-    padding: clamp(16px, 3vw, 24px) !important;
+    padding: 24px 20px !important;
     gap: 24px !important;
   }
 
-  /* 貓咪 + 對話框 */
+  /* 1. 貓咪頭像與對話框的專屬圓形大舞台 */
   .top-card .flex.flex-col.lg\:flex-row {
-    display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
     justify-content: center !important;
-
-    gap: clamp(12px, 3vw, 24px) !important;
-
-    width: 100%;
-    max-width: 100%;
-  }
-
-  /* 貓咪 */
-  .top-card .w-40.h-40 {
-    width: clamp(120px, 22vw, 200px) !important;
-    height: clamp(120px, 22vw, 200px) !important;
-
-    flex-shrink: 0;
-  }
-
-  /* bubble */
-  .top-card .chat-bubble {
     position: relative !important;
+    width: 100% !important;
+    max-width: 440px !important;
+    height: 220px !important;
+    margin: 0 auto !important;
+    gap: 0 !important;
+  }
 
-    width: clamp(140px, 28vw, 240px) !important;
-
+  /* 貓咪頭像：維持原本最完美的放大尺寸（208px），在大舞台中央絕對置中 */
+  .top-card .w-40.h-40 {
+    position: absolute !important;
+    width: 208px !important;
+    height: 208px !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
     margin: 0 !important;
+    z-index: 5 !important;
+  }
 
-    animation: float 3s ease-in-out infinite;
-
-    flex-shrink: 1;
+  /* 浮空對話框：完美向右外推 110px 且帶有滑順浮空動畫，100% 絕不遮臉 */
+  .top-card .chat-bubble {
+    position: absolute !important;
+    left: calc(50% + 110px) !important;   
+    top: 30px !important;
+    transform: none !important;
+    width: 150px !important;
+    padding: 10px !important;
+    margin: 0 !important;
+    text-align: left !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06) !important;
+    z-index: 10 !important;
+    animation: floatMobileCustomRow 3s ease-in-out infinite !important;
   }
 
   .top-card .chat-bubble p {
-    font-size: clamp(12px, 1.8vw, 18px) !important;
+    font-size: 13px !important;
+    line-height: 1.4 !important;
   }
 
   @keyframes floatMobileCustomRow {
@@ -2250,8 +2258,7 @@ select.custom-input1 option {
     flex-direction: row !important;
     justify-content: space-between !important; /* 🌟 核心：物品永遠在左、按鈕永遠在右 */
     align-items: center !important;
-    flex-wrap: wrap !important;
-      gap: 16px !important;
+    flex-wrap: nowrap !important;              /* 🌟 核心：死都不准換行掉下去 */
     width: 100% !important;
     box-sizing: border-box !important;
   }
@@ -2290,12 +2297,9 @@ select.custom-input1 option {
     border: none !important;
     
     /* 🌟 元件規格原封不動：任何尺寸都不縮小，比例一模一樣 */
-  width: clamp(90px, 18vw, 130px) !important;
-
-  height: clamp(40px, 6vw, 50px) !important;
-
-  font-size: clamp(14px, 2vw, 20px) !important;
-
+    width: 130px !important;                   /* 100% 維持原本大按鈕的 130px 寬度 */
+    height: 50px !important;                   /* 100% 維持原本大按鈕的 50px 高度 */
+    font-size: 1.25rem !important;             /* 100% 維持原本大按鈕的字體大小 */
     flex-shrink: 0 !important;                 /* 強力防禦：不准被左右任何寬度壓扁 */
     
     display: flex !important;
