@@ -1080,52 +1080,57 @@ select.custom-input1 option {
 /*------------------------------響應式佈局 (Media Queries)------------------------------*/
 @media (max-width: 1023px) {
 
-  /* 1. 貓咪與對話框的外殼舞台 */
+  /* 1. 貓咪與對話框的外殼舞台：稍微拉高高度，給予貓咪與浮空泡泡更充裕的層疊空間 */
   .top-card .flex.flex-col.lg\:flex-row {
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
     position: relative !important;
     width: 100% !important;
-    max-width: 320px !important;
-    height: 310px !important;    /* 預留上方浮空泡泡的高度 */
-    margin: 0 auto !important;   /* 讓整個組合在城堡大卡片裡絕對置中 */
+    max-width: 340px !important;
+    height: 330px !important;    /* 稍微拉高，防止內容擁擠 */
+    margin: 0 auto !important;   /* 大框架在城堡卡片裡絕對居中 */
     gap: 0 !important;
   }
 
-  /* 2. 貓咪頭像：永遠固定在舞台底部中央 */
+  /* 2. 🌟 貓咪頭像：解除變小的問題，固定自然尺寸，並讓牠完美坐在舞台中下方 */
   .top-card .w-40.h-40 {
     position: absolute !important;
-    bottom: 10px !important;
+    width: 160px !important;     /* 鎖定貓咪寬度，不讓牠變小 */
+    height: 160px !important;    /* 鎖定貓咪高度 */
+    bottom: 5px !important;      /* 固定在舞台底部 */
     left: 50% !important;
-    transform: translateX(-50%) !important; /* 完美水平居中 */
+    transform: translateX(-50%) !important; /* 貓咪本體絕對居中 */
     margin: 0 !important;
     z-index: 5 !important;
   }
 
-  /* 3. 🌟 浮空對話框：精準往右微調偏移，絕不擋到貓咪！ */
+  /* 3. 🌟 浮空對話框：縮小比例、提早右偏，達成最自然的對話框視覺！ */
   .top-card .chat-bubble {
     position: absolute !important;
-    top: 0px !important;         /* 浮空在最上方頂部 */
-    left: 50% !important;
-    /* 🌟 核心微調：原本是 -50%（正中央），改成 -35% 就能讓對話框往右優雅漂移，把貓咪可愛的臉露出來！ */
-    transform: translateX(-35%) !important; 
-    width: 100% !important;
-    max-width: 260px !important;
+    top: 5px !important;         /* 飄浮在最上方 */
+    
+    /* 🌟 核心修正：將基準點從 left: 50% 改成 left: 55%，並減少反向位移，強制泡泡大幅度往右邊靠！ */
+    left: 55% !important;        
+    transform: translateX(-20%) !important; 
+    
+    /* 🌟 核心修正：把寬度從 260px 縮小到 210px，這樣泡泡就不會顯得巨大無比，比例超自然！ */
+    width: 210px !important;     
+    padding: 12px !important;    /* 稍微縮小內距，讓對話框更精緻 */
     margin: 0 !important;
-    text-align: center !important; /* 讓泡泡內的文字居中 */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05) !important;
+    text-align: center !important;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.06) !important;
     z-index: 10 !important;
     animation: floatMobileCustom 3s ease-in-out infinite !important;
   }
 
-  /* 4. 同步修正縮小時的浮空動畫（配合 translateX(-35%)） */
+  /* 4. 同步修正縮小時的浮空動畫位移（對齊 translateX(-20%)） */
   @keyframes floatMobileCustom {
-    0%, 100% { transform: translateX(-35%) translateY(0px); }
-    50% { transform: translateX(-35%) translateY(-6px); }
+    0%, 100% { transform: translateX(-20%) translateY(0px); }
+    50% { transform: translateX(-20%) translateY(-6px); }
   }
 
-  /* 5. 隱藏垂直上下排時會穿幫的舊左右對話小箭頭 */
+  /* 5. 垂直排列時不需要小箭頭，保持乾淨 */
   .top-card .chat-bubble::before,
   .top-card .chat-bubble::after {
     display: none !important;
@@ -1136,5 +1141,4 @@ select.custom-input1 option {
     max-width: 100% !important;
     min-width: 0 !important;
   }
-
 }
