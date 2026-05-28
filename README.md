@@ -1,60 +1,58 @@
-# DescodeusesApp
+# KittyTasks - Frontend (Angular 19)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.13.
-by Peihsin
+Ce dépôt contient le code source de l'interface utilisateur de **KittyTasks**, une application moderne de gestion de tâches. Ce projet a été validé dans le cadre de l'obtention du titre RNCP 6.
 
-## Development server
+## Technologies & Architecture
 
-To start a local development server, run:
+* **Framework** : Angular 19
+* **Architecture** : Organisation propre via le système de `NgModule`.
+* **Design & UX** : Maquettes **Figma**, intégration *Responsive* avec **Tailwind CSS** et **CSS3**.
+* **Communication API** : Consommation de l'API RESTful via `HttpClient` (gestion dynamique via `environment.ts`).
+
+---
+
+## Captures d'écran (Screenshots)
+
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/d55f32f8-2d83-44b1-922c-0a5385b7f8df" alt="Dashboard" width="85%" />
+  <p><em>Tableau de bord principal</em></p>
+  <br>
+  <img src="https://github.com/user-attachments/assets/34933bdf-2194-44d0-94ff-8286e478d619" alt="Login" width="85%" />
+  <p><em>Page de connexion (Login)</em></p>
+</div>
+
+---
+
+## Configuration & Déploiement
+
+### Prérequis
+* **Node.js** (version 18+)
+* **Angular CLI** (`npm install -g @angular/cli`)
+
+### Guide d'exécution
 
 ```bash
+# =========================================================================
+# EN PRODUCTION (Cloud Architecture)
+# =========================================================================
+# Application déployée en continu sur Netlify.
+# -> Chaque 'git push' déclenche automatiquement le build de production (ng build).
+# -> Le frontend consomme l'API de production configurée dans environment.prod.ts.
+
+
+# =========================================================================
+# EN LOCAL (Développement et Tests)
+# =========================================================================
+
+# 1. Cloner ce dépôt et accéder au dossier :
+git clone [https://github.com/copeihsinoc/planit.git](https://github.com/copeihsinoc/planit.git)
+cd planit
+
+# 2. Installer les dépendances du projet (Étape indispensable !) :
+npm install
+
+# 3. Lancer le serveur de développement local :
 ng serve
-```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+# Le projet est accessible en local sur : http://localhost:4200
+# L'application bascule automatiquement sur l'API locale (localhost:8080) via environment.ts.
