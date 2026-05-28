@@ -1,60 +1,40 @@
-# DescodeusesApp
+# KittyTasks - Frontend (Angular 19)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.13.
-by Peihsin
+Ce dépôt contient le code source de l'interface utilisateur de **KittyTasks**, une application moderne de gestion de tâches. Ce projet a été conçu, développé et validé dans le cadre de mon projet de fin d'études pour l'obtention du titre RNCP 6.
 
-## Development server
+## Technologies & Architecture
+* **Framework** : Angular 19.
+* **Architecture Modulaire** : Organisation du code via le système de `NgModule`.
+* **Design & Styles** : **Tailwind CSS** pour la mise en page rapide et **CSS3** pour les ajustements personnalisés.
+* **Design & UX** : Maquettes réalisées sur **Figma** et intégration entièrement *Responsive*.
+* **Communication API** : Consommation d'API RESTful via le module `HttpClient`.
 
-To start a local development server, run:
+---
 
+## Captures d'écran (Screenshots)
+
+<div align="center">
+
+  <img src="https://github.com/user-attachments/assets/d55f32f8-2d83-44b1-922c-0a5385b7f8df" alt="Dashboard" width="85%" />
+  <p><em>Tableau de bord principal</em></p>
+  
+  <br>
+
+  <img src="https://github.com/user-attachments/assets/34933bdf-2194-44d0-94ff-8286e478d619" alt="Login" width="85%" />
+  <p><em>Page de connexion (Login)</em></p>
+
+</div>
+
+---
+
+## Installation et Démarrage
+
+### Prérequis
+* **Node.js** (version 18+)
+* **Angular CLI** (`npm install -g @angular/cli`)
+
+### Étapes
+1. Cloner ce dépôt :
 ```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+   git clone [https://github.com/votre-username/kittytasks-frontend.git](https://github.com/votre-username/kittytasks-frontend.git)
+   cd kittytasks-frontend
