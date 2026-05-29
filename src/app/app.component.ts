@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
 
   @ViewChild('sidenav') sidenav!: MatSidenav;
 
-  title = 'Kitty Tasks';
+  title = 'KittyTasks';
 
   navLinks = [
     { path: 'dashboard', label: 'Dashboard', icon: 'home' },
