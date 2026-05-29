@@ -23,7 +23,7 @@ export class TodoService {
   // 🌟 新增：全域共享的 KPI 狀態流 (初始值為 0)
   private kpiSummarySubject = new BehaviorSubject<any[]>([
     { label: "Today's Tasks", icon: 'today', count: 0 },
-    { label: 'Urgent', icon: 'priority_high', count: 0 },
+    { label: 'Urgent', icon: 'urgent', count: 0 },
     { label: 'Overdue', icon: 'warning', count: 0 }
   ]);
 
@@ -64,7 +64,7 @@ export class TodoService {
       // 4. 
       this.kpiSummarySubject.next([
         { label: "Today's Tasks", icon: 'today', count: countToday },
-        { label: 'Urgent', icon: 'priority_high', count: countUrgent },
+        { label: 'Urgent', icon: 'urgent', count: countUrgent },
         { label: 'Overdue', icon: 'warning', count: countOverdue }
       ]);
     });
