@@ -64,7 +64,7 @@ export class TodoService {
       // 4. 
       this.kpiSummarySubject.next([
         { label: "Today's Tasks", icon: 'today', count: countToday },
-        { label: 'Urgent', icon: 'urgent', count: countUrgent },
+        { label: 'Urgent', icon: 'error', count: countUrgent },
         { label: 'Overdue', icon: 'warning', count: countOverdue }
       ]);
     });
