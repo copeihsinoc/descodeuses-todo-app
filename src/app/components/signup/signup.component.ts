@@ -77,17 +77,26 @@ export class SignupComponent implements OnInit {
     this.formLoaded = true;
   }
 
-  private initForm(isEditMode = false) {
+private initForm(isEditMode = false) {
+    // 建立密碼的安全性驗證規則
+    const passwordValidators = [
+      Validators.minLength(8), // 至少 8 個字
+      // 強制包含：1個大寫、1個小寫、1個數字、1個特殊符號
+      Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
+    ];
+
+    // 如果是「新增模式」，密碼必須是必填（Required）
+    if (!isEditMode) {
+      passwordValidators.unshift(Validators.required);
+    }
+
     this.signUpForm = this.fb.group({
       id: [null],
       lastname: [''],
       firstname: [''],
       username: ['', Validators.required],
       genre: [''],
-      password: [
-        '',
-        isEditMode ? [] : [Validators.required] // ✅ 編輯模式不強制密碼
-      ],
+      password: ['', passwordValidators], // 💡 套用我們寫好的密碼規則
     });
   }
 

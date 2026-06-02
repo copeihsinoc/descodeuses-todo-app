@@ -34,17 +34,31 @@
                 @for (g of genre; track g.value){ <option [value]="g.value">{{ g.text }}</option> }
               </select> 
             </div>
-            <div class="form-row1"> <label>Password:</label> <input formControlName="password" type="password" class="custom-input1"> </div>
+            
+            <div class="form-row1 flex flex-col"> 
+              <div class="flex items-center w-full">
+                <label>Password:</label> 
+                <input formControlName="password" type="password" class="custom-input1"> 
+              </div>
+              <div *ngIf="signUpForm.get('password')?.touched && signUpForm.get('password')?.invalid" 
+                   class="text-xs text-red-500 self-end mt-1 text-right" style="max-width: 280px;">
+                <span *ngIf="signUpForm.get('password')?.hasError('required')">Password is required.</span>
+                <span *ngIf="signUpForm.get('password')?.hasError('minlength')">Must be at least 8 characters.</span>
+                <span *ngIf="signUpForm.get('password')?.hasError('pattern') && !signUpForm.get('password')?.hasError('minlength')">
+                  Must include uppercase, lowercase, number, and symbol (@$!%*?&).
+                </span>
+              </div>
+            </div>
           </div>
 
           <div class="mt-8 w-full">
-            <button *ngIf="!isAdminMode" type="submit" class="signup-btn w-full">Sign Up</button>
+            <button *ngIf="!isAdminMode" type="submit" class="signup-btn w-full" [disabled]="signUpForm.invalid">Sign Up</button>
             
             <div *ngIf="isAdminMode" class="form-actions">
               <button type="button" (click)="onCancel()" class="btn-cancel">
                 <mat-icon>cancel</mat-icon> cancel
               </button>
-              <button type="submit" class="btn-save">
+              <button type="submit" class="btn-save" [disabled]="signUpForm.invalid">
                 <img src="assets/heart.png" class="w-8 h-8 rounded-full" /> save
               </button>
             </div>
