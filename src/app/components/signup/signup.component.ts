@@ -73,19 +73,22 @@ export class SignupComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.initForm();
+    if (!this.signUpForm) {
+      this.initForm();
+    }
     this.formLoaded = true;
   }
 
-private initForm(isEditMode = false) {
-    // 建立密碼的安全性驗證規則
+  private initForm(isEditMode = false) {
+    // set rules
     const passwordValidators = [
-      Validators.minLength(8), // 至少 8 個字
-      // 強制包含：1個大寫、1個小寫、1個數字、1個特殊符號
+      // at least 8 letters
+      Validators.minLength(8), 
+      // includes：1 LETTER、1 letter、1 number、1 symbol
       Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
     ];
 
-    // 如果是「新增模式」，密碼必須是必填（Required）
+    // if EditMode password:Required
     if (!isEditMode) {
       passwordValidators.unshift(Validators.required);
     }
@@ -96,7 +99,7 @@ private initForm(isEditMode = false) {
       firstname: [''],
       username: ['', Validators.required],
       genre: [''],
-      password: ['', passwordValidators], // 💡 套用我們寫好的密碼規則
+      password: ['', passwordValidators], // 💡 rules
     });
   }
 
