@@ -2135,13 +2135,17 @@ select.custom-input1 option {
   transition: all 0.2s ease-in-out !important;
 }
 
-.disabled-btn-style {
-  background-color: #D6C7B7 !important; 
-  color: #A39281 !important;           
-  cursor: not-allowed !important;      
-  transform: none !important;           
-  box-shadow: none !important;          
-  pointer-events: none !important;      
+/* 💡 終極權重疊加：當 signup-btn 同時被貼上禁用類別，或處於原生 disabled 狀態時，強制斷電變灰！ */
+.signup-btn.disabled-btn-style,
+.signup-btn:disabled,
+.btn-save.disabled-btn-style,
+.btn-save:disabled {
+  background-color: #D6C7B7 !important; /* 強制覆蓋成質感灰 */
+  color: #A39281 !important;           /* 文字變淡 */
+  cursor: not-allowed !important;       /* 游標變禁止符號 */
+  transform: none !important;           /* 關閉所有上浮動畫 */
+  box-shadow: none !important;          /* 拔除陰影 */
+  pointer-events: none !important;      /* 🔒 徹底阻斷所有滑鼠事件，絕對點不到 */
 }
 
 /*Sign-Up in Users List*/
