@@ -1,48 +1,50 @@
 <div [class.entry-page]="!isAdminMode">
-
-  <div [class.signup-content-scaler]="!isAdminMode" [style.width]="isAdminMode ? '100%' : 'auto'">
+  
+  <div [class.signup-content-scaler]="!isAdminMode"
+       [style.width]="isAdminMode ? '100%' : 'auto'">
 
     <div class="relative flex flex-col items-center">
+      
+      <img *ngIf="!isAdminMode" 
+           [src]="isNewUser ? 'assets/signupCat.png' : user?.catPhoto" 
+           class="signup-photo" />
 
-      <img *ngIf="!isAdminMode" [src]="isNewUser ? 'assets/signupCat.png' : user?.catPhoto" class="signup-photo" />
-
-      <mat-card class="card2" *ngIf="signUpForm != null" [class.card2-signup]="!isAdminMode"
-        [class.admin-border]="isAdminMode" [style.width]="isAdminMode ? '100%' : '450px'">
-
+      <mat-card class="card2" *ngIf="signUpForm != null" 
+                [class.card2-signup]="!isAdminMode"
+                [class.admin-border]="isAdminMode"
+                [style.width]="isAdminMode ? '100%' : '450px'">
+        
         <form [formGroup]="signUpForm" (ngSubmit)="onSave()" class="form-grid w-full">
 
           <div *ngIf="isAdminMode" class="flex flex-col items-center mt-2">
-            <img [src]="isNewUser ? 'assets/signupCat.png' : user?.catPhoto" class="w-55 h-50" />
+            <img [src]="isNewUser ? 'assets/signupCat.png' : user?.catPhoto" 
+                 class="w-55 h-50" />
             <div class="form-row1 m-5">
               <span class="font-bold text-amber-900">Your Cat</span>
             </div>
           </div>
 
           <div class="w-full">
-            <div class="form-row1"> <label>Last name:</label> <input formControlName="lastname" class="custom-input1">
-            </div>
-            <div class="form-row1"> <label>First name:</label> <input formControlName="firstname" class="custom-input1">
-            </div>
-            <div class="form-row1"> <label>Username:</label> <input formControlName="username" class="custom-input1">
-            </div>
-            <div class="form-row1">
-              <label>Genre:</label>
+            <div class="form-row1"> <label>Last name:</label> <input formControlName="lastname" class="custom-input1"> </div>
+            <div class="form-row1"> <label>First name:</label> <input formControlName="firstname" class="custom-input1"> </div>
+            <div class="form-row1"> <label>Username:</label> <input formControlName="username" class="custom-input1"> </div>
+            <div class="form-row1"> 
+              <label>Genre:</label> 
               <select formControlName="genre" class="custom-input1">
                 @for (g of genre; track g.value){ <option [value]="g.value">{{ g.text }}</option> }
-              </select>
+              </select> 
             </div>
-
-            <div class="form-row1 flex flex-col">
+            
+            <div class="form-row1 flex flex-col"> 
               <div class="flex items-center w-full">
-                <label>Password:</label>
-                <input formControlName="password" type="password" class="custom-input1">
+                <label>Password:</label> 
+                <input formControlName="password" type="password" class="custom-input1"> 
               </div>
-              <div *ngIf="signUpForm.get('password')?.touched && signUpForm.get('password')?.invalid"
-                class="text-xs text-red-500 self-end mt-1 text-right" style="max-width: 280px;">
+              <div *ngIf="signUpForm.get('password')?.touched && signUpForm.get('password')?.invalid" 
+                   class="text-xs text-red-500 self-end mt-1 text-right" style="max-width: 280px;">
                 <span *ngIf="signUpForm.get('password')?.hasError('required')">Password is required.</span>
                 <span *ngIf="signUpForm.get('password')?.hasError('minlength')">Must be at least 8 characters.</span>
-                <span
-                  *ngIf="signUpForm.get('password')?.hasError('pattern') && !signUpForm.get('password')?.hasError('minlength')">
+                <span *ngIf="signUpForm.get('password')?.hasError('pattern') && !signUpForm.get('password')?.hasError('minlength')">
                   Must include uppercase, lowercase, number, and symbol (@$!%*?&).
                 </span>
               </div>
@@ -50,17 +52,19 @@
           </div>
 
           <div class="mt-8 w-full">
-            <button *ngIf="!isAdminMode" type="submit" class="signup-btn w-full"
-              [attr.disabled]="(signUpForm.invalid || signUpForm.get('password')?.invalid) ? true : null">
+            <button *ngIf="!isAdminMode" type="submit" class="signup-btn w-full" 
+                    [disabled]="signUpForm.invalid || signUpForm.get('password')?.invalid"
+                    [class.disabled-btn-style]="signUpForm.invalid || signUpForm.get('password')?.invalid">
               Sign Up
             </button>
-
+            
             <div *ngIf="isAdminMode" class="form-actions">
               <button type="button" (click)="onCancel()" class="btn-cancel">
                 <mat-icon>cancel</mat-icon> cancel
               </button>
-              <button type="submit" class="btn-save"
-                [attr.disabled]="(signUpForm.invalid || signUpForm.get('password')?.invalid) ? true : null">
+              <button type="submit" class="btn-save" 
+                      [disabled]="signUpForm.invalid || signUpForm.get('password')?.invalid"
+                      [class.disabled-btn-style]="signUpForm.invalid || signUpForm.get('password')?.invalid">
                 <img src="assets/heart.png" class="w-8 h-8 rounded-full" /> save
               </button>
             </div>

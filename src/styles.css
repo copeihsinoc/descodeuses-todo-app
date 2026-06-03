@@ -2135,11 +2135,8 @@ select.custom-input1 option {
   transition: all 0.2s ease-in-out !important;
 }
 
-.signup-btn:disabled,
-.signup-btn[disabled],
-.btn-save:disabled,
-.btn-save[disabled] {
-  background-color: #D6C7B7 !important;
+.disabled-btn-style {
+  background-color: #D6C7B7 !important; 
   color: #A39281 !important;           
   cursor: not-allowed !important;      
   transform: none !important;           
