@@ -123,6 +123,12 @@ export class SignupComponent implements OnInit {
   }
 
   onSave() {
+    const pwd = this.signUpForm.get('password')?.value || '';
+    if (this.signUpForm.invalid || pwd.length < 8) {
+      this.snackbar.open('Password must be at least 8 characters with upper, lower, number, and symbol.', 'OK', { duration: 3000 });
+      return; // ⛔ 後面的 API 請求程式碼直接變死會，絕對不會執行！
+    }
+
     if (this.signUpForm.invalid || !this.formLoaded) {
       this.snackbar.open('Complete all fields', '', { duration: 1500 });
       return;
