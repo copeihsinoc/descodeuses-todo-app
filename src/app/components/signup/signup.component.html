@@ -50,19 +50,28 @@
           </div>
 
           <div class="mt-8 w-full">
-            <button *ngIf="!isAdminMode" type="submit" class="signup-btn w-full"
-              [disabled]="signUpForm.invalid || pwdInput.value.length < 8"
-              [class.disabled-btn-style]="signUpForm.invalid || pwdInput.value.length < 8">
+            <button *ngIf="!isAdminMode && (signUpForm.invalid || pwdInput.value.length < 8)" 
+                    type="button" class="disabled-btn-style w-full">
               Sign Up
             </button>
-
+            
+            <button *ngIf="!isAdminMode && (!signUpForm.invalid && pwdInput.value.length >= 8)" 
+                    type="submit" class="signup-btn w-full">
+              Sign Up
+            </button>
+            
             <div *ngIf="isAdminMode" class="form-actions">
               <button type="button" (click)="onCancel()" class="btn-cancel">
                 <mat-icon>cancel</mat-icon> cancel
               </button>
-              <button type="submit" class="btn-save"
-                [disabled]="signUpForm.invalid || pwdInput.value.length < 8"
-                [class.disabled-btn-style]="signUpForm.invalid || pwdInput.value.length < 8">
+
+              <button *ngIf="signUpForm.invalid || pwdInput.value.length < 8" 
+                      type="button" class="disabled-btn-style flex items-center justify-center gap-2" style="height: 40px; padding: 0 16px; border-radius: 8px;">
+                <img src="assets/heart.png" class="w-8 h-8 rounded-full opacity-50" /> save
+              </button>
+
+              <button *ngIf="!signUpForm.invalid && pwdInput.value.length >= 8" 
+                      type="submit" class="btn-save">
                 <img src="assets/heart.png" class="w-8 h-8 rounded-full" /> save
               </button>
             </div>

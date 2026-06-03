@@ -2135,19 +2135,20 @@ select.custom-input1 option {
   transition: all 0.2s ease-in-out !important;
 }
 
-/* 💡 終極權重疊加：當 signup-btn 同時被貼上禁用類別，或處於原生 disabled 狀態時，強制斷電變灰！ */
-.signup-btn.disabled-btn-style,
-.signup-btn:disabled,
-.btn-save.disabled-btn-style,
-.btn-save:disabled {
-  background-color: #D6C7B7 !important; /* 強制覆蓋成質感灰 */
-  color: #A39281 !important;           /* 文字變淡 */
-  cursor: not-allowed !important;       /* 游標變禁止符號 */
-  transform: none !important;           /* 關閉所有上浮動畫 */
-  box-shadow: none !important;          /* 拔除陰影 */
-  pointer-events: none !important;      /* 🔒 徹底阻斷所有滑鼠事件，絕對點不到 */
+/* 💡 獨立的灰色按鈕樣式，跟原本的橘色按鈕互不干擾 */
+.disabled-btn-style {
+  height: 64px !important;
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  border-radius: 20px !important;
+  margin-top: 15px;
+  width: 100%;
+  background-color: #D6C7B7 !important; /* 質感灰 */
+  color: #A39281 !important;           /* 灰字 */
+  border: none !important;
+  cursor: not-allowed !important;       /* 禁止符號 */
+  pointer-events: none !important;      /* 滑鼠無法點擊 */
 }
-
 /*Sign-Up in Users List*/
 .admin-border .flex-col.items-center {
   display: flex !important;
