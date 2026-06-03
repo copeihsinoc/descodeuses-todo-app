@@ -99,13 +99,14 @@ mat-toolbar {
   transform: scale(1.1);
 }
 
-#kpis .flex.items-center > div:first-child {
-  width: 60px;  
+#kpis .flex.items-center>div:first-child {
+  width: 60px;
   height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0; /* 防止圖片被擠壓 */
+  flex-shrink: 0;
+  /* 防止圖片被擠壓 */
 }
 
 /* ----- Rewards animation ----- */
@@ -208,8 +209,13 @@ mat-toolbar {
 }
 
 @keyframes shake {
-  from { transform: rotate(-1deg) translateY(-6px); }
-  to { transform: rotate(1deg) translateY(-6px); }
+  from {
+    transform: rotate(-1deg) translateY(-6px);
+  }
+
+  to {
+    transform: rotate(1deg) translateY(-6px);
+  }
 }
 
 /* ----------------------------------------------------------------------------- */
@@ -1179,13 +1185,14 @@ mat-toolbar {
   transform: scale(1.1);
 }
 
-#kpis .flex.items-center > div:first-child {
-  width: 60px;  
+#kpis .flex.items-center>div:first-child {
+  width: 60px;
   height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0; /* 防止圖片被擠壓 */
+  flex-shrink: 0;
+  /* 防止圖片被擠壓 */
 }
 
 /* ----- Rewards animation ----- */
@@ -1288,8 +1295,13 @@ mat-toolbar {
 }
 
 @keyframes shake {
-  from { transform: rotate(-1deg) translateY(-6px); }
-  to { transform: rotate(1deg) translateY(-6px); }
+  from {
+    transform: rotate(-1deg) translateY(-6px);
+  }
+
+  to {
+    transform: rotate(1deg) translateY(-6px);
+  }
 }
 
 /* ----------------------------------------------------------------------------- */
@@ -2120,6 +2132,23 @@ select.custom-input1 option {
   background-color: #F9A158 !important;
   color: #FFFFFF !important;
   border: none !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+.signup-btn:disabled,
+.btn-save:disabled {
+  background-color: #D6C7B7 !important;
+  color: #A39281 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.signup-btn:disabled:hover,
+.btn-save:disabled:hover {
+  background-color: #D6C7B7 !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 /*Sign-Up in Users List*/
@@ -2188,7 +2217,7 @@ select.custom-input1 option {
   /* 3. 浮空對話框：再度向右外推，達到 100% 完全不遮到貓咪任何毛髮的效果！ */
   .top-card .chat-bubble {
     position: absolute !important;
-    left: calc(50% + 110px) !important;   
+    left: calc(50% + 110px) !important;
     top: 30px !important;
     transform: none !important;
     width: 150px !important;
@@ -2206,8 +2235,15 @@ select.custom-input1 option {
   }
 
   @keyframes floatMobileCustomRow {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-6px); }
+
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+
+    50% {
+      transform: translateY(-6px);
+    }
   }
 
   .top-card .chat-bubble::before {
@@ -2218,7 +2254,7 @@ select.custom-input1 option {
     border-width: 6px 10px 6px 0 !important;
     border-color: transparent #fff7ed transparent transparent !important;
   }
-  
+
   .top-card .chat-bubble::after {
     display: block !important;
     left: -11px !important;

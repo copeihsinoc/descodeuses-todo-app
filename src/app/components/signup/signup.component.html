@@ -52,13 +52,15 @@
           </div>
 
           <div class="mt-8 w-full">
-            <button *ngIf="!isAdminMode" type="submit" class="signup-btn w-full" [disabled]="signUpForm.invalid">Sign Up</button>
+            <button *ngIf="!isAdminMode" type="submit" class="signup-btn w-full" 
+                    [disabled]="signUpForm.invalid || signUpForm.get('password')?.invalid">Sign Up</button>
             
             <div *ngIf="isAdminMode" class="form-actions">
               <button type="button" (click)="onCancel()" class="btn-cancel">
                 <mat-icon>cancel</mat-icon> cancel
               </button>
-              <button type="submit" class="btn-save" [disabled]="signUpForm.invalid">
+              <button type="submit" class="btn-save" 
+                      [disabled]="signUpForm.invalid || signUpForm.get('password')?.invalid">
                 <img src="assets/heart.png" class="w-8 h-8 rounded-full" /> save
               </button>
             </div>

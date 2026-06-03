@@ -124,25 +124,7 @@ export class SignupComponent implements OnInit {
   }
 
   onSave() {
-// 1. 基本擋路（如果表單還沒載入好就返回）
-    if (!this.formLoaded) return;
-
-    // 2. 🛡️ 密碼強度二次硬性校驗（Jury 最愛的防禦性編程）
-    if (this.isNewUser) {
-      const password = this.signUpForm.get('password')?.value || '';
-      
-      // 與你設定的驗證規則完全相同的正則表達式
-      const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-      
-      if (!strongPasswordRegex.test(password)) {
-        // 如果密碼沒通過複雜度測試，直接彈出提示並 return，中斷註冊！
-        this.snackbar.open('Password must be at least 8 characters, with uppercase, lowercase, number, and symbol.', '', { duration: 3000 });
-        return; 
-      }
-    }
-
-    // 3. 通過檢查後，如果其他欄位有問題才擋下
-    if (this.signUpForm.invalid) {
+    if (this.signUpForm.invalid || !this.formLoaded) {
       this.snackbar.open('Complete all fields', '', { duration: 1500 });
       return;
     }
