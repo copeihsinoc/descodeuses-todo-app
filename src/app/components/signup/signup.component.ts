@@ -163,6 +163,8 @@ export class SignupComponent implements OnInit {
         } else {
           // ✅ User 註冊完 -> return login
           this.router.navigate(['/']);
+        } error: () => {
+          this.snackbar.open('Failed!', '', { duration: 2500 });
         }
       });
 

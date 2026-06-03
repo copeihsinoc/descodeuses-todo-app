@@ -2046,6 +2046,7 @@ mat-toolbar {
 .admin-border {
   border: 5px solid #F9A158 !important;
   box-shadow: 0 0 15px rgba(249, 161, 88, 0.2);
+  padding: 40px 40px 50px 40px !important;
 }
 
 .signup-photo {
@@ -2192,10 +2193,15 @@ select.custom-input1 option {
   color: #45392E !important;
   letter-spacing: 1px;
 }
-
-.admin-border {
-  padding: 40px 40px 50px 40px !important;
+.password-error {
+  color: #e53935 !important;
 }
+
+/* fix snackbar 被遮住問題 */
+.cdk-overlay-container {
+  z-index: 99999 !important;
+}
+
 
 /*------------------------------響應式佈局 (Media Queries)------------------------------*/
 @media (max-width: 1023px) {

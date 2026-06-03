@@ -37,14 +37,25 @@
                 <label>Password:</label>
                 <input formControlName="password" type="password" class="custom-input1">
               </div>
+
+              <!-- 🔴 ONLY CHANGE HERE -->
               <div *ngIf="signUpForm.get('password')?.touched && signUpForm.get('password')?.invalid"
-                class="text-xs text-red-500 self-end mt-1 text-right" style="max-width: 280px;">
-                <span *ngIf="signUpForm.get('password')?.hasError('required')">Password is required.</span>
-                <span *ngIf="signUpForm.get('password')?.hasError('minlength')">Must be at least 8 characters.</span>
+                class="text-xs self-end mt-1 text-right password-error"
+                style="max-width: 280px;">
+
+                <span *ngIf="signUpForm.get('password')?.hasError('required')">
+                  Password is required.
+                </span>
+
+                <span *ngIf="signUpForm.get('password')?.hasError('minlength')">
+                  Must be at least 8 characters.
+                </span>
+
                 <span
                   *ngIf="signUpForm.get('password')?.hasError('pattern') && !signUpForm.get('password')?.hasError('minlength')">
                   Must include uppercase, lowercase, number, and symbol (@$!%*?&).
                 </span>
+
               </div>
             </div>
           </div>
