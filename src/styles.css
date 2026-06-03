@@ -2136,19 +2136,15 @@ select.custom-input1 option {
 }
 
 .signup-btn:disabled,
-.btn-save:disabled {
+.signup-btn[disabled],
+.btn-save:disabled,
+.btn-save[disabled] {
   background-color: #D6C7B7 !important;
-  color: #A39281 !important;
-  cursor: not-allowed !important;
-  transform: none !important;
-  box-shadow: none !important;
-}
-
-.signup-btn:disabled:hover,
-.btn-save:disabled:hover {
-  background-color: #D6C7B7 !important;
-  transform: none !important;
-  box-shadow: none !important;
+  color: #A39281 !important;           
+  cursor: not-allowed !important;      
+  transform: none !important;           
+  box-shadow: none !important;          
+  pointer-events: none !important;      
 }
 
 /*Sign-Up in Users List*/
