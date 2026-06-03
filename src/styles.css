@@ -2146,6 +2146,22 @@ select.custom-input1 option {
   box-shadow: none !important;
 }
 
+.disabled-btn-style {
+  height: 64px !important;
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  border-radius: 20px !important;
+  margin-top: 15px;
+  width: 100%;
+  background-color: #D6C7B7 !important; /* 質感灰 */
+  color: #A39281 !important;           /* 灰字 */
+  border: none !important;
+  cursor: not-allowed !important;       /* 禁止符號 */
+  pointer-events: none !important;      /* 鎖死滑鼠點擊事件 */
+  box-shadow: none !important;
+  transform: none !important;
+}
+
 /*Sign-Up in Users List*/
 .admin-border .flex-col.items-center {
   display: flex !important;
