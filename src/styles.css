@@ -2135,20 +2135,17 @@ select.custom-input1 option {
   transition: all 0.2s ease-in-out !important;
 }
 
-/* 💡 獨立的灰色按鈕樣式，跟原本的橘色按鈕互不干擾 */
-.disabled-btn-style {
-  height: 64px !important;
-  font-size: 24px !important;
-  font-weight: 700 !important;
-  border-radius: 20px !important;
-  margin-top: 15px;
-  width: 100%;
+/* 💡 終極修正：當按鈕處理被禁用 (:disabled) 狀態時，強制用這個 important 把橘色壓過去！ */
+.signup-btn:disabled,
+.btn-save:disabled {
   background-color: #D6C7B7 !important; /* 質感灰 */
   color: #A39281 !important;           /* 灰字 */
-  border: none !important;
   cursor: not-allowed !important;       /* 禁止符號 */
-  pointer-events: none !important;      /* 滑鼠無法點擊 */
+  pointer-events: none !important;      /* 🔒 徹底阻斷滑鼠點擊 */
+  transform: none !important;
+  box-shadow: none !important;
 }
+
 /*Sign-Up in Users List*/
 .admin-border .flex-col.items-center {
   display: flex !important;
