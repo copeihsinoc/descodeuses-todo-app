@@ -24,23 +24,22 @@ export class SignupComponent implements OnInit {
     this._userId = id ?? null;
     this.isNewUser = !this._userId || this._userId <= 0;
 
+    if (!this.signUpForm) {
+      this.initForm(!this.isNewUser);
+    }
+
     if (this.isNewUser) {
       // ➕ 新增模式：密碼必填
-      this.initForm(false);
-      this.formLoaded = true; // 新增模式立即可用
+      this.formLoaded = true; // 新增模式立立即可用
     } else {
       // ➕ 編輯模式：密碼非必填
-      this.initForm(true);
       this.loadData(this._userId!);
     }
   }
 
   isNewUser = true;
-
   user: User | null = null;             // 要編輯的 user (單一)
-
   signUpForm!: FormGroup;
-
   formLoaded = false;
 
   genre = [
@@ -74,7 +73,7 @@ export class SignupComponent implements OnInit {
 
   ngOnInit(): void {
     if (!this.signUpForm) {
-      this.initForm();
+      this.initForm(!this.isNewUser);
     }
     this.formLoaded = true;
   }
@@ -83,7 +82,7 @@ export class SignupComponent implements OnInit {
     // set rules
     const passwordValidators = [
       // at least 8 letters
-      Validators.minLength(8), 
+      Validators.minLength(8),
       // includes：1 LETTER、1 letter、1 number、1 symbol
       Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
     ];
