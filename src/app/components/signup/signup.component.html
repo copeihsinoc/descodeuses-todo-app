@@ -39,9 +39,9 @@
               </div>
 
               <div class="text-[10px] text-gray-400 mt-1 self-end text-right" style="max-width: 280px;">
-                8+ chars, 1 uppercase, 1 lowercase, 1 number, 1 symbol (@$!%*?&)
+                8+ chars, 1 uppercase, 1 lowercase, 1 number, 1 symbol (&#64;$!%*?&)
               </div>
-              
+
               <div *ngIf="signUpForm.get('password')?.touched && signUpForm.get('password')?.invalid"
                 class="text-xs text-red-500 self-end mt-1 text-right" style="max-width: 280px;">
                 <span *ngIf="signUpForm.get('password')?.hasError('required')">Password is required.</span>
